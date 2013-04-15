@@ -1,0 +1,57 @@
+extends ../base
+
+mixin stepContent(step, stepKey)
+    unless step["no-title"]
+        h2!=step.name
+    if step.picture
+        img(src=step.picture).step-background
+    if step.spots
+        each spot, spotKey in step.spots
+            .spot(
+                style=spotStyle(spot),
+                class=spotClass(spot),
+                data-html=spot.html,
+                data-spot=spotKey,
+                data-step=stepKey,
+                data-origin=spot.origin,
+                data-entrance=spot.entrance,
+                data-entrance-duration=spot["entrance-duration"],
+                data-background=spot.background,
+                data-background-direction=spot["background-direction"],
+                data-background-speed=spot["background-speed"],
+                data-background-frequency=spot["background-frequency"],
+                data-queue=1*spot.queue)
+                +spotBlock(spot)
+
+mixin spotBlock(spot)
+    case spot.type
+        when "iframe"
+            iframe.js-animation-wrapper(
+                style=spotWrapperStyle(spot),
+                src=spot.src, 
+                frameborder="0",
+                allowfullscreen="allowfullscreen")
+
+        when "link"
+            a.js-animation-wrapper(
+                style=spotWrapperStyle(spot),
+                href=spot.href)
+                +spotContent(spot)
+        default
+            .js-animation-wrapper( style=spotWrapperStyle(spot) ) 
+                +spotContent(spot)
+
+mixin spotContent(spot)
+    if spot["title"]
+        h3!=spot["title"]
+    if spot["sub-title"]
+        h4!=spot["sub-title"]    
+    if spot["content"]
+        p!=spot["content"]
+    if spot["picture"]
+        img(src=spot["picture"]["src"], alt=spot["picture"]["alt"]).spot-background
+
+block content
+    each step, stepKey in data.steps
+        .step(style=stepStyle(step), class=step.class, data-step=stepKey)
+            +stepContent(step, stepKey)

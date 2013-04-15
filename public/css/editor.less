@@ -1,0 +1,115 @@
+@import "./vendor/codemirror.css";
+
+
+body.editor-mode #overflow{    
+    .translate(400px/2px, 0);
+}
+
+#editor {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    width:400px;
+    color:white;
+    z-index:@zIndexEditor;
+    background:@editorColor;
+    overflow:hidden;    
+    .box-shadow(0 0 10px 0 darken(@editorColor, 30%));
+    
+    .js-loading & .CodeMirror:after {
+        content:"";
+        position:absolute;
+        top:0; bottom:0;
+        left:0; right:0;
+        z-index:@zIndexLoading;
+        background:@white;        
+        display:block;
+        .opacity(60);
+    }
+    
+    h2 {
+        padding:10px;
+        padding-left:60px;
+        margin:0;
+        background:lighten(@editorColor, 10%) url("/img/common/editor.png") 10px center no-repeat;
+        border-bottom:darken(@editorColor, 10%) 1px solid;     
+    }
+
+    .tabs-bar {
+        list-style:none;
+        margin:0;
+        padding:0;
+        padding-top:10px;        
+        height:29px;
+        background:darken(@editorColor, 10%);
+        .box-shadow( inset 0 0 40px 0 darken(@editorColor, 20%) );
+        
+        li {
+            display:block;
+            float:left;
+            margin-left:10px;
+            
+            a {         
+                display:block;       
+                height:18px;
+                padding:5px 20px;
+                background:darken(@editorColor, 5%);
+                color:#ddd;
+                text-transform:uppercase;
+                text-decoration:none;
+                font-size:14px;      
+                border:1px solid fade(@white, 10%);                                          
+                border-left:0;
+                border-bottom:0;
+                .box-shadow(5px -3px 5px 0 darken(@editorColor, 15%));
+                .transition(0.4s);
+            }
+
+            &.active a,
+            &.active:hover a {                
+                color:#fff;
+                background:@activeColor;
+                font-weight:bold;            
+            }
+
+            &:hover a {                
+                background:mix(@activeColor, @menuColor);
+            }
+        }        
+    }
+
+    .tabs-pan {
+        
+        position:absolute;
+        top:85px;
+        bottom:0;
+        left:0;
+        right:0;
+
+        &.active {            
+            display:block;
+            background:@activeColor;
+        }
+
+        &#editor-json {
+
+            .editor-actions {
+                padding:10px;
+                position:relative;
+                z-index:@zIndexEditor+10;
+            }
+
+            textarea, .CodeMirror {
+                position:absolute;
+                top:50px;
+                bottom:10px;
+                left:10px;
+                right:10px;
+                border:1px  darken(@activeColor, 15%) solid;
+                background:fade(@white, 80%);
+                .box-shadow(inset 0 0 5px darken(@activeColor, 15%) );
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+/public/*
+/views/*
+/.git/*
+/builtAssets/*
+/data/*
+*.jade

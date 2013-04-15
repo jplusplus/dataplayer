@@ -1,0 +1,26 @@
+#editor
+    h2 Editor 
+        | : 
+        =data.title
+    ul.tabs-bar
+        li.active
+            a(href="#editor-json") JSON
+        li 
+            a(href="#editor-help") Help
+        li 
+            a(href="#editor-publish") Publish
+
+    #editor-json.tabs-pan.active
+        .tr.editor-actions
+            a.btn.disabled.right10             
+                i.icon-refresh.right10
+                | Preview
+            a.btn.btn-save.disabled.important 
+                i.icon-upload.icon-white.right10
+                | Save 
+
+        textarea(name="config")
+            !=JSON.stringify(data, null, 4)
+    
+    #editor-help.tabs-pan
+    #editor-publish.tabs-pan
