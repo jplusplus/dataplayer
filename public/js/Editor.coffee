@@ -41,7 +41,7 @@ class @Editor
 
     updateView:() =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page}.html #overflow > *", ->
+        $("#overflow").load "/#{page}.html #overflow > *", (data)->                                      
             window.interactive = new window.Interactive()
 
     constructor: ->
