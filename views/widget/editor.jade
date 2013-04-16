@@ -3,14 +3,14 @@
         | : 
         =obj.content.title
     ul.tabs-bar
-        li
-            a(href="#editor-json") JSON
         li.active
+            a(href="#editor-json") JSON
+        li
             a(href="#editor-help") Help
         li 
             a(href="#editor-publish") Publish
 
-    #editor-json.tabs-pan
+    #editor-json.tabs-pan.active
         .tr.editor-actions
             a.btn.btn-preview.disabled.right10             
                 i.icon-refresh.right10
@@ -22,7 +22,7 @@
         textarea(name="config")
             !=JSON.stringify(obj.content, null, 4)
     
-    #editor-help.tabs-pan.active
+    #editor-help.tabs-pan
         article
             !="" + getPage("help")
     #editor-publish.tabs-pan
