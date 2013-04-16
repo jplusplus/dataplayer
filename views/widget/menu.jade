@@ -1,13 +1,14 @@
-.nav(class=data["menu-position"] || "top left")
+.nav(class=obj.content["menu-position"] || "top left")
     ul.steps
-        each step, stepKey in data.steps          
-            li(class=(step["no-index"] ? "hidden":""))
-                a.to-step(href="#step="+stepKey, data-step=stepKey)
-                    span.wrapper=strip_tags(step.name)
-                    if step["menu-icon"]
-                        i(style="background-image:url('#{step["menu-icon"]}')").with-icon=stepKey
-                    else
-                        i=stepKey
+        if obj.content.steps
+            each step, stepKey in obj.content.steps       
+                li(class=(step["no-index"] ? "hidden":""))
+                    a.to-step(href="#step="+stepKey, data-step=stepKey)
+                        span.wrapper=stripTags(step.name)
+                        if step["menu-icon"]
+                            i(style="background-image:url('#{step["menu-icon"]}')").with-icon=stepKey
+                        else
+                            i=stepKey
                         
     ul.arrows
         li

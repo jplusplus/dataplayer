@@ -1,8 +1,9 @@
 @import "./vendor/codemirror.css";
+@import "./vendor/notify-osd.css";
 
 
 body.editor-mode #overflow{    
-    .translate(400px/2px, 0);
+    .translate(450px/2px, 0);
 }
 
 #editor {
@@ -10,7 +11,7 @@ body.editor-mode #overflow{
     top:0;
     bottom:0;
     left:0;
-    width:400px;
+    width:450px;
     color:white;
     z-index:@zIndexEditor;
     background:@editorColor;
@@ -28,7 +29,7 @@ body.editor-mode #overflow{
         .opacity(60);
     }
     
-    h2 {
+    h2.heading {
         padding:10px;
         padding-left:60px;
         margin:0;
@@ -81,15 +82,54 @@ body.editor-mode #overflow{
 
     .tabs-pan {
         
+        overflow:auto;
         position:absolute;
         top:85px;
         bottom:0;
         left:0;
         right:0;
+        display:none;
 
         &.active {            
             display:block;
             background:@activeColor;
+        }
+
+        article {
+            padding:20px;
+            
+            h2 {
+                border-bottom:1px solid white;
+                padding-bottom:5px;
+            }    
+            
+            code {
+                padding:0;
+                background:darken(@menuColor, 5);
+                border:1px solid darken(@menuColor, 10);                
+            }     
+            
+            pre code {
+                padding:2px;
+                display:block;
+            }
+            
+            blockquote {
+                display:block;
+                padding-left:10px;
+                border-left:3px solid darken(@activeColor, 10);                    
+            }   
+            
+            table {
+                .table();
+                .table-striped();
+                background-color:fade(@white, 20);
+                .border-radius(4px);
+                tbody > tr:nth-child(2n+1) > td,
+                tbody > tr:nth-child(2n+1) > th {
+                    background-color:fade(@white, 20);
+                }
+            }
         }
 
         &#editor-json {
@@ -107,7 +147,7 @@ body.editor-mode #overflow{
                 left:10px;
                 right:10px;
                 border:1px  darken(@activeColor, 15%) solid;
-                background:fade(@white, 80%);
+                background:fade(@white, 90%);
                 .box-shadow(inset 0 0 5px darken(@activeColor, 15%) );
             }
         }

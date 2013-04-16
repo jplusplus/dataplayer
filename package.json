@@ -10,6 +10,9 @@
     "jade": "*",
     "less": "*",
     "coffee-script": "*",
-    "connect-assets": "*"
+    "connect-assets": "*",
+    "mongoose": "*",
+    "config": "*",
+    "marked": "*"
   }
 }

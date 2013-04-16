@@ -1,0 +1,18 @@
+{
+    "title": "Your title",
+    "navigation": "horizontal",
+    "menu-position": "right bottom",
+    "width": 900,
+    "height": 600,
+    "steps": [
+        {
+            "name": "Your first slide",
+            "menu-icon": "/img/common/home.png",
+            "spots": []
+        },
+        {
+            "name": "Your second slide",
+            "spots": []
+        }
+    ]
+}

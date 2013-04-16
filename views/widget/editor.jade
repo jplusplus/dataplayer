@@ -1,18 +1,18 @@
 #editor
-    h2 Editor 
+    h2.heading Editor 
         | : 
-        =data.title
+        =obj.content.title
     ul.tabs-bar
-        li.active
+        li
             a(href="#editor-json") JSON
-        li 
+        li.active
             a(href="#editor-help") Help
         li 
             a(href="#editor-publish") Publish
 
-    #editor-json.tabs-pan.active
+    #editor-json.tabs-pan
         .tr.editor-actions
-            a.btn.disabled.right10             
+            a.btn.btn-preview.disabled.right10             
                 i.icon-refresh.right10
                 | Preview
             a.btn.btn-save.disabled.important 
@@ -20,7 +20,9 @@
                 | Save 
 
         textarea(name="config")
-            !=JSON.stringify(data, null, 4)
+            !=JSON.stringify(obj.content, null, 4)
     
-    #editor-help.tabs-pan
+    #editor-help.tabs-pan.active
+        article
+            !="" + getPage("help")
     #editor-publish.tabs-pan

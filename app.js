@@ -4,18 +4,20 @@
  */
 
 var express = require('express')
-  , http = require('http')
-  , path = require('path')
+       , md = require("marked")
+       , fs = require('fs')
+     , http = require('http')
+     , path = require('path');
 
 var app = express();
 
 app.configure(function(){
   
   app.set('port', process.env.PORT || 3000);
+  app.set('data',  __dirname + '/data');
+  app.set('pages', __dirname + '/pages');
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.set('page', 'page/');
-  app.set('data', __dirname + '/data');
   
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -105,7 +107,7 @@ app.configure(function(){
       if(spot.class) klass.push(spot.class);
       return klass.join(" ");
     },
-    strip_tags: function(input, allowed) {
+    stripTags: function(input, allowed) {
       // http://kevin.vanzonneveld.net
       allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
       var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
@@ -113,14 +115,23 @@ app.configure(function(){
       return input.replace(commentsAndPhpTags, '').replace(tags, function ($0, $1) {
         return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
       });
+    },
+    getPage: function(name) {
+      // Builds file name
+      var fileName = path.join(app.get("pages"), name) + ".md";
+      // Checks that file exists
+      if(!fs.existsSync(fileName)) return "";
+      // Read the text file
+      var file = fs.readFileSync(fileName, "UTF-8");
+      // Parse the markdown      
+      return md(file)
     }
   });
 
   // Add context helpers
-  app.use(function(req, res, next) {
-    // Unable debug mode
-    res.locals.debugMode = req.query.hasOwnProperty("debug")
-    res.locals.editMode = req.query.hasOwnProperty("edit")
+  app.use(function(req, res, next) {    
+    res.locals.editMode  = req.query.hasOwnProperty("edit")
+    res.locals.editToken = req.query["edit"]
     next();
   });
   

@@ -52,6 +52,7 @@ mixin spotContent(spot)
         img(src=spot["picture"]["src"], alt=spot["picture"]["alt"]).spot-background
 
 block content
-    each step, stepKey in data.steps
-        .step(style=stepStyle(step), class=step.class, data-step=stepKey)
-            +stepContent(step, stepKey)
+    if obj.content.steps
+        each step, stepKey in obj.content.steps
+            .step(style=stepStyle(step), class=step.class, data-step=stepKey)
+                +stepContent(step, stepKey)

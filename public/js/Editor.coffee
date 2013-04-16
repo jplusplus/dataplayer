@@ -3,6 +3,7 @@
 #= require vendor/codemirror.js
 #= require vendor/codemirror-javascript.js
 #= require vendor/jquery.hotkeys.js
+#= require vendor/notify-osd.min.js
 
 class @Editor
     recordSpotPosition:(spot)=>
@@ -26,26 +27,55 @@ class @Editor
           left: left
           top: top
 
-    saveJson:() =>
+    updateContent:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")            
             $("#editor .btn").addClass("disabled")
-            json = @myCodeMirror.getValue()
-            page = $("body").data("page")
+            content = @myCodeMirror.getValue()
+            token   = $("body").data("given-token");
+            page    = $("body").data("page")
             $.ajax
-                url: "/#{page}/save"
+                url: "/#{page}/content"
                 type: "POST"
-                data: { config: json }
-                success: @updateView
+                data: { content: content, token: token }
+                success: @loadContent
+                error: @updateError 
             return false
 
-    updateView:() =>        
+    loadContent:() =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page}.html #overflow > *", (data)->                                      
+        $("#overflow").load "/#{page} #overflow > *", (data)->                                      
             window.interactive = new window.Interactive()
 
-    constructor: ->
+    updateDraft:() =>
+        unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
+            $("body").addClass("js-loading")            
+            $("#editor .btn").addClass("disabled")
+            content = @myCodeMirror.getValue()
+            token   = $("body").data("given-token");
+            page    = $("body").data("page")
+            $.ajax
+                url: "/#{page}/draft"
+                type: "POST"
+                data: { content: content, token: token }
+                success: @loadDraft
+                error: @updateError                   
+            return false
 
+    loadDraft:() =>        
+        page = $("body").data("page")
+        $("#overflow").load "/#{page}?preview=1 #overflow > *", (data)->                                      
+            window.interactive = new window.Interactive()
+            $("#editor .btn-save").removeClass("disabled")
+
+    updateError:(xhr) =>   
+        $("#editor .btn").removeClass("disabled")
+        $("body").removeClass("js-loading")
+        $.notify_osd.create
+            text    : xhr.responseText                     
+            timeout : 5
+
+    constructor: ->
         # Bind a "CodeMirror" editor on editor text area
         @myCodeMirror = CodeMirror.fromTextArea(
             $("#editor-json textarea")[0],
@@ -58,9 +88,23 @@ class @Editor
         # Activate save/preview buttons
         @myCodeMirror.on "change", -> $("#editor .btn").removeClass("disabled")
 
-        $("#editor").on("click", ".btn-save", @saveJson);
-        $("input,textarea", "#editor").bind('keydown', 'ctrl+s', @saveJson);
-         
+        # Save the screen
+        $("#editor").on("click", ".btn-save", @updateContent);
+        $("input,textarea", "#editor").bind('keydown', 'ctrl+s', @updateContent);
+        # Save the draft
+        $("#editor").on("click", ".btn-preview", @updateDraft);
+        $("input,textarea", "#editor").bind('keydown', 'ctrl+p', @updateDraft);  
+
+        # Tabs switch
+        $("#editor .tabs-bar").on "click", "a", (event)->
+            event.preventDefault()
+            # Toggle the right tab link
+            $("#editor .tabs-bar li").removeClass("active")
+            $(this).parents("li").addClass("active")
+            panId = $(this).attr("href") 
+            # Hide pan
+            $("#editor .tabs-pan").removeClass("active")
+            $(panId).addClass("active")
 
         $(".spot").draggable stop: (event, ui) ->
             @recordSpotPosition(this)

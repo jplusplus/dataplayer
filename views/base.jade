@@ -12,20 +12,20 @@ html
     meta(http-equiv="X-UA-Compatible",content="IE=edge,chrome=1")
     meta(name="viewport",content="width=1200")
     meta(charset="utf-8")
-    if typeof data.title !== "undefined"
-        title=data.title
+    if typeof obj.content.title !== "undefined"
+        title=obj.content.title
 
     block stylesheets
     !=css("style")
 
-  body.js-loading(class=page + (editMode ? " editor-mode" : ""), data-page=page)
+  body.js-loading(class=!editMode || "editor-mode", data-page=obj.slug, data-given-token=editToken)
 
     #old-browser
         h4 Votre navigateur <strong>est trop ancien</strong>
         p <a href="http://browsehappy.com/">Mettez à jour votre navigateur</a> ou <a href="http://www.google.com/chromeframe/?redirect=true">installez Google Chrome Frame</a> pour accéder à cette page.
 
-    - var navigation = data.navigation || "horizontal"
-    #overflow(data-navigation=navigation, class=navigation, style=screenStyle(data))
+    - var navigation = obj.content.navigation || "horizontal"
+    #overflow(data-navigation=navigation, class=navigation, style=screenStyle(obj.content))
         include widget/menu.jade
         #container
             block content
