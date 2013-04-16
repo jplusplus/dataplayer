@@ -233,7 +233,7 @@ class window.Interactive
    * Just go to step directcly
    * @return {Number} New step number
   ###
-  readStepFromHash: => @goToStep @getHashParams().step or = 0
+  readStepFromHash: => @goToStep @getHashParams().step if @getHashParams().step
 
   ###*
    * Slide to the given step

@@ -11,15 +11,15 @@
             "spots": []
         },
         {
-            "name": "Wich is the wettest music festival?",
-            "style": "background:#272B30;",
+            "name": "Mariages en Allemagne",
+            "style": "background:#272B30; color:white;",
             "spots": [
                 {
                     "type": "iframe",
-                    "src": "",
                     "top": 100,
-                    "width": "100%",
-                    "height": 500,
+                    "left": 85,
+                    "width": 750,
+                    "height": 485,
                     "entrance": "zoomIn fadeIn"
                 }
             ]
