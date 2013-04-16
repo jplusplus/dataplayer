@@ -1,0 +1,10 @@
+extends ./layouts/naked
+
+block content
+    #home
+        .content
+            !=getPage("home")
+        .tc.top30
+            a.btn.btn-large.btn-save(href="/create")
+                .icon-pencil.icon-white.right10.top10.pull-left
+                | Let's begin
