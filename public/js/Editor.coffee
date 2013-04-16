@@ -106,10 +106,10 @@ class @Editor
 
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);
-        $("input,textarea", "#editor").bind('keydown', 'ctrl+s', @updateContent);
+        $(document).bind('keydown', 'Ctrl+s', @updateContent);
         # Save the draft
         $("#editor").on("click", ".btn-preview", @updateDraft);
-        $("input,textarea", "#editor").bind('keydown', 'ctrl+p', @updateDraft);  
+        $(document).bind('keydown', 'Ctrl+p', @updateDraft);  
 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
