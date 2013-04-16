@@ -45,7 +45,7 @@ class window.Interactive
     # Remove loading overlay
     $("body").removeClass "js-loading"    
     # Read the step from the hash
-    @readStepFromHash()    
+    @readStepFromHash() or @goToStep 0   
     # Activate fast click to avoid tap delay on touch screen
     new FastClick(document.body)
 
@@ -233,7 +233,11 @@ class window.Interactive
    * Just go to step directcly
    * @return {Number} New step number
   ###
-  readStepFromHash: => @goToStep @getHashParams().step if @getHashParams().step
+  readStepFromHash: => 
+    if @getHashParams().step
+      @goToStep @getHashParams().step
+    else
+      return false
 
   ###*
    * Slide to the given step

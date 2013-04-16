@@ -16,13 +16,7 @@
 @containerColor:#232325;
 @editorColor:@menuColor;
 
-@import "./vendor/bootstrap/reset.less";
-@import "./vendor/bootstrap/variables.less";
-@import "./vendor/bootstrap/mixins.less";
-@import "./vendor/bootstrap/button-groups.less";
-@import "./vendor/bootstrap/buttons.less";
-@import "./vendor/bootstrap/sprites.less";
-@import "./vendor/bootstrap/tables.less";
+@import "./vendor/bootstrap/bootstrap.less";
 @import "./bootstrap-overload.less";
 @import "./tools.less";
 @import "./editor.less";
@@ -32,17 +26,17 @@ body {
     margin:0;
     padding:0;
     overflow:hidden;
-    font: 14px arial, "Lucida Grande", Helvetica, sans-serif;
     background:@bgColor;
-    color:#404040;    
+    color:white;    
     
     .spot a, .spot {
       color: black;
-      text-decoration:none;
     }
 
     a {
-        color:@activeColor;        
+        color:@activeColor;       
+        text-decoration: none;
+        
         &:hover {            
             color:mix(@activeColor, @menuColor);
         }
@@ -63,6 +57,11 @@ body {
     
     display:none;
     .lt-ie7 & { display:block; }
+}
+
+#home {
+    width:400px;
+    margin:40px auto;
 }
 
 #overflow {    

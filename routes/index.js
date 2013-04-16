@@ -13,15 +13,19 @@ module.exports = function(a){
   // Connect mongoose
   mongoose.connect(process.env.DATABASE_URL || config.DATABASE_URL);
   // Set routes
+  app.get("/", homepage);
   app.get("/create", createScreen);
-  app.get("/:page", routePage);
-  app.get("/:page/:step/:spot", editSpotPosition);
+  app.get("/:page", viewScreen);
   app.post("/:page/content", updateContent);
   app.post("/:page/draft", updateDraft);
 };
 
 
-var routePage = function(req, res) {
+var homepage = function(req, res) {
+  res.render("home");
+};
+
+var viewScreen = function(req, res) {
 
     // Template file 
     var tplDir = "theme/"
@@ -43,37 +47,6 @@ var routePage = function(req, res) {
     });     
 };
 
-
-var editSpotPosition = function(req, res) {
-
-    var step = req.params.step,
-        spot = req.params.spot; 
-    
-    // Forbidden in production!    
-    if( process.env.NODE_ENV == "production") return res.send(403);    
-
-    // Do we received the position ?
-    if(!req.query.top || !req.query.left) return res.send(500);
-
-    var dataDir = app.get("data")
-     , dataName = req.params.page + ".json"
-     , dataPath = path.join(dataDir, dataName)
-         , data = require( dataPath );
-
-    // Does the spot exist ?
-    if(!data || !data[step] || !data[step].spots[spot]) return res.send(404);
-
-    // Edit the data
-    data[step].spots[spot].top  = req.query.top;
-    data[step].spots[spot].left = req.query.left;
-
-    var dataString = JSON.stringify(data, null, 4);
-    // Mades it persistent
-    fs.writeFile(dataPath, dataString);
-
-    // Send the resut now
-    res.send(200);
-};
 
 var updateContent = function(req, res) {    
   // JSON parsing to avoid inbject javascript

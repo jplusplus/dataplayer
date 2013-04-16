@@ -19,10 +19,14 @@ body.editor-mode #overflow{
         .icon-white();
         .box-shadow(0 0 3px 0 darken(@containerColor, 10%) );
         .opacity(10);
+        &:hover {
+            background-color:mix(@menuColor, @activeColor);
+            border-color:mix(@menuColor, @activeColor);
+        }
     }
 
     .spot:hover .handle {        
-        .opacity(100);
+        .opacity(100);        
     }
 }
 
@@ -54,6 +58,8 @@ body.editor-mode #overflow{
         padding:10px;
         padding-left:60px;
         margin:0;
+        font-size:24px;
+        line-height:24px;
         background:lighten(@editorColor, 10%) url("/img/common/editor.png") 10px center no-repeat;
         border-bottom:darken(@editorColor, 10%) 1px solid;     
     }
@@ -62,8 +68,8 @@ body.editor-mode #overflow{
         list-style:none;
         margin:0;
         padding:0;
-        padding-top:10px;        
-        height:29px;
+        padding-top:15px;        
+        height:35px;
         background:darken(@editorColor, 10%);
         .box-shadow( inset 0 0 40px 0 darken(@editorColor, 20%) );
         
@@ -74,7 +80,7 @@ body.editor-mode #overflow{
             
             a {         
                 display:block;       
-                height:18px;
+                height:20px;
                 padding:5px 20px;
                 background:darken(@editorColor, 5%);
                 color:#ddd;
@@ -105,7 +111,7 @@ body.editor-mode #overflow{
         
         overflow:auto;
         position:absolute;
-        top:85px;
+        top:90px;
         bottom:0;
         left:0;
         right:0;
@@ -128,7 +134,8 @@ body.editor-mode #overflow{
                 padding-bottom:5px;
             }    
             
-            code {
+            pre {
+                color:white;
                 padding:0;
                 margin-right:3px;
                 background:darken(@menuColor, 5);
@@ -150,8 +157,9 @@ body.editor-mode #overflow{
             table {
                 .table();
                 .table-striped();
-                background-color:fade(@white, 20);
+                .table-condensed();
                 .border-radius(4px);
+                background-color:fade(@white, 20);
                 tbody > tr:nth-child(2n+1) > td,
                 tbody > tr:nth-child(2n+1) > th {
                     background-color:fade(@white, 20);
