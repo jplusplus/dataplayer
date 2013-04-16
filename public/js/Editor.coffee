@@ -8,24 +8,29 @@
 class @Editor
     recordSpotPosition:(spot)=>
         # Shortcuts
-        $this = $(spot)
-        $step = $this.parents(".step")
+        $spot = $(spot)
+        $step = $spot.parents(".step")
 
-        # Data
-        step = $this.data("step")
-        spot = $this.data("spot")
-        page = $("body").data("page")
-        left = parseInt($this.css("left")) / ($step.width() / 100)
-        top = parseInt($this.css("top")) / ($step.height() / 100)
-
+        # Step key
+        step = $spot.data("step")
+        # Spot key
+        spot = $spot.data("spot")        
+        # Spot positions
+        left = parseInt($spot.css("left")) / ($step.width() / 100)
+        top = parseInt($spot.css("top")) / ($step.height() / 100)
         # Round the values at 4 decimals
-        left = (~~(left * 10000) / 10000) + "%"
-        top = (~~(top * 10000) / 10000) + "%"
+        left = (~~(left * 100) / 100) + "%"
+        top = (~~(top * 100) / 100) + "%"
+        
+        # Get the JSON to edit
+        content = JSON.parse @myCodeMirror.getValue()
+        # Edit positions into the object
+        content.steps[step].spots[spot].left = left
+        content.steps[step].spots[spot].top = top
+        # Add the new configuration file to the editor
+        @myCodeMirror.setValue JSON.stringify content, null, 4
 
-        # Send the value to update the json
-        $.getJSON "/#{page}/#{step}/#{spot}",
-          left: left
-          top: top
+        
 
     updateContent:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
@@ -75,6 +80,17 @@ class @Editor
             text    : xhr.responseText                     
             timeout : 5
 
+    setSpotDraggable:(event) =>
+        $spot = $(event.target).parents(".spot")
+        unless $spot.is(':data(draggable)')
+            $spot.draggable            
+                handle: ".handle"
+                containment: "#container"
+                scroll: false
+                stop: (event, ui) =>              
+                    @recordSpotPosition event.target
+
+
     constructor: ->
         # Bind a "CodeMirror" editor on editor text area
         @myCodeMirror = CodeMirror.fromTextArea(
@@ -106,32 +122,8 @@ class @Editor
             $("#editor .tabs-pan").removeClass("active")
             $(panId).addClass("active")
 
-        $(".spot").draggable stop: (event, ui) ->
-            @recordSpotPosition(this)
-
-        # Add a focus class to the spot where we click
-        $(".spot").on "click", (e) ->
-            $(".spot").not(this).removeClass("focus")
-            $(this).toggleClass("focus")
-
-        # Disable other key events
-        $(window).off("keyup keydown").on "keyup", (e)->        
-            $div = $ '.js-current .spot.focus'
-            if $div.length
-                switch e.which
-                    # left arrow key
-                    when 37 then $div.css "left", '-=1%'                                
-                    # up arrow key                
-                    when 38 then $div.css "top", '-=1%'                                
-                    # right arrow key                
-                    when 39 then $div.css "left", '+=1%'                                
-                    # bottom arrow key                
-                    when 40 then $div.css "top", '+=1%'
-                    # Or stop here
-                    else return
-
-                # Record the div position
-                @recordSpotPosition $div
+        # Set delegated draggable 
+        $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)        
 
 
 $(window).load -> window.editor = new window.Editor()

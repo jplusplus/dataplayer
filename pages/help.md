@@ -1,5 +1,5 @@
 ### JSON file structure
-Such as a configuration file, the JSON file must fit to the following structure :
+Such as a configuration file, the [JSON](http://json.org) file must fit to the following structure :
 
 ```javascript
 // An array detailing every steps

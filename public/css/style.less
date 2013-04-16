@@ -2,7 +2,8 @@
 @zIndexTail    : @zIndexPicture+10;
 @zIndexSpot    : @zIndexTail+10;
 @zIndexTitle   : @zIndexSpot+10;
-@zIndexNav     : @zIndexTitle+10;
+@zIndexHandle  : @zIndexTitle+10;
+@zIndexNav     : @zIndexHandle+10;
 @zIndexEditor  : @zIndexNav+10;
 @zIndexLoading : @zIndexEditor+100;
 
@@ -314,6 +315,10 @@ body {
 
             &.fg {
               z-index:@zIndexSpot + 5;      
+            }
+
+            .handle {
+                display:none;
             }
 
             .ie &.ie-opacity .js-animation-wrapper {

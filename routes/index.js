@@ -15,9 +15,9 @@ module.exports = function(a){
   // Set routes
   app.get("/create", createScreen);
   app.get("/:page", routePage);
+  app.get("/:page/:step/:spot", editSpotPosition);
   app.post("/:page/content", updateContent);
   app.post("/:page/draft", updateDraft);
-  app.get("/:page/:step/:spot", editSpotPosition);
 };
 
 

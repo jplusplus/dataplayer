@@ -40,6 +40,7 @@ mixin spotBlock(spot)
         default
             .js-animation-wrapper( style=spotWrapperStyle(spot) ) 
                 +spotContent(spot)
+    .handle
 
 mixin spotContent(spot)
     if spot["title"]
@@ -49,7 +50,7 @@ mixin spotContent(spot)
     if spot["content"]
         p!=spot["content"]
     if spot["picture"]
-        img(src=spot["picture"]["src"], alt=spot["picture"]["alt"]).spot-background
+        img(src=spot["picture"]["src"], alt=spot["picture"]["alt"]).spot-background            
 
 block content
     if obj.content.steps

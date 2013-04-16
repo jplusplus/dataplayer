@@ -4,6 +4,26 @@
 
 body.editor-mode #overflow{    
     .translate(450px/2px, 0);
+    
+    .spot .handle {
+        display:block;
+        position:absolute;
+        right:10px;
+        bottom:10px;
+        height:14px;
+        width:14px;
+        background:@menuColor;
+        border:5px solid @menuColor;
+        cursor:move;
+        .icon-move();
+        .icon-white();
+        .box-shadow(0 0 3px 0 darken(@containerColor, 10%) );
+        .opacity(10);
+    }
+
+    .spot:hover .handle {        
+        .opacity(100);
+    }
 }
 
 #editor {
@@ -28,6 +48,7 @@ body.editor-mode #overflow{
         display:block;
         .opacity(60);
     }
+
     
     h2.heading {
         padding:10px;
@@ -89,10 +110,14 @@ body.editor-mode #overflow{
         left:0;
         right:0;
         display:none;
+        background:@activeColor;
 
         &.active {            
             display:block;
-            background:@activeColor;
+        }
+
+        a {
+            color:lighten(@activeColor, 40);
         }
 
         article {
@@ -105,12 +130,14 @@ body.editor-mode #overflow{
             
             code {
                 padding:0;
+                margin-right:3px;
                 background:darken(@menuColor, 5);
                 border:1px solid darken(@menuColor, 10);                
             }     
             
             pre code {
                 padding:2px;
+                margin-right:0px;
                 display:block;
             }
             
