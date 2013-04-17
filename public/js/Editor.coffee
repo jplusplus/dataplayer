@@ -31,6 +31,22 @@ class @Editor
         @myCodeMirror.setValue JSON.stringify content, null, 4
 
         
+    updateEditor:()=>        
+        # Get the JSON
+        content = JSON.parse @myCodeMirror.getValue()
+        # Update the theme by changing the body class
+        bodyClass = "editor-mode theme-" + (content.theme || "default")
+        $("body").attr("class", bodyClass)
+        # Update the app title
+        $("head title").text(content.title)
+        $("#editor .screen-title").text(content.title)
+        # Update the container navigation
+        navigation = content.navigation || "horizontal"
+        $("#overflow")
+            .removeClass("horizontal vertical")
+            .addClass(navigation)
+            .data("navigation", navigation);
+
 
     updateContent:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
@@ -49,7 +65,8 @@ class @Editor
 
     loadContent:() =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page} #overflow > *", (data)->                                      
+        $("#overflow").load "/#{page} #overflow > *", (data)=>                                      
+            @updateEditor()
             window.interactive = new window.Interactive()
 
     updateDraft:() =>
@@ -69,7 +86,8 @@ class @Editor
 
     loadDraft:() =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page}?preview=1 #overflow > *", (data)->                                      
+        $("#overflow").load "/#{page}?preview=1 #overflow > *", (data)=>                                      
+            @updateEditor()
             window.interactive = new window.Interactive()
             $("#editor .btn-save").removeClass("disabled")
 

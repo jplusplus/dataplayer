@@ -37,6 +37,12 @@ mixin spotBlock(spot)
                 style=spotWrapperStyle(spot),
                 href=spot.href)
                 +spotContent(spot)
+
+        when "image"
+            img.js-animation-wrapper(
+                style=spotWrapperStyle(spot),
+                src=spot.src)
+
         default
             .js-animation-wrapper( style=spotWrapperStyle(spot) ) 
                 +spotContent(spot)
@@ -48,9 +54,7 @@ mixin spotContent(spot)
     if spot["sub-title"]
         h4!=spot["sub-title"]    
     if spot["content"]
-        p!=spot["content"]
-    if spot["picture"]
-        img(src=spot["picture"]["src"], alt=spot["picture"]["alt"]).spot-background            
+        p!=spot["content"]         
 
 block content
     if obj.content.steps

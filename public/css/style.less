@@ -18,16 +18,15 @@
 
 @import "./vendor/bootstrap/bootstrap.less";
 @import "./bootstrap-overload.less";
+@import "./mixins.less";
 @import "./tools.less";
+@import "./themes.less";
 @import "./editor.less";
-
 
 body {    
     margin:0;
     padding:0;
     overflow:hidden;
-    background:@bgColor;
-    color:white;    
     
     .spot a, .spot {
       color: black;
@@ -148,15 +147,12 @@ body {
                 a {                                                            
                     padding:0 5px;
                     margin-bottom:5px;
-                    background:@menuColor;
-                    color:white;
                     display:block;
                     height:30px;
                     font-weight:bold;
                     cursor:pointer;
                     text-decoration:none;
-                    overflow:hidden;  
-                    .box-shadow(0 0 10px 0 darken(@containerColor, 10%) );
+                    overflow:hidden;                      
                     .transition(0.4s);                  
 
                     .wrapper {
@@ -201,13 +197,10 @@ body {
                 top:50%;
                 margin-top:50px/-2px;
                 
-                color:white;
                 font-size:30px;
                 line-height:46px;
                 text-align:center;
-                background:@menuColor; 
                 cursor:pointer;  
-                .box-shadow(0 0 10px 0 darken(@containerColor, 10%) );
                 .transition(~"left 0.4s, right 0.4s, background-color 0.4s");
                                
                 &:hover { 
@@ -249,11 +242,7 @@ body {
     top:0; left:0;    
     width:100%;
     height:100%;
-    
-    background:@containerColor repeat-x bottom;
-    .box-shadow(0 -5px 20px 0 darken(@containerColor, 10%) inset);
-    
-    
+        
     .step {
         position:absolute;
         top:0; 
@@ -369,9 +358,6 @@ body {
                 font-weight:normal;
             }
 
-            small {
-                color:#999;
-            }
 
             .js-animation-wrapper {
                 background:transparent repeat;            

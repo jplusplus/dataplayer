@@ -18,9 +18,11 @@ html
     block stylesheets
     !=css("style")
 
-  body.js-loading(class=!editMode || "editor-mode", data-page=obj.slug, data-given-token=editToken)
+  - bodyClass  = !editMode || "editor-mode"
+  - bodyClass += " theme-" + (obj.content.theme || "default")
+  body.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
 
-    - var navigation = obj.content.navigation || "horizontal"
+    - navigation = obj.content.navigation || "horizontal"
     #overflow(data-navigation=navigation, class=navigation, style=screenStyle(obj.content))
       include ../widget/menu.jade
       #container
