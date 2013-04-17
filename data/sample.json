@@ -10,7 +10,7 @@
             "spots": [
                 {
                     "width": 300,
-                    "src": "http://images6.fanpop.com/image/photos/33700000/World-s-Cutest-Kitten-cats-33703461-500-383.jpg",
+                    "src": "https://dl.dropboxusercontent.com/u/25128734/kitten.jpg",
                     "type": "image",
                     "entrance": "fadeIn clockWise",
                     "left": "33.33%",

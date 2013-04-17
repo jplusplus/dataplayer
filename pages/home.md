@@ -1,4 +1,4 @@
-# DataPlayer
+# Dataplayer
 
 Gentrify hella jean shorts bespoke pug voluptate adipisicing, brunch seitan occupy banh mi marfa ullamco brooklyn pork belly. Mcsweeney's pour-over +1 mumblecore, cupidatat dolore church-key sriracha truffaut master cleanse exercitation williamsburg quis aute cardigan. Fap street art tousled, nesciunt authentic aliquip mumblecore velit yr qui. 
 

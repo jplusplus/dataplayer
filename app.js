@@ -81,8 +81,8 @@ app.configure(function(){
       style.push("left:" + toPx(spot.left || 0) );
 
       // Add size
-      style.push("width:"  + toPx(spot.width) );      
-      style.push("height:" + toPx(spot.height || spot.width) ); // Square by default      
+      if(spot.width) style.push("width:"  + toPx(spot.width) );      
+      if(spot.height) style.push("height:" + toPx(spot.height) );
       
       // Add style
       if(spot.style) style.push(spot.style)
