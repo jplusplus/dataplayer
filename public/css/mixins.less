@@ -1,0 +1,54 @@
+.animation(@animation) {
+    animation:@animation;
+    -moz-animation:@animation; 
+    -webkit-animation:@animation;
+    -o-animation:@animation; 
+    -ms-animation:@animation;
+}
+
+.build-theme(
+    @bodyBackground, 
+    @basicBackground, 
+    @altBackground, 
+    @basicColor, 
+    @altColor, 
+    @activeColor, 
+    @basicRadius) {      
+
+    background:@bodyBackground;
+    
+    #overflow {
+        .border-radius(@basicRadius);
+    }
+        
+    #container, #container &.step {        
+        color: @basicColor;
+        background-color:@basicBackground;      
+        
+        h1, h2, h3, h4 {
+            color:@basicColor;     
+        }
+
+        a {
+            color:@activeColor;       
+            text-decoration: none;
+            
+            &:hover {            
+                color:mix(@activeColor, @altBackground);       
+                text-decoration: none;
+            }
+        }
+    }       
+    
+    ul.arrows .next,
+    ul.arrows .previous,
+    ul.steps a {    
+        background-color:@altBackground;
+        color:@altColor;
+        .border-radius(@basicRadius);
+        
+        &:hover {
+            background-color:mix(@activeColor, @altBackground)
+        }
+    }
+}

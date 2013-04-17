@@ -27,11 +27,19 @@ class @Editor
         # Edit positions into the object
         content.steps[step].spots[spot].left = left
         content.steps[step].spots[spot].top = top
-        # Add the new configuration file to the editor
-        @myCodeMirror.setValue JSON.stringify content, null, 4
+        updateJsonEditor(content)
 
+
+    updateJsonEditor:(content)=>        
+        if typeof content == "string"
+            value = content
+        else
+            # stringify the object
+            value =  JSON.stringify content, null, 4
+        # Add the new configuration file to the editor
+        @myCodeMirror.setValue value if @myCodeMirror.getValue() != value
         
-    updateEditor:()=>        
+    updateScreen:()=>        
         # Get the JSON
         content = JSON.parse @myCodeMirror.getValue()
         # Update the theme by changing the body class
@@ -67,10 +75,11 @@ class @Editor
                 error: @updateError             
         return false
 
-    loadContent:() =>        
+    loadContent:(content) =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page} #overflow > *", (data)=>                                      
-            @updateEditor()
+        @updateJsonEditor(content)
+        $("#overflow").load "/#{page} #overflow > *", ()=>                                      
+            @updateScreen()
             window.interactive = new window.Interactive()
 
     updateDraft:() =>
@@ -88,10 +97,11 @@ class @Editor
                 error: @updateError                               
         return false
 
-    loadDraft:() =>        
+    loadDraft:(content) =>        
         page = $("body").data("page")
-        $("#overflow").load "/#{page}?preview=1 #overflow > *", (data)=>                                      
-            @updateEditor()
+        @updateJsonEditor(content)
+        $("#overflow").load "/#{page}?preview=1 #overflow > *", ()=>                                      
+            @updateScreen()
             window.interactive = new window.Interactive()
             $("#editor .btn-save").removeClass("disabled")
 

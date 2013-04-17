@@ -1,5 +1,6 @@
 // Dependencies
   var path = require('path')
+       , _ = require('underscore')
       , fs = require('fs')
 , mongoose = require('mongoose')
   , Screen = require('../models.js').Screen
@@ -48,9 +49,14 @@ var viewScreen = function(req, res) {
 };
 
 
-var updateContent = function(req, res) {    
-  // JSON parsing to avoid inbject javascript
-  var dataObject = JSON.parse(req.body.content);
+var updateContent = function(req, res) {     
+  try {    
+    // JSON parsing to avoid inbject javascript
+    var dataObject = setDefaultValues(JSON.parse(req.body.content));  
+  } catch(e) {
+    // Catch the parsing error
+    return res.send(500, "Invalid configuration.");
+  }
   // Update the screen into the database
   Screen.update(
     { slug: req.params.page, token: req.body.token }, 
@@ -61,7 +67,7 @@ var updateContent = function(req, res) {
       // Screen not found
       else if(data == null) res.send(400, "Page not found.");
       // OK
-      else res.send(200);
+      else res.json(dataObject);
     }
   );
 };
@@ -69,8 +75,9 @@ var updateContent = function(req, res) {
 var updateDraft = function(req, res) {    
   try {    
     // JSON parsing to avoid inbject javascript
-    var dataObject = JSON.parse(req.body.content);
+    var dataObject = setDefaultValues(JSON.parse(req.body.content));
   } catch(e) {
+    // Catch the parsing error
     return res.send(500, "Invalid configuration.");
   }
   // Update the screen into the database
@@ -83,10 +90,26 @@ var updateDraft = function(req, res) {
       // Screen not found
       else if(data == null) res.send(400, "Page not found.");
       // OK
-      else res.send(200);
+      else res.json(dataObject);
     }
   );
 };
+
+var setDefaultValues = function(obj) {  
+  
+  // Default values
+  var defaults = _.clone( require("../data/default.json") ),
+  defaultsStep = _.clone( require("../data/default-step.json") );
+
+  // Extend the obj value
+  obj = _.extend(defaults, obj);
+  // Extend each steps
+  for(var s in obj.steps) {    
+    obj.steps[s] = _.extend(defaultsStep, obj.steps[s]);
+  }
+
+  return obj;
+}
 
 var createScreen = function(req, res) {
 

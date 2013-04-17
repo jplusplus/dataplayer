@@ -1,0 +1,9 @@
+{
+    "title": "No title",
+    "navigation": "horizontal",
+    "menu-position": "right bottom",
+    "width": 900,
+    "height": 600,
+    "theme": "default",
+    "steps": [{}]
+}

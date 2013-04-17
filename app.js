@@ -108,6 +108,7 @@ app.configure(function(){
       return klass.join(" ");
     },
     stripTags: function(input, allowed) {
+      if(!input) return "";
       // http://kevin.vanzonneveld.net
       allowed = (((allowed || "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join(''); // making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
       var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
