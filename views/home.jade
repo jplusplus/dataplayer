@@ -2,9 +2,19 @@ extends ./layouts/naked
 
 block content
     #home
-        .content
-            !=getPage("home")
-        .tc.top30
-            a.btn.btn-large.btn-save(href="/create")
-                .icon-pencil.icon-white.right10.top10.pull-left
-                | Let's begin
+        .banner
+            nav.anchors
+                ul.inline
+                    li
+                        a(href="#discover") discover
+                    li
+                        a(href="#understand") understand
+                    li
+                        a(href="#know") know
+                    li
+                        a(href="#share") share
+            .introduction
+                !=getPage("home")
+            .launch
+                a.btn.btn-large.btn-block.btn-save(href="/create")
+                    | Let's begin

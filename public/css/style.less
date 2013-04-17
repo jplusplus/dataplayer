@@ -10,7 +10,7 @@
 @containerWidth  : 940px;
 @containerHeight : 600px;
 
-@activeColor: #2D80B7;
+@activeColor: #3A75AF;
 @bgColor: #505050;
 @menuColor: @bgColor;
 @containerColor:#232325;
@@ -77,8 +77,64 @@ body {
 }
 
 #home {
-    width:400px;
-    margin:40px auto;
+    nav.anchors {
+        position:absolute;
+        top:20px;
+        right:20px;
+        li a{
+            font-size:17px;
+            display:block;
+            color:@white;
+            padding:5px 15px;
+            margin:5px;
+            font-variant:small-caps;
+            font-weight:bold;
+            border:1px solid transparent;
+            .border-radius(15px);       
+            &:hover {
+                border-color:@white;
+            }     
+        }
+    }    
+    .banner {
+        position:relative;
+        width:100%;
+        height:512px;
+        background:@black url("/img/gear.jpg") no-repeat center center;
+        position:relative;        
+        .box-shadow(0 0 0 10px fade(@black, 30%) inset);
+
+        .introduction {
+            color:@white;
+            width:400px;
+            margin-left:400px/-2px;
+            position:absolute;
+            bottom:0;
+            left:50%;
+            font-size:18px;        
+            padding:20px 0;    
+            text-shadow:0 0 10px @black; 
+            
+            h1 {                
+                padding:20px 0; 
+            }
+        }
+
+        .launch {
+            background:fade(@black, 10%);
+            text-align:center;
+            position:absolute;
+            padding:20px;
+            width:360px;
+            top:100%;
+            left:50%;
+            margin-left:400px/-2px;
+            .btn {
+                padding:4%;
+                font-size:30px;
+            }
+        }
+    }
 }
 
 #overflow {    
