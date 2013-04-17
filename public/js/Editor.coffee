@@ -44,8 +44,8 @@ class @Editor
                 type: "POST"
                 data: { content: content, token: token }
                 success: @loadContent
-                error: @updateError 
-            return false
+                error: @updateError             
+        return false
 
     loadContent:() =>        
         page = $("body").data("page")
@@ -64,8 +64,8 @@ class @Editor
                 type: "POST"
                 data: { content: content, token: token }
                 success: @loadDraft
-                error: @updateError                   
-            return false
+                error: @updateError                               
+        return false
 
     loadDraft:() =>        
         page = $("body").data("page")
@@ -107,9 +107,11 @@ class @Editor
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);
         $(document).bind('keydown', 'Ctrl+s', @updateContent);
+        $("textarea,input").bind('keydown', 'Ctrl+s', @updateContent);
         # Save the draft
         $("#editor").on("click", ".btn-preview", @updateDraft);
         $(document).bind('keydown', 'Ctrl+p', @updateDraft);  
+        $("textarea,input").bind('keydown', 'Ctrl+p', @updateDraft);  
 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
