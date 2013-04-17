@@ -27,7 +27,7 @@ class @Editor
         # Edit positions into the object
         content.steps[step].spots[spot].left = left
         content.steps[step].spots[spot].top = top
-        updateJsonEditor(content)
+        @updateJsonEditor(content)
 
 
     updateJsonEditor:(content)=>        
@@ -160,9 +160,7 @@ class @Editor
 
         # Set delegated draggable 
         $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)   
-
-        # Select the whole content of the URL
-             
+     
 
 
 $(window).load -> window.editor = new window.Editor()

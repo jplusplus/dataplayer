@@ -103,11 +103,7 @@ var setDefaultValues = function(obj) {
 
   // Extend the obj value
   obj = _.extend(defaults, obj);
-  // Extend each steps
-  for(var s in obj.steps) {    
-    obj.steps[s] = _.extend(defaultsStep, obj.steps[s]);
-  }
-
+  
   return obj;
 }
 

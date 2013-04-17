@@ -4,15 +4,25 @@
     "menu-position": "right bottom",
     "width": 900,
     "height": 600,
+    "theme": "default",
     "steps": [
         {
-            "name": "Your first slide",
+            "spots": [
+                {
+                    "width": 300,
+                    "src": "http://images6.fanpop.com/image/photos/33700000/World-s-Cutest-Kitten-cats-33703461-500-383.jpg",
+                    "type": "image",
+                    "entrance": "fadeIn clockWise",
+                    "left": "33.33%",
+                    "top": "23.5%"
+                }
+            ],
             "menu-icon": "/img/common/home.png",
-            "spots": []
+            "name": "Your first slide"
         },
         {
-            "name": "Your second slide",
-            "spots": []
+            "spots": [],
+            "name": "Your second slide"
         }
     ]
 }
