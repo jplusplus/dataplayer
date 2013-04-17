@@ -1,32 +1,40 @@
 @import "./vendor/codemirror.css";
 @import "./vendor/notify-osd.css";
 
+body.editor-mode {
 
-body.editor-mode #overflow{    
-    .translate(450px/2px, 0);
-    
-    .spot .handle {
-        display:block;
-        position:absolute;
-        right:10px;
-        bottom:10px;
-        height:14px;
-        width:14px;
-        background:@menuColor;
-        border:5px solid @menuColor;
-        cursor:move;
-        .icon-move();
-        .icon-white();
-        .box-shadow(0 0 3px 0 darken(@containerColor, 10%) );
-        .opacity(10);
-        &:hover {
-            background-color:mix(@menuColor, @activeColor);
-            border-color:mix(@menuColor, @activeColor);
-        }
+    &.editor-toggled #overflow {        
+        .translate(0, 0);
     }
 
-    .spot:hover .handle {        
-        .opacity(100);        
+    #overflow {    
+
+        .translate(450px/2px, 0);
+        .transition(0.4s);
+        
+        .spot .handle {
+            display:block;
+            position:absolute;
+            right:10px;
+            bottom:10px;
+            height:14px;
+            width:14px;
+            background:@menuColor;
+            border:5px solid @menuColor;
+            cursor:move;
+            .icon-move();
+            .icon-white();
+            .box-shadow(0 0 3px 0 darken(@containerColor, 10%) );
+            .opacity(10);
+            &:hover {
+                background-color:mix(@menuColor, @activeColor);
+                border-color:mix(@menuColor, @activeColor);
+            }
+        }
+
+        .spot:hover .handle {        
+            .opacity(100);        
+        }
     }
 }
 
@@ -40,8 +48,32 @@ body.editor-mode #overflow{
     z-index:@zIndexEditor;
     background:@editorColor;
     overflow:hidden;    
-    .box-shadow(0 0 10px 0 darken(@editorColor, 30%));
+    .transition(0.4s);
+    .box-shadow(0 -5px 10px 0 darken(@editorColor, 20%));
     
+    .editor-toggler {
+        position:absolute;
+        top:10px;
+        right:10px;
+        width:14px;
+        height:14px;
+        .hide-text();
+        .icon-white();
+        .icon-chevron-up();        
+        cursor:pointer;
+        background-color:lighten(@editorColor, 10%);
+        border:4px solid lighten(@editorColor, 10%); 
+        
+        .editor-toggled & {
+            .icon-chevron-down();        
+        }
+    }
+
+    .editor-toggled & {
+        bottom:auto;
+        height:44px;
+    }
+
     .js-loading & .CodeMirror:after {
         content:"";
         position:absolute;
@@ -53,7 +85,7 @@ body.editor-mode #overflow{
         .opacity(60);
     }
 
-    
+
     h2.heading {
         padding:10px;
         padding-left:60px;

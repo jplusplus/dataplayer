@@ -113,6 +113,8 @@ class @Editor
         $(document).bind('keydown', 'Ctrl+p', @updateDraft);  
         $("textarea,input").bind('keydown', 'Ctrl+p', @updateDraft);  
 
+        # Toggle the editor
+        $("#editor").on "click", ".editor-toggler", -> $("body").toggleClass "editor-toggled" 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
             event.preventDefault()
