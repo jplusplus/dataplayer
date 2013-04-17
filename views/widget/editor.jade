@@ -8,7 +8,7 @@
             a(href="#editor-json") JSON
         li
             a(href="#editor-help") Help
-        li 
+        li
             a(href="#editor-publish") Publish
 
     #editor-json.tabs-pan.active
@@ -24,6 +24,31 @@
             !=JSON.stringify(obj.content, null, 4)
     
     #editor-help.tabs-pan
-        article
-            !="" + getPage("help")
+        article!="" + getPage("help")
+    
     #editor-publish.tabs-pan
+        article
+            h4 Public address
+            code
+                i.icon-share.right10
+                a(href=publicURL(obj))=publicURL(obj)  
+            p.top10
+                .pull-left.right10.fb-like(data-href=publicURL(obj), data-send='true', data-layout='button_count', data-width='120', data-show-faces='false', data-font='verdana', data-action='recommend')
+                a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
+
+            h4.top20 Admin address
+            p This address enables you to edit this page. Keep it in your bookmarks and above all: <strong>do not share it.</strong>
+            code
+                i.icon-edit.right10
+                a(href=privateURL(obj))=privateURL(obj)
+#fb-root
+script
+  (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+script
+  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');

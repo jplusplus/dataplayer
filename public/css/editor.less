@@ -10,7 +10,6 @@ body.editor-mode {
     #overflow {    
 
         .translate(450px/2px, 0);
-        .transition(transform 0.4s);
         
         .spot .handle {
             display:block;
@@ -48,7 +47,6 @@ body.editor-mode {
     z-index:@zIndexEditor;
     background:@editorColor;
     overflow:hidden;    
-    .transition(0.4s);
     .box-shadow(0 0 5px 0 fade(@black, 20%));
     
     .editor-toggler {
@@ -212,9 +210,19 @@ body.editor-mode {
                 bottom:10px;
                 left:10px;
                 right:10px;
-                border:1px  darken(@activeColor, 15%) solid;
-                background:fade(@white, 90%);
-                .box-shadow(inset 0 0 5px darken(@activeColor, 15%) );
+            }
+        }
+
+        &#editor-publish {
+            input[readonly] {
+                cursor:text;
+            }
+            code {
+                font-family:inherit;
+                a {
+                    color:@gray;   
+                    text-decoration:underline;             
+                }
             }
         }
     }

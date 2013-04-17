@@ -159,7 +159,10 @@ class @Editor
             $(panId).addClass("active")
 
         # Set delegated draggable 
-        $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)        
+        $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)   
+
+        # Select the whole content of the URL
+             
 
 
 $(window).load -> window.editor = new window.Editor()

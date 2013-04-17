@@ -133,6 +133,12 @@ app.configure(function(){
   app.use(function(req, res, next) {    
     res.locals.editMode  = req.query.hasOwnProperty("edit")
     res.locals.editToken = req.query["edit"]
+    res.locals.publicURL = function(obj) {
+      return req.protocol + "://" + req.headers.host + "/" + obj.slug
+    }
+    res.locals.privateURL = function(obj) {
+      return res.locals.publicURL(obj) + "?edit=" + req.query["edit"]
+    }
     next();
   });
   
