@@ -52,12 +52,10 @@ app.configure(function(){
       // Add size
       if(data.width) {
         style.push("width:"  + toPx(data.width) );      
-        style.push("margin-left:"  + toPx(data.width/-2) );      
       }
 
       if(data.height) {
-        style.push("height:" + toPx(data.height) );
-        style.push("margin-top:"  + toPx(data.height/-2) );   
+        style.push("height:" + toPx(data.height) );        
       }
 
       return style.join(";");

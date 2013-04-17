@@ -22,11 +22,12 @@ html
   - bodyClass += " theme-" + (obj.content.theme || "default")
   body.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
 
-    - navigation = obj.content.navigation || "horizontal"
-    #overflow(data-navigation=navigation, class=navigation, style=screenStyle(obj.content))
-      include ../widget/menu.jade
-      #container
-        block content                  
+    #workspace
+      - navigation = obj.content.navigation || "horizontal"
+      #overflow(data-navigation=navigation, class=navigation, style=screenStyle(obj.content))
+        include ../widget/menu.jade
+        #container
+          block content                  
 
     !=js('Interactive')
 

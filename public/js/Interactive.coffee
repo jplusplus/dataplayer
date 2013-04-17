@@ -37,7 +37,8 @@ class window.Interactive
   ###
   constructor: ->    
     @buildUI()
-    @buildAnimations()    
+    @buildAnimations()  
+    @containerPosition()  
     @stepsPosition()
     @spotsSize()
     @spotsPosition()
@@ -72,6 +73,7 @@ class window.Interactive
     $uis.steps.on "click", ".spot", @showSpot
     $uis.previous.on "click", @previousStep
     $uis.next.on "click", @nextStep
+    $(window).off("resize").on("resize", @containerPosition)
     $(window).off("hashchange").hashchange @readStepFromHash
     # Deactivates this shortcuts in editor mode
     if not $("body").hasClass("editor-mode")
@@ -139,6 +141,19 @@ class window.Interactive
       counterClockWise:
         from: { transform: "rotate(0deg)" }
         to:   { transform: "rotate(-360deg)" }
+
+  ###*
+   * Adjust the margin of the container to fit to the widnow   
+  ###
+  containerPosition: =>
+    windowHeight = $(window).height()
+    containerHeight = $ui.outerHeight()
+    if windowHeight <= containerHeight
+      top = 0 
+    else
+      top = (windowHeight-containerHeight)/2
+    # Sets the new offset
+    $ui.parents("#overflow").css "top", top
 
   ###*
    * Position every steps in the container

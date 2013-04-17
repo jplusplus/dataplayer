@@ -3,14 +3,17 @@
 
 body.editor-mode {
 
-    &.editor-toggled #overflow {        
-        .translate(0, 0);
+    &.editor-toggled #workspace {        
+        left:0;
+    }
+
+    #workspace {
+        left:400px;
+        overflow:auto;
     }
 
     #overflow {    
 
-        .translate(450px/2px, 0);
-        
         .spot .handle {
             display:block;
             position:absolute;
@@ -42,12 +45,12 @@ body.editor-mode {
     top:0;
     bottom:0;
     left:0;
-    width:450px;
+    width:400px;
     color:white;
     z-index:@zIndexEditor;
     background:@editorColor;
     overflow:hidden;    
-    .box-shadow(0 0 5px 0 fade(@black, 20%));
+    .box-shadow(0 0 5px 0 fade(@black, 30%));
     
     .editor-toggler {
         position:absolute;
