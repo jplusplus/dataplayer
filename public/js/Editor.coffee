@@ -43,6 +43,10 @@ class @Editor
         # Update the container navigation
         navigation = content.navigation || "horizontal"
         $("#overflow")
+            .css("width", content.width)
+            .css("margin-left", content.width/-2)
+            .css("height", content.height)
+            .css("margin-top", content.height/-2)
             .removeClass("horizontal vertical")
             .addClass(navigation)
             .data("navigation", navigation);
