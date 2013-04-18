@@ -136,12 +136,12 @@ class @Editor
 
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);
-        $(document).bind('keydown', 'Ctrl+s', @updateContent);
-        $("textarea,input").bind('keydown', 'Ctrl+s', @updateContent);
+        $(document).bind('keydown', 'Ctrl+s meta+s', @updateContent);
+        $("textarea,input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
         # Save the draft
         $("#editor").on("click", ".btn-preview", @updateDraft);
-        $(document).bind('keydown', 'Ctrl+p', @updateDraft);  
-        $("textarea,input").bind('keydown', 'Ctrl+p', @updateDraft);  
+        $(document).bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
+        $("textarea,input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
 
         # Toggle the editor
         $("#editor").on "click", ".heading, .editor-toggler", -> $("body").toggleClass "editor-toggled" 
