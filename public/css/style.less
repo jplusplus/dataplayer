@@ -10,7 +10,7 @@
 @containerWidth  : 940px;
 @containerHeight : 600px;
 
-@activeColor: #3A75AF;
+@activeColor: #60A5E5;
 @bgColor: #505050;
 @menuColor: @bgColor;
 @containerColor:#232325;
@@ -26,7 +26,6 @@
 body {    
     margin:0;
     padding:0;
-    overflow:hidden;
     
     .spot a, .spot {
       color: black;
@@ -77,6 +76,10 @@ body {
 }
 
 #home {
+
+    font-size:18px;  
+    background:url("/img/gear-footer.jpg") bottom center no-repeat black fixed;
+            
     nav.anchors {
         position:absolute;
         top:20px;
@@ -102,6 +105,7 @@ body {
         height:512px;
         background:@black url("/img/gear.jpg") no-repeat center center;
         position:relative;        
+        border-bottom:100px solid @white;
         .box-shadow(0 0 0 10px fade(@black, 30%) inset);
 
         .introduction {
@@ -110,13 +114,18 @@ body {
             margin-left:400px/-2px;
             position:absolute;
             bottom:0;
-            left:50%;
-            font-size:18px;        
+            left:50%;      
             padding:20px 0;    
             text-shadow:0 0 10px @black; 
             
             h1 {                
-                padding:20px 0; 
+                padding:0;
+                padding-bottom:40px; 
+                font-size:65px;
+            }
+
+            p {
+                margin-bottom:20px;
             }
         }
 
@@ -134,6 +143,80 @@ body {
                 font-size:30px;
             }
         }
+    }
+
+    h2 {
+        margin:auto;
+        text-align:center;
+        width:300px;
+        line-height:50px;
+        padding-bottom:30px;
+        margin-bottom:60px;
+        position:relative;
+        
+        &:after {
+            content:"";
+            border-bottom:2px solid @textColor;
+            width:200px;
+            position:absolute;
+            bottom:0;
+            left:50%;
+            margin-left:200px/-2px;                
+        }
+    } 
+
+    #discover{
+        background:@white;        
+        padding:60px 0;            
+
+        .row {
+            padding-bottom:30px;
+        }
+    }
+
+    #share {
+        background:@menuColor;
+        overflow:hidden;
+        color:white;
+        padding:60px 0;    
+        position:relative;
+        
+        
+        &:before {
+            content:"";
+            display:block;
+            top:0;
+            position:absolute;
+            left:-20px;
+            right:-20px;
+            height:40px;
+            .box-shadow(0 10px 0 0 fade(@black, 20) inset)
+        }
+
+        h2:after { border-color:@white; }  
+    }
+
+    footer {
+        overflow:hidden;
+        min-height:100px;
+        padding:60px 0;
+        position:relative;
+        color:@white;
+        font-size:18px;
+        line-height:22px;
+        text-shadow:0 0 10px @black; 
+        
+        &:before {
+            content:"";
+            display:block;
+            top:0;
+            position:absolute;
+            left:-20px;
+            right:-20px;
+            height:40px;
+            .box-shadow(0 10px 0 0 fade(@black, 20) inset)
+        }
+
     }
 }
 
