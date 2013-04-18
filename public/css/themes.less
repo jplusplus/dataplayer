@@ -17,10 +17,12 @@
         .box-shadow(0 -5px 20px 0 darken(@containerColor, 10%) inset);               
     }    
     
-    ul.arrows .next,
-    ul.arrows .previous,
-    ul.steps a {            
-        .box-shadow(0 0 10px 0 darken(@containerColor, 10%) );        
+    .nav {        
+        ul.arrows .next,
+        ul.arrows .previous,
+        ul.steps a {            
+            .box-shadow(0 0 10px 0 darken(@containerColor, 10%) );        
+        }
     }
 }
 
@@ -32,7 +34,7 @@
     @altBackground:@grayLighter;
     @basicColor:@grayDark;
     @altColor:@grayDarker;
-    @activeColor:#AAEBFF;
+    @activeColor:#0088CC;
     @basicRadius:4px;
     
     .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);

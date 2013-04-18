@@ -12,14 +12,27 @@ html
     meta(http-equiv="X-UA-Compatible",content="IE=edge,chrome=1")
     meta(name="viewport",content="width=1200")
     meta(charset="utf-8")
-    title
-      block title
+    if typeof obj.content.title !== "undefined"
+      title=obj.content.title
+
     link(href='http://fonts.googleapis.com/css?family=Merriweather:400,700,300', rel='stylesheet', type='text/css')
     block stylesheets
     !=css("style")
 
-  body.theme-datawrapper
-    block content
+  - bodyClass  = !editMode || "editor-mode"
+  - bodyClass += " theme-" + (obj.content.theme || "default")
+  body.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
+    
+    block slider              
+
+    !=js('Interactive')
+    //- Edit mode
+    if editMode
+      //- Loads the editor html
+      include ../widgets/editor.jade
+      //- Loads its library 
+      !=js('Editor')
+
     //- Context scripts    
     block scripts
     include ../widgets/deprecated

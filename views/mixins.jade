@@ -1,5 +1,3 @@
-extends ../layouts/base
-
 mixin stepContent(step, stepKey)
     unless step["no-title"]
         h2!=step.name
@@ -55,9 +53,3 @@ mixin spotContent(spot)
         h4!=spot["sub-title"]    
     if spot["content"]
         p!=spot["content"]         
-
-block content
-    if obj.content.steps
-        each step, stepKey in obj.content.steps
-            .step(style=stepStyle(step), class=step.class, data-step=stepKey)
-                +stepContent(step, stepKey)

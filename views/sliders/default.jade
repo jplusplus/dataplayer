@@ -1,0 +1,13 @@
+extends ../layouts/slider
+include ../mixins
+
+block slider
+    #workspace
+      - navigation = obj.content.navigation || "horizontal"
+      #overflow(data-navigation=navigation, class=navigation, style=screenStyle(obj.content))
+        include ../widgets/menu.jade
+        #container
+          if obj.content.steps
+            each step, stepKey in obj.content.steps
+                .step(style=stepStyle(step), class=step.class, data-step=stepKey)
+                    +stepContent(step, stepKey)

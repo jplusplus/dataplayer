@@ -28,20 +28,25 @@ var homepage = function(req, res) {
 
 var viewScreen = function(req, res) {
 
-    // Template file 
-    var tplDir = "theme/"
-     , tplName = req.params.page + "." + app.get("view engine")
-     , tplPath = path.join(app.get("views"), tplDir, tplName );
-    
     Screen.findOne({slug: req.params.page }, function(err, data) {
       if(err) return res.send(500);
       if(data == null || !data) return res.send(400, "Page not found.");
+      
+      // Template file 
+      var  tplDir = "sliders/"
+        , tplName = data.content.layout + "." + app.get("view engine")
+        , tplPath = path.join(app.get("views"), tplDir, tplName );
+
+      // Change the layout if not exists
+      data.content.layout = fs.existsSync(tplPath) ? data.content.layout : "default";
+      
       // Preview mode, use the draft as data
       if(req.query.preview) data.content = data.draft || data.content;
+
       // Render the page template
       res.render(
           // Use the default template if needed 
-          path.join( tplDir, fs.existsSync(tplPath) ? req.params.page : "default" ), 
+          path.join( tplDir, data.content.layout ), 
           // Send the data to the template
           { obj: data }
       );   

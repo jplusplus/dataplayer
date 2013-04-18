@@ -1,0 +1,9 @@
+.tabs
+    ul.steps.unstyled
+        if obj.content.steps
+            each step, stepKey in obj.content.steps       
+                li(class=(step["no-index"] ? "hidden":""))
+                    a.to-step(href="#step="+stepKey, data-step=stepKey)
+                        img.icon.right10(src=step["menu-icon"])
+                        =stripTags(step.name)
+                        

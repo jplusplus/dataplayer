@@ -4,6 +4,7 @@
     "menu-position": "right bottom",
     "width": 900,
     "height": 600,
+    "layout": "default",
     "theme": "default",
     "steps": [{}]
 }
