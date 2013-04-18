@@ -78,6 +78,7 @@ body {
 #home {
 
     font-size:18px;  
+    line-height:26px;
     background:url("/img/gear-footer.jpg") bottom center no-repeat black fixed;
             
     nav.anchors {
@@ -174,7 +175,7 @@ body {
         }
     }
 
-    #share {
+    #touch {
         background:@menuColor;
         overflow:hidden;
         color:white;
@@ -194,6 +195,46 @@ body {
         }
 
         h2:after { border-color:@white; }  
+        
+        .links {
+            
+            li {
+                float:left;
+                line-height:70px;
+                
+                a {
+                    padding-right:20px;
+                    display:block;
+                    color:@white;
+                    font-size:40px;
+                    line-height:90px;   
+                    font-family:@sansFontFamily;                    
+                }
+                
+                &.rounded {
+                           
+                    a {
+                        .border-radius(50px);
+                        width:70px;
+                        height:70px;                
+                        padding:0;
+                        background:@white center center no-repeat;
+                        border:10px solid darken(@menuColor, 2%);
+                        
+                        &.twitter {
+                            background-image:url("/img/twitter.png");
+                        }
+                        &.facebook {
+                            background-image:url("/img/facebook.png");
+                        }
+                        &.github {
+                            background-image:url("/img/github.png");
+                        }
+                    }
+                    
+                }
+            }     
+        }
     }
 
     footer {
@@ -205,6 +246,7 @@ body {
         font-size:18px;
         line-height:22px;
         text-shadow:0 0 10px @black; 
+        font-family:@sansFontFamily;
         
         &:before {
             content:"";

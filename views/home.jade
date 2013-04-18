@@ -8,7 +8,7 @@ block content
                     li
                         a(href="#discover") discover
                     li
-                        a(href="#share") share
+                        a(href="#touch") get in touch
             .introduction
                 !=getPage("home")
             .launch
@@ -46,11 +46,21 @@ block content
                     .span2
                         img.img-circle(src="http://placehold.it/150x150")
 
-        #share
+        #touch
             .container
-                h2 Share
+                h2 Get in touch
+                h3 Meeting exciting people, confront ideas and concepts is what makes us enthusiastic. So go on, get in touch.
+                ul.inline.links.pull-right
+                    li
+                        a(href="mailto:hello@dataplayer.org") hello@dataplayer.org
+                    li.rounded
+                        a.facebook(href="http://facebook.com/journalismplusplus", title="facebook")
+                    li.rounded
+                        a.twitter(href="http://twitter.com/jplusplus_", title="twitter")
+                    li.rounded
+                        a.github(href="http://github.com/jplusplus", title="github")
 
-        footer
+        footer            
             .container
                 .row
                     .span8.tr
@@ -64,4 +74,15 @@ block content
                                 | and available <a href="http://github/jplusplus/dataplayer">on Github</a>.
                     .span4.tr
                         a(href="http://jplusplus.org")
-                            img(src="img/logo-full.png", alt="Journalism++")                    
+                            img(src="img/logo-full.png", alt="Journalism++")
+
+block scripts
+    !=js('vendor/jquery-1.7.1.min.js')
+    script
+        $('a[href^="#"]').click(function(){  
+            var the_id = $(this).attr("href");  
+            $('html, body').animate({  
+                scrollTop:$(the_id).offset().top  
+            }, 'slow');  
+            return false;  
+        });  
