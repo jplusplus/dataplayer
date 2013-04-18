@@ -144,7 +144,7 @@ class @Editor
         $("textarea,input").bind('keydown', 'Ctrl+p', @updateDraft);  
 
         # Toggle the editor
-        $("#editor").on "click", ".editor-toggler", -> $("body").toggleClass "editor-toggled" 
+        $("#editor").on "click", ".heading, .editor-toggler", -> $("body").toggleClass "editor-toggled" 
         # Resize editor
         $("#editor").resizable
             handles: "e"
