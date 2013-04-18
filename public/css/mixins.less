@@ -17,12 +17,14 @@
 
     background:@bodyBackground;
     
-    #overflow {
-        .border-radius(@basicRadius);
-        .js-loading &:after {
-            background:@bodyBackground;
-        }
+    &.js-loading #overflow:after {
+        background:@bodyBackground;
     }
+
+    #overflow {
+        .border-radius(@basicRadius);        
+    }
+
         
     #container, #container &.step {        
         color: @basicColor;
