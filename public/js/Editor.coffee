@@ -145,6 +145,12 @@ class @Editor
 
         # Toggle the editor
         $("#editor").on "click", ".editor-toggler", -> $("body").toggleClass "editor-toggled" 
+        # Resize editor
+        $("#editor").resizable
+            handles: "e"
+            ghost: true
+            minWidth: 300
+
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
             event.preventDefault()
