@@ -4,4 +4,11 @@
 .btn-save {
     @bg: #31475E;
     .buttonBackground(@bg, @bg);
+    &:hover {
+        .buttonBackground(lighten(@bg, 5), lighten(@bg, 5));        
+    }
+
+    &:focus {
+        color:@white;
+    }
 }
