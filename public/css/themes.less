@@ -1,7 +1,7 @@
 
     
 /* Default theme */
-.theme-default {        
+.theme-default, .theme-dark {        
     
     @bodyBackground:@bgColor;
     @basicBackground:@containerColor;
@@ -25,7 +25,7 @@
 }
 
 /*  Datawrapper */
-.theme-datawrapper {
+.theme-light {
 
     @bodyBackground:#F7F7F7;
     @basicBackground:@white;
@@ -45,3 +45,47 @@
         }
     }
 }
+
+/*  Purple*/
+.theme-purple {
+
+    @bodyBackground:#FFE8FF;
+    @basicBackground:@white;
+    @altBackground:#FFCEE5;
+    @basicColor:#561129;
+    @altColor:@white;
+    @activeColor:#AF366F;
+    @basicRadius:14px;
+    
+    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);
+              
+    #overflow {
+        .box-shadow(0 0 10px 0 @altBackground);                                 
+        h1, h2, h3 {
+            font-weight:500;
+            font-family:@serifFontFamily;
+        }
+    }
+}
+
+/*  Green*/
+.theme-green {
+
+    @activeColor:#44A823;
+    @bodyBackground:mix(@white, @activeColor);
+    @basicBackground:@white;
+    @altBackground:lighten(@activeColor, 20);
+    @basicColor:@bodyBackground;
+    @altColor:@white;
+    @basicRadius:0;
+    
+    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);
+              
+    #overflow {
+        .box-shadow(0 0 0 1px lighten(#44A823, 30) );                  
+        h1, h2, h3 {
+            font-family:Helvetica Neue, Helvetica, Arial;
+        }
+    }
+}
+

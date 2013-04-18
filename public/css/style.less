@@ -362,7 +362,6 @@ body {
                     }
 
                     &:hover {
-                        background:mix(@activeColor, @menuColor);
                         .wrapper {
                             width:auto;
                             max-width:600px;   
@@ -371,9 +370,6 @@ body {
                         }
                     }
 
-                    html body &.active {
-                        background:@activeColor;
-                    }
                 }                
             }
         }
@@ -396,12 +392,7 @@ body {
                 line-height:46px;
                 text-align:center;
                 cursor:pointer;  
-                .transition(~"left 0.4s, right 0.4s, background-color 0.4s");
-                               
-                &:hover { 
-                    background:mix(@activeColor, @menuColor);
-                }
-
+                .transition(~"left 0.4s, right 0.4s, background-color 0.4s");                             
             }
 
             .previous {
