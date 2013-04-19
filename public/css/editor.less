@@ -247,9 +247,16 @@ body.editor-mode {
         }
 
         &#editor-publish {
-            input[readonly] {
+            
+            .embed {
+                .input-block-level();
+                height:80px;
+            }
+
+            [readonly], .embed {
                 cursor:text;
             }
+
             code {
                 font-family:inherit;
                 a {

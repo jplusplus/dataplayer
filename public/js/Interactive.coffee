@@ -153,13 +153,13 @@ class window.Interactive
   ###
   containerPosition: =>
     windowHeight = $(window).height()
-    containerHeight = $ui.outerHeight()
+    containerHeight = $uis.overflow.outerHeight()
     if windowHeight <= containerHeight
-      top = 0 
+      top = 0
     else
       top = (windowHeight-containerHeight)/2
     # Sets the new offset
-    $ui.parents("#overflow").css "top", top
+    $uis.overflow.css "top", top
 
   ###*
    * Position every steps in the container

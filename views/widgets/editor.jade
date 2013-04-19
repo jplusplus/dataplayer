@@ -11,7 +11,7 @@
         li
             a(href="#editor-publish") Publish
 
-    #editor-json.tabs-pan.active
+    #editor-json.tabs-pan
         .tr.editor-actions
             button.btn.btn-preview.disabled.right10             
                 i.icon-refresh.right10
@@ -26,7 +26,7 @@
     #editor-help.tabs-pan
         article!="" + getPage("help")
     
-    #editor-publish.tabs-pan
+    #editor-publish.tabs-pan.active
         article
             h4 Public address
             code
@@ -35,6 +35,10 @@
             p.top10
                 .pull-left.right10.fb-like(data-href=publicURL(obj), data-send='true', data-layout='button_count', data-width='120', data-show-faces='false', data-font='verdana', data-action='recommend')
                 a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
+
+            h4.top20 Embed 
+            textarea.embed(readonly)
+                iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
 
             h4.top20 Admin address
             p This address enables you to edit this page. Keep it in your bookmarks and above all: <strong>do not share it.</strong>
