@@ -41,7 +41,17 @@ app.configure(function(){
    ************************************/   
   // Register helpers for use in view's
   app.locals({  
-    NODE_ENV: process.env.NODE_ENV,  
+    NODE_ENV: process.env.NODE_ENV, 
+    containerClass: function(data) {
+      var klasses = data["menu-position"].split(" ")
+         , layout = data["layout"]; 
+      // For each class 
+      for(k in klasses) {
+        // Add a suffix
+        klasses[k] = layout + "-" + klasses[k];
+      }    
+      return klasses.join(" ");
+    },        
     screenStyle: function(data) { 
 
       var toPx = function(val) {

@@ -271,8 +271,7 @@ body {
     width:@containerWidth;
     height:@containerHeight;
     margin:auto;
-    position:relative;
-    
+    position:relative;    
 
     .js-loading &:after {
         content:"";
@@ -425,18 +424,39 @@ body {
 /* Vertical tabs layout */
 .vertical-tabs {
 
-    #container {        
+    #container.vertical-tabs-left {        
         left:200px;
+    }
+
+    #container.vertical-tabs-right {        
+        right:200px;
     }
     
     .tabs {            
         position:absolute;
         width:200px;
-        top:0; left:0;
-        bottom:0;
         overflow:auto;
+        max-height:100%;
+
+        &.left {
+            left:0;
+        }
+
+        &.right {
+            right:0;
+        }
+
+        &.top {
+            top:0;
+        }
         
-        .steps {                
+        &.bottom {
+            bottom:0;
+        }
+        
+        .steps {  
+            padding:0; 
+            margin:0;            
             li a {
                 padding:20px 10px; 
                 display:block;

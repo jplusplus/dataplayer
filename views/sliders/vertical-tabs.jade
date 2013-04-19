@@ -8,7 +8,8 @@ block slider
       - klass = obj.content.layout || "default"
       #overflow(data-navigation=navigation, class=klass, style=screenStyle(obj.content))    
         include ../widgets/tabs.jade    
-        #container
+        - klass = containerClass(obj.content)        
+        #container(class=klass)
           if obj.content.steps
             each step, stepKey in obj.content.steps
                 .step(style=stepStyle(step), class=step.class, data-step=stepKey)

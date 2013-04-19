@@ -50,11 +50,12 @@ class @Editor
         $("#editor .screen-title").text(content.title)
         # Update the container navigation
         navigation = content.navigation || "horizontal"
+        layout = content.layout || "default"
         $("#overflow")
             .css("width", content.width)
             .css("height", content.height)
-            .removeClass("horizontal vertical")
-            .addClass(navigation)
+            .removeAttr("class")
+            .addClass(navigation + " " + layout)
             .data("navigation", navigation);
 
 
