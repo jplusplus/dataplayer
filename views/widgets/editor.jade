@@ -11,7 +11,7 @@
         li
             a(href="#editor-publish") Publish
 
-    #editor-json.tabs-pan
+    #editor-json.tabs-pan.active
         .tr.editor-actions
             button.btn.btn-preview.disabled.right10             
                 i.icon-refresh.right10
@@ -26,7 +26,7 @@
     #editor-help.tabs-pan
         article!="" + getPage("help")
     
-    #editor-publish.tabs-pan.active
+    #editor-publish.tabs-pan
         article
             h4 Public address
             code
@@ -37,7 +37,7 @@
                 a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
 
             h4.top20 Embed 
-            textarea.embed(readonly)
+            textarea#editor-embed(readonly)
                 iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
 
             h4.top20 Admin address

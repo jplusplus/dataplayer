@@ -39,7 +39,12 @@ class @Editor
         # Add the new configuration file to the editor
         @myCodeMirror.setValue value if @myCodeMirror.getValue() != value
         
-    updateScreen:()=>        
+    updateScreen:(text)=>         
+        # Update workspace content
+        $("#workspace").html $(text).filter("#workspace").html()
+        window.interactive = new window.Interactive()  
+        # Update embed code
+        $("#editor-embed").html $(text).find("textarea#editor-embed").val()      
         # Get the JSON
         content = JSON.parse @myCodeMirror.getValue()
         # Update the theme by changing the body class
@@ -48,48 +53,34 @@ class @Editor
         # Update the app title
         $("head title").text(content.title)
         $("#editor .screen-title").text(content.title)
-        # Update the container navigation
-        navigation = content.navigation || "horizontal"
-        layout = content.layout || "default"
-        $("#overflow")
-            .css("width", content.width)
-            .css("height", content.height)
-            .removeAttr("class")
-            .addClass(navigation + " " + layout)
-            .data("navigation", navigation);
 
 
-    updateContent:() =>
+    updateContent:() =>   
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")            
             $("#editor .btn").addClass("disabled")
             content = @myCodeMirror.getValue()
-            token   = $("body").data("given-token");
-            page    = $("body").data("page")
             $.ajax
-                url: "/#{page}/content"
+                url: "/#{@page}/content"
                 type: "POST"
-                data: { content: content, token: token }
+                data: { content: content, token: @token }
                 success: @loadContent
                 error: @updateError             
         return false
 
     loadContent:(content) =>        
-        page = $("body").data("page")
         @updateJsonEditor(content)
-        $("#overflow").load "/#{page} #overflow > *", ()=>                                      
-            @updateScreen()
-            window.interactive = new window.Interactive()
+        $.get "/#{@page}?edit=#{@token}", (xml)=>            
+            @updateScreen(xml)
+            $("#editor .btn").removeClass("disabled")
 
     updateDraft:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")            
             $("#editor .btn").addClass("disabled")
             content = @myCodeMirror.getValue()
-            token   = $("body").data("given-token");
-            page    = $("body").data("page")
             $.ajax
-                url: "/#{page}/draft"
+                url: "/#{@page}/draft"
                 type: "POST"
                 data: { content: content, token: token }
                 success: @loadDraft
@@ -97,11 +88,9 @@ class @Editor
         return false
 
     loadDraft:(content) =>        
-        page = $("body").data("page")
         @updateJsonEditor(content)
-        $("#overflow").load "/#{page}?preview=1 #overflow > *", ()=>                                      
-            @updateScreen()
-            window.interactive = new window.Interactive()
+        $.get "/#{@page}?edit={@token}&preview=1", (text)=>                                      
+            @updateScreen(text)
             $("#editor .btn-save").removeClass("disabled")
 
     updateError:(xhr) =>   
@@ -122,7 +111,9 @@ class @Editor
                     @recordSpotPosition event.target
 
 
-    constructor: ->
+    constructor: ->        
+        @token = $("body").data "given-token"
+        @page  = $("body").data "page"
         # Bind a "CodeMirror" editor on editor text area
         @myCodeMirror = CodeMirror.fromTextArea(
             $("#editor-json textarea")[0],
