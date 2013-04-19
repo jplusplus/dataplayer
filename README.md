@@ -22,7 +22,7 @@ The following environment variables can be use with the highest priority :
 To launch the server (once the installation is complete), just run from the root of the project:
 
 ```
-$ node app.js
+$ coffee app.coffee
 ```
 
 ## Create a page
