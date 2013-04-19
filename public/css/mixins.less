@@ -48,7 +48,7 @@
     
     ul.arrows .next,
     ul.arrows .previous,
-    ul.steps a {    
+    .steps .wrapper a {    
         background-color:@altBackground;
         color:@altColor;
         
@@ -67,5 +67,13 @@
         ul.steps a {     
             .border-radius(@basicRadius);
         }    
+    }
+
+    .nav-tick a {
+        background:@altBackground;
+        color:@altColor;
+        &.disbaled:after {
+            color:mix(@altBackground, @altColor);
+        }
     }
 }

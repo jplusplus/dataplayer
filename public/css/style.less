@@ -440,28 +440,102 @@ body {
 
 .vertical-tabs, 
 .horizontal-tabs {
-    
+
+    position:relative;
+
+    .nav-tick a {
+        position:absolute;
+        cursor:pointer;
+        display:block;    
+        &:after {
+            display:block;
+            position:absolute;
+            left:0;
+            right:0;
+            top:0;
+            bottom:0;
+            color:inherit;
+        }
+    } 
+
+    &.horizontal-tabs .nav-tick a {
+        top:0;
+        bottom:0;
+        width:20px; 
+
+        &:after {
+            line-height:60px;
+            text-align:center;
+        }     
+
+        &.previous {
+            left:0px;
+            &:after { content: "◂"; }
+        }
+
+        &.next {
+            right:0px;
+            &:after { content: "▸"; }
+        }
+    }
+
     &.vertical-tabs .tabs {    
         width:200px;
-        max-height:100%;     
-        overflow:auto;
+        max-height:100%;  
+
+        top:0px;
+        bottom:0px;        
+
+        .steps {
+            top:40px;
+            bottom:40px;
+            left:0;
+            right:0;
+        }
+  
+
+        .nav-tick a {
+
+            left:0;
+            right:0;
+            height:40px;
+
+            &:after {
+                line-height:40px;
+                text-align:center;
+            }
+
+            &.previous {
+                top:0px;
+                &:after { content: "▴"; }
+            }
+
+            &.next {
+                bottom:0px;
+                &:after { content: "▾"; }
+            }
+        }
     } 
     
     &.horizontal-tabs .tabs {    
         height:60px;
-        max-width:100%;    
-        overflow:hidden;    
-        &:hover {
-            overflow: auto; 
-            overflow-y:hidden; 
+        left:0px;
+        right:0px;
+
+        .steps {
+            left:20px;
+            right:20px;
+            top:0;
+            bottom:0;
         }
         
-        .steps {
+        .wrapper {
             width:150px*100px;
+            li {
+                float:left;
+            }
         }
-        li {
-            float:left;
-        }
+
     }
 
     .tabs {
@@ -484,7 +558,11 @@ body {
             bottom:0;
         }
         
-        .steps {  
+        .steps {
+            overflow:hidden;
+            position:absolute;            
+        }
+        .steps .wrapper {  
             padding:0; 
             margin:0;
 
