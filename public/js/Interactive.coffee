@@ -26,6 +26,10 @@
 # Patch the requestAnimationFrame function for better compatibility
 #= require vendor/rAF.js
 
+# Cross-browser mousewheel support
+#= require vendor/jquery.mousewheel.js
+
+
 class window.Interactive
   $ui = $uis = null
   currentStep = 0
@@ -61,8 +65,9 @@ class window.Interactive
       spots: $ui.find(".spot")
       overflow: $("#overflow")
       navitem: $("#overflow .to-step")
-      previous: $("#overflow .nav .arrows .previous")
-      next: $("#overflow .nav .arrows .next")
+      tabs: $("#overflow .tabs .steps")
+      previous: $("#overflow .previous")      
+      next: $("#overflow .next")
     return $ui
 
   ###*
@@ -73,6 +78,7 @@ class window.Interactive
     $uis.steps.on "click", ".spot", @showSpot
     $uis.previous.on "click", @previousStep
     $uis.next.on "click", @nextStep
+    $uis.tabs.on "mousewheel", @wheelOnTabs
     $(window).off("resize").on("resize", @containerPosition)
     $(window).off("hashchange").hashchange @readStepFromHash
     # Deactivates this shortcuts in editor mode
@@ -208,6 +214,23 @@ class window.Interactive
     alert $this.data("html")  if $this.data("html")
 
   ###*
+   * Activate mousewheel within the tabs area
+   * @param  {Object} event  Mouse wheel event
+   * @param  {Number} delta  Distance across
+   * @param  {Number} deltaX Distance across on X
+   * @param  {Number} deltaY Distance across on Y
+  ###
+  wheelOnTabs: (event, delta, deltaX, deltaY) ->
+    $this = $(this)    
+    if $uis.overflow.hasClass("vertical-tabs")      
+      scrollTop = $this.scrollTop()
+      $this.scrollTop(scrollTop-Math.round(deltaY*20))      
+    else
+      scrollLeft = $this.scrollLeft()
+      $this.scrollLeft(scrollLeft-Math.round(deltaX*20))          
+
+
+  ###*
    * Bind the keyboard keydown event to navigate through the page
    * @param  {Object} event Keydown event
    * @return {Object}       Keydown event
@@ -263,12 +286,14 @@ class window.Interactive
     if step >= 0 and step < $uis.steps.length      
       # Update the current step id
       currentStep = 1 * step      
+      # Remove current class
+      $uis.steps.removeClass("js-current").eq(currentStep).addClass "js-current"      
       # Prevent scroll queing
       jQuery.scrollTo.window().queue([]).stop()      
       # And scroll to the current step
-      $ui.scrollTo $uis.steps.eq(currentStep), scrollDuration      
-      # Remove current class
-      $uis.steps.removeClass("js-current").eq(currentStep).addClass "js-current"      
+      $ui.scrollTo $uis.steps.eq(currentStep), scrollDuration    
+      # Update the menu
+      $uis.tabs.scrollTo $uis.navitem.filter("[data-step=#{currentStep}]"), scrollDuration  
       # Add a class to the body
       $body = $("body")      
       # Is this the first step ?

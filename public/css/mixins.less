@@ -48,7 +48,8 @@
     
     ul.arrows .next,
     ul.arrows .previous,
-    .steps .wrapper a {    
+    .steps .wrapper a,
+    .nav-tick a { 
         background-color:@altBackground;
         color:@altColor;
         
@@ -61,6 +62,10 @@
         }
     }
 
+    .nav-tick a {
+        .box-shadow( 0 0 1px 0 fade(@altColor, 40) );
+    }
+
     .nav {
         ul.arrows .next,
         ul.arrows .previous,
@@ -69,11 +74,12 @@
         }    
     }
 
-    .nav-tick a {
-        background:@altBackground;
-        color:@altColor;
-        &.disbaled:after {
-            color:mix(@altBackground, @altColor);
-        }
+
+    &.js-first .nav-tick a.previous:after {
+        color:mix(@altBackground, @altColor);
+    }
+    
+    &.js-last .nav-tick a.next:after {
+        color:mix(@altBackground, @altColor);
     }
 }
