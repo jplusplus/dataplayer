@@ -114,6 +114,7 @@ class @Editor
     constructor: ->        
         @token = $("body").data "given-token"
         @page  = $("body").data "page"
+
         # Bind a "CodeMirror" editor on editor text area
         @myCodeMirror = CodeMirror.fromTextArea(
             $("#editor-json textarea")[0],
@@ -144,6 +145,8 @@ class @Editor
             minWidth: 300
         }).on "resizestop", -> $("#workspace").css "left", $("#editor").outerWidth()
 
+        # Select embed code
+        $("#editor-embed").on "click", -> this.select()
 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
