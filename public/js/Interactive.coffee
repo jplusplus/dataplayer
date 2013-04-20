@@ -89,7 +89,7 @@ class window.Interactive
     if not $("body").hasClass("editor-mode")
       $(window).off("keydown").keydown @keyboardNav
     # Activate this shortcut on touch screens
-    if Modernizr.touch
+    if Modernizr.touch and $uis.tabs.length
       # Create a new iScroll instance
       $uis.iscroll = new iScroll $uis.tabs[0]
     # Or bind the mousewheel
@@ -97,10 +97,6 @@ class window.Interactive
       $uis.tabs.on "mousewheel", @wheelOnTabs
     # Open links begining by http in a new window
     $("a[href^='http://']").attr "target", "_blank"
-
-  buildIScroll: =>
-    $uis.iscroll = new iScroll $ui[0],
-      snap: ".step"
 
   ###*
    * Builds the animations array dynamicly to allow relative computation 
@@ -323,7 +319,7 @@ class window.Interactive
       # Tab target (where to scroll to)
       $tabTarget = $uis.navitem.filter("[data-step=#{currentStep}]")     
       # Activate this shortcut on touch screens
-      if Modernizr.touch
+      if Modernizr.touch and $uis.tabs.length
         $uis.iscroll.scrollToElement $tabTarget[0], scrollDuration
       else
         # Update the menu
