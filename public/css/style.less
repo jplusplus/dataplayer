@@ -107,7 +107,7 @@ body {
         height:512px;
         background:@black url("/img/gear.jpg") no-repeat center center;
         position:relative;        
-        border-bottom:100px solid @white;
+        margin:0;
         .box-shadow(0 0 0 10px fade(@black, 30%) inset);
 
         .introduction {
@@ -168,7 +168,8 @@ body {
     } 
 
     #discover{
-        background:@white;        
+        background:@white;    
+        border-top:100px solid @white;    
         padding:60px 0;            
 
         .row {
