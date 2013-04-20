@@ -29,6 +29,8 @@
 # Cross-browser mousewheel support
 #= require vendor/jquery.mousewheel.js
 
+# Local pan on touch screen
+#= require vendor/iscroll-lite.js
 
 class window.Interactive
   $ui = $uis = null
@@ -43,6 +45,7 @@ class window.Interactive
     @buildUI()
     @buildAnimations()  
     @containerPosition()  
+    @tabWrapperWidth()
     @stepsPosition()
     @spotsSize()
     @spotsPosition()
@@ -78,16 +81,26 @@ class window.Interactive
     $uis.steps.on "click", ".spot", @showSpot
     $uis.previous.on "click", @previousStep
     $uis.next.on "click", @nextStep
-    $uis.tabs.on "mousewheel", @wheelOnTabs
+    # Update the container position when we resize the window
     $(window).off("resize").on("resize", @containerPosition)
+    # Bind the hashchange to change the current step
     $(window).off("hashchange").hashchange @readStepFromHash
     # Deactivates this shortcuts in editor mode
     if not $("body").hasClass("editor-mode")
       $(window).off("keydown").keydown @keyboardNav
+    # Activate this shortcut on touch screens
+    if Modernizr.touch
+      # Create a new iScroll instance
+      $uis.iscroll = new iScroll $uis.tabs[0]
+    # Or bind the mousewheel
+    else
+      $uis.tabs.on "mousewheel", @wheelOnTabs
     # Open links begining by http in a new window
     $("a[href^='http://']").attr "target", "_blank"
 
-
+  buildIScroll: =>
+    $uis.iscroll = new iScroll $ui[0],
+      snap: ".step"
 
   ###*
    * Builds the animations array dynamicly to allow relative computation 
@@ -157,9 +170,24 @@ class window.Interactive
     if windowHeight <= containerHeight
       top = 0
     else
-      top = (windowHeight-containerHeight)/2
+      top = (windowHeight-containerHeight)/2    
     # Sets the new offset
     $uis.overflow.css "top", top
+
+  ###*
+   * Resize the tab wrapper within horizontal layout
+   * @return {Object} Tabs wrapper
+  ###
+  tabWrapperWidth: =>
+    if $uis.overflow.hasClass("horizontal-tabs")
+      # Calculates the wrapper size
+      wrapperWith = 0 
+      # By extracting the size of every step
+      $uis.tabs.find(".wrapper > li").each ->
+        # And mades a right reduction using there with
+        wrapperWith += $(this).outerWidth()
+      # Then apply the width to the wrapper
+      $uis.tabs.find(".wrapper").css("width", wrapperWith)
 
   ###*
    * Position every steps in the container
@@ -227,7 +255,7 @@ class window.Interactive
       $this.scrollTop(scrollTop-Math.round(deltaY*20))      
     else
       scrollLeft = $this.scrollLeft()
-      $this.scrollLeft(scrollLeft-Math.round(deltaX*20))          
+      $this.scrollLeft(scrollLeft-Math.round(-deltaX*20))          
 
 
   ###*
@@ -287,13 +315,19 @@ class window.Interactive
       # Update the current step id
       currentStep = 1 * step      
       # Remove current class
-      $uis.steps.removeClass("js-current").eq(currentStep).addClass "js-current"      
+      $uis.steps.removeClass("js-current").eq(currentStep).addClass "js-current"            
       # Prevent scroll queing
       jQuery.scrollTo.window().queue([]).stop()      
       # And scroll to the current step
-      $ui.scrollTo $uis.steps.eq(currentStep), scrollDuration    
-      # Update the menu
-      $uis.tabs.scrollTo $uis.navitem.filter("[data-step=#{currentStep}]"), scrollDuration  
+      $ui.scrollTo $uis.steps.eq(currentStep), scrollDuration     
+      # Tab target (where to scroll to)
+      $tabTarget = $uis.navitem.filter("[data-step=#{currentStep}]")     
+      # Activate this shortcut on touch screens
+      if Modernizr.touch
+        $uis.iscroll.scrollToElement $tabTarget[0], scrollDuration
+      else
+        # Update the menu
+        $uis.tabs.scrollTo $tabTarget, scrollDuration  
       # Add a class to the body
       $body = $("body")      
       # Is this the first step ?
