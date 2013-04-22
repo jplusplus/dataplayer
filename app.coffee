@@ -31,7 +31,6 @@ app.configure ->
     res.locals.path = req.path
     next()
 
-  
   ###
   Views helpers
   ###
