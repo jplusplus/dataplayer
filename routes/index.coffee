@@ -140,8 +140,8 @@ createScreen = (req, res) ->
   content = if res.locals.content? then res.locals.content else require("../data/sample.json")
   # Create the screen object
   s = new Screen(
-    slug: randomString(5)
-    token: randomString(10)
+    slug: require("../utils").randomString(5)
+    token: require("../utils").randomString(10)
     created_at: new Date()
     content: content
     draft: {}
@@ -163,28 +163,10 @@ createScreen = (req, res) ->
  * @return {Object}     Screen descriptor updated
 ###
 setDefaultValues = (obj) ->
-  
   # Default values
   defaults = _.clone(require("../data/default.json"))
-  defaultsStep = _.clone(require("../data/default-step.json"))
-  
   # Extend the obj value
-  obj = _.extend(defaults, obj)
-  obj
-
-###*
- * Simple function to generate a random string with the given length
- * @param  {Number} length Length of the random String
- * @return {String}        Random string
-###
-randomString = (length) ->
-  chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz"
-  length = (if length then length else 32)
-  string = ""
-  i = 0
-
-  while i < length
-    randomNumber = Math.floor(Math.random() * chars.length)
-    string += chars.substring(randomNumber, randomNumber + 1)
-    i++
-  string
+  obj = _.extend(defaults, obj)  
+  # Sanitaze each fields and return the obj
+  require("../utils").sanitaze(obj)  
+  

@@ -1,3 +1,4 @@
 {
-    "DATABASE_URL": false
+    "DATABASE_URL": false,
+    "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div>"
 }

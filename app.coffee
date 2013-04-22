@@ -33,8 +33,7 @@ app.configure ->
 
   ###
   Views helpers
-  ###
-
+  ###  
   # Register helpers for use in view's
   app.locals
     # Constant containing the node environment (development, production, etc)
@@ -142,16 +141,10 @@ app.configure ->
      * Template helper to remove html tags (to plain text)
      * @copyright http://kevin.vanzonneveld.net
      * @param  {String} input   HTML to escape
-     * @param  {Array} allowed  Allowed tags
+     * @param  {String} allowed  Allowed tags (ex: <a><b><em>)
      * @return {String}         Input string as plain text
     ###
-    stripTags: (input, allowed) ->
-      return ""  unless input      
-      allowed = (((allowed or "") + "").toLowerCase().match(/<[a-z][a-z0-9]*>/g) or []).join("") # making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-      tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/g
-      commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/g
-      input.replace(commentsAndPhpTags, "").replace tags, ($0, $1) ->
-        (if allowed.indexOf("<" + $1.toLowerCase() + ">") > -1 then $0 else "")
+    stripTags: require("./utils").stripTags
 
     ###*
      * Return the given page (parsed from Markdown)
