@@ -59,6 +59,7 @@ Such as a configuration file, the JSON file must fit to the following structure 
 <a id="player" />
 ### Player configuration
 Every player object can follow this options:
+
 Name | Type | Description | Exemple |
 ---- | ---- | ---- | ---- |
 name | String | Name of the player | Soft kitty
