@@ -283,6 +283,21 @@ body {
         z-index:@zIndexLoading;
         display:block;
     }
+
+    .credits {
+        position:absolute;
+        left:0; bottom:0;
+        z-index:@zIndexCredits;
+        padding:0 5px;
+        font-size:12px;            
+    }
+
+    &.credits-to-top .credits {
+        bottom:auto;
+        left:auto;
+        top:0;
+        right:0;
+    } 
     
     
     .nav {
@@ -575,8 +590,7 @@ body {
                 display:block;
             } 
         }
-    }
-    
+    }    
 }
  
 
@@ -589,26 +603,7 @@ body {
     top:0; left:0;    
     right:0;
     bottom:0;      
-    
-    .credits {
-        position:absolute;
-        left:0; bottom:0;
-        z-index:@zIndexCredits;
-        padding:0 5px;
-        font-size:12px;
-        a, a:hover { 
-            color:inherit; 
-            text-decoration:underline; 
-        }
 
-    }
-
-    &.horizontal-tabs-bottom .credits {
-        bottom:auto;
-        left:auto;
-        top:0;
-        right:0;
-    } 
         
     .step {
         position:absolute;

@@ -41,6 +41,21 @@ app.configure ->
     NODE_ENV: process.env.NODE_ENV
 
     ###*
+     * Return the class of the overflow according descriptor
+     * @param  {Object} data Screen descriptor
+     * @return {String}      Overflow classes
+    ###
+    overflowClass: (data) ->
+      klasses = []
+      klasses.push data.navigation || "horizontal"
+      klasses.push data.layout || "default"
+      # Credits position 
+      if data["menu-position"].split(" ").indexOf("bottom") > -1
+        klasses.push("credits-to-top")
+
+      klasses.join " "
+
+    ###*
      * Return the class of the container according descriptor
      * @param  {Object} data Screen descriptor
      * @return {String}      Container classes
@@ -50,10 +65,10 @@ app.configure ->
       layout = data["layout"]
       
       # For each class 
-      for k of klasses
-        
+      for k of klasses        
         # Add a suffix
         klasses[k] = layout + "-" + klasses[k]
+        
       klasses.join " "
 
     ###*

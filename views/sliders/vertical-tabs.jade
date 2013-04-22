@@ -3,15 +3,12 @@ include ../mixins
 
 block slider
     #workspace
-      - klass = navigation = obj.content.navigation || "horizontal"
-      - klass = " "
-      - klass = obj.content.layout || "default"
-      #overflow(data-navigation=navigation, class=klass, style=screenStyle(obj.content))    
-        include ../widgets/tabs.jade    
-        - klass = containerClass(obj.content)        
-        #container(class=klass)
+      - navigation = obj.content.navigation || "horizontal"
+      #overflow(data-navigation=navigation,  class=overflowClass(obj.content), style=screenStyle(obj.content))    
+        include ../widgets/tabs.jade            
+        #container(class=containerClass(obj.content) )
           if obj.content.steps
             each step, stepKey in obj.content.steps
                 .step(style=stepStyle(step), class=step.class, data-step=stepKey)
                     +stepContent(step, stepKey)
-          include ../widgets/credits
+        include ../widgets/credits
