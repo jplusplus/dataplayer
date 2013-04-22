@@ -330,7 +330,7 @@ class window.Interactive
       # Update the menu
       $uis.navitem.removeClass("active").filter("[data-step=#{currentStep}]").addClass("active")
       # Hides element with entrance
-      $uis.steps.eq(currentStep).find(".spot[data-entrance] .js-animation-wrapper").addClass "hidden"      
+      $uis.steps.eq(currentStep).find(".spot[data-entrance]:not([data-entrance='']) .js-animation-wrapper").addClass "hidden"      
       # Clear all spot animations
       @clearSpotAnimations()      
       # Add the entrance animation after the scroll
@@ -348,8 +348,8 @@ class window.Interactive
     # Number of element behind before animate the entrance
     queue = 0    
     # Find spots with animated entrance
-    $step.find(".spot[data-entrance]").each (i, elem) =>
-      $elem = $(elem)      
+    $step.find(".spot[data-entrance]:not([data-entrance=''])").each (i, elem) =>          
+      $elem = $(elem)            
       # Get tge data from the element
       data = $elem.data()
       # Works on an animation wrapper
