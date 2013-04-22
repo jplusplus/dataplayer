@@ -29,6 +29,14 @@
         .credits {
            background:fade(darken(@basicBackground, 10), 45);
            color:darken(@basicColor, 10); 
+            a {
+                color:@activeColor;       
+                text-decoration: none;                
+                &:hover {            
+                    color:mix(@activeColor, @altBackground);       
+                    text-decoration: none;
+                }
+            }
         }    
     }
 

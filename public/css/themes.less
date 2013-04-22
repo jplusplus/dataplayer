@@ -48,6 +48,37 @@
     }
 }
 
+/*  Red*/
+.theme-red {
+
+    @bodyBackground:@white;
+    @basicBackground:@white;
+    @altBackground:#FAFAFA;
+    @basicColor:@black;
+    @altColor:@black;
+    @activeColor:#FF0000;
+    @basicRadius:0;
+    
+    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);
+              
+    #overflow {                             
+        h1, h2, h3 {
+            font-weight:500;
+        }
+    }
+    .nav {        
+        ul.arrows .next,
+        ul.arrows .previous,
+        ul.steps a {            
+            .box-shadow(0 0 10px 0 fade(@black, 20) );      
+            html.no-touch &:hover {
+                background:@activeColor;
+            }  
+        }
+    }
+}
+
+
 /*  Purple*/
 .theme-purple {
 
