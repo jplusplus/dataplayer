@@ -286,19 +286,24 @@ body {
 
     .credits {
         position:absolute;
-        left:0; bottom:0;
+        right:0; bottom:0;
         z-index:@zIndexCredits;
         padding:0 5px;
         font-size:12px;            
     }
 
-    &.credits-to-top .credits {
-        bottom:auto;
+    &.vertical-tabs-right .credits {
+        left:0;
+        right:auto;
+    }
+
+    &.horizontal-tabs-bottom .credits {
+        right:0;
         left:auto;
         top:0;
-        right:0;
-    } 
-    
+        bottom:auto;
+    }
+
     
     .nav {
         
@@ -439,19 +444,19 @@ body {
 }
 
 /* Vertical tabs layout */
-#container.vertical-tabs-left {        
+.vertical-tabs-left #container{        
     left:200px;
 }
 
-#container.vertical-tabs-right {        
+.vertical-tabs-right #container{        
     right:200px;
 }
 
-#container.horizontal-tabs-top {        
+.horizontal-tabs-top #container{        
     top:60px;
 }
 
-#container.horizontal-tabs-bottom {        
+.horizontal-tabs-bottom #container{        
     bottom:60px;
 }
 

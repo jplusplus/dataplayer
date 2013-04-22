@@ -46,13 +46,16 @@ app.configure ->
      * @return {String}      Overflow classes
     ###
     overflowClass: (data) ->
-      klasses = []
+      klasses = data["menu-position"].split(" ")
+      layout = data["layout"]      
+      # For each class 
+      for k of klasses        
+        # Add a suffix
+        klasses[k] = layout + "-" + klasses[k]
+
       klasses.push data.navigation || "horizontal"
       klasses.push data.layout || "default"
-      # Credits position 
-      if data["menu-position"].split(" ").indexOf("bottom") > -1
-        klasses.push("credits-to-top")
-
+        
       klasses.join " "
 
     ###*
@@ -61,15 +64,7 @@ app.configure ->
      * @return {String}      Container classes
     ###
     containerClass: (data) ->
-      klasses = data["menu-position"].split(" ")
-      layout = data["layout"]
-      
-      # For each class 
-      for k of klasses        
-        # Add a suffix
-        klasses[k] = layout + "-" + klasses[k]
-        
-      klasses.join " "
+      return
 
     ###*
      * Container context style
