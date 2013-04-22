@@ -15,9 +15,10 @@ module.exports = (a) ->
   # Set routes
   app.get "/", homepage
   app.get "/create", createScreen
-  app.get "/:page", viewScreen
-  app.post "/:page/content", updateContent
-  app.post "/:page/draft", updateDraft
+  app.get "/fork/:slug", createScreen
+  app.get "/:slug", viewScreen
+  app.post "/:slug/content", updateContent
+  app.post "/:slug/draft", updateDraft
 
 ###*
  * Homepage router
@@ -34,7 +35,7 @@ homepage = (req, res) ->
 ###
 viewScreen = (req, res) ->
   Screen.findOne(
-    slug: req.params.page,
+    slug: req.params.slug,
     (err, data) ->
       # Error cases
       return res.send(500)  if err
@@ -74,7 +75,7 @@ updateContent = (req, res) ->
   
   # Update the screen into the database
   Screen.update
-    slug: req.params.page
+    slug: req.params.slug
     token: req.body.token
   ,
     content: dataObject
@@ -105,7 +106,7 @@ updateDraft = (req, res) ->
   
   # Update the screen into the database
   Screen.update
-    slug: req.params.page
+    slug: req.params.slug
     token: req.body.token
   ,
     draft: dataObject
@@ -127,23 +128,32 @@ updateDraft = (req, res) ->
  * @param  {Object} res Client result object
 ###
 createScreen = (req, res) ->
-  
+
+  # Is it a fork ?
+  if req.params.slug? and not res.locals.content?
+    return Screen.findOne
+      slug: req.params.slug,
+      (err, screen)->
+        res.locals.content = screen.content if screen?
+        createScreen(req, res)
+
+  content = if res.locals.content? then res.locals.content else require("../data/sample.json")
   # Create the screen object
   s = new Screen(
     slug: randomString(5)
     token: randomString(10)
     created_at: new Date()
-    content: require("../data/sample.json")
+    content: content
     draft: {}
   )
-  
+
   # Save it to the databse
   s.save (err, data) ->    
     # Duplicate slug, try again
     if err and err.code is 11000
       return createScreen(req, res)    
     # Other error
-    else return res.send(500)  if err    
+    else return res.send(500) if err    
     # Redirect to the new screen
     res.redirect "/" + data.slug + "?edit=" + data.token
 

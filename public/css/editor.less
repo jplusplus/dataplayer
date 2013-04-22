@@ -10,9 +10,12 @@ body.editor-mode {
         }
     }
 
-    #workspace {
-        left:400px;
+    #workspace {        
         overflow:auto;
+        left:400px;
+        @media (min-width: 1200px) {
+            left:600px;
+        }
     }
 
     #overflow {    
@@ -49,12 +52,17 @@ body.editor-mode {
     top:0;
     bottom:0;
     left:0;
-    width:400px;
+    
     color:white;
     z-index:@zIndexEditor;
     background:@editorColor;
     .box-shadow(0 0 5px 0 fade(@black, 30%));
     
+    width:400px;
+    @media (min-width: 1200px) {
+        width:600px;
+    }
+
     .ui-resizable-handle {
         position:absolute;
         left:100%;
