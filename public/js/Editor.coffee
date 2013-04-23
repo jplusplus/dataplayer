@@ -56,6 +56,8 @@ class @Editor
         switch content.layout
             when "horizontal-tabs", "vertical-tabs"
                 klass = window.Tabs
+            when "book"
+                klass = window.Book
             else
                 klass = window.Interactive
         window.interactive = new klass()  
@@ -149,7 +151,9 @@ class @Editor
             handles: "e",
             ghost: true,
             minWidth: 300
-        }).on "resizestop", -> $("#workspace").css "left", $("#editor").outerWidth()
+        }).on "resizestop", -> 
+            $("#workspace").css "left", $("#editor").outerWidth()
+            setTimeout window.interactive.resize, 1000
 
         # Select embed code
         $("#editor-embed").on "click", -> this.select()

@@ -38,14 +38,8 @@ class window.Interactive
     @currentStep = 0
     @scrollDuration = 300  
     @defaultEntranceDuration = 600   
-    
+
     @buildUI()
-    @buildAnimations()  
-    @containerPosition()  
-    @stepsPosition()
-    @spotsSize()
-    @spotsPosition()
-    @bindUI()    
     # Remove loading overlay
     $("body").removeClass "js-loading"    
     # Read the step from the hash
@@ -66,18 +60,26 @@ class window.Interactive
       navitem: $("#overflow .to-step")
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
+
+    @buildAnimations()  
+    @containerPosition()  
+    @stepsPosition()
+    @spotsSize()
+    @spotsPosition()
+    @bindUI()
+
     return @ui
 
   ###*
    * Bind javascript event on page elements
-   * @return {Object} jQuest window ibject
+   * @return {Object} jQuest window object
   ###
   bindUI: =>
     @uis.steps.on "click", ".spot", @showSpot
     @uis.previous.on "click", @previousStep
     @uis.next.on "click", @nextStep
     # Update the container position when we resize the window
-    $(window).off("resize").on("resize", @containerPosition)
+    $(window).off("resize").on("resize", @resize)
     # Bind the hashchange to change the current step
     $(window).off("hashchange").hashchange @readStepFromHash
     # Deactivates this shortcuts in editor mode
@@ -85,6 +87,13 @@ class window.Interactive
       $(window).off("keydown").keydown @keyboardNav
     # Open links begining by http in a new window
     $("a[href^='http://']").attr "target", "_blank"
+
+  ###*
+   * Refresh the container position and steps size when we resize the window   
+  ###
+  resize: =>
+    @containerPosition()
+    @stepsPosition()
 
   ###*
    * Builds the animations array dynamicly to allow relative computation 
@@ -163,11 +172,10 @@ class window.Interactive
    * Position every steps in the container
    * @return {Array} Steps list
   ###
-  stepsPosition: =>
+  stepsPosition: ->
     navigation = @uis.overflow.data("navigation")
     @uis.steps.each (i, step) =>
-      $step = $(step)
-      
+      $step = $(step)      
       # Do not position the first step
       if i > 0
         $previousStep = @uis.steps.eq(i - 1)   

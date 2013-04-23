@@ -1,12 +1,13 @@
-@zIndexPicture : 10;
-@zIndexTail    : @zIndexPicture+10;
-@zIndexSpot    : @zIndexTail+10;
-@zIndexTitle   : @zIndexSpot+10;
-@zIndexHandle  : @zIndexTitle+10;
-@zIndexNav     : @zIndexHandle+10;
-@zIndexEditor  : @zIndexNav+10;
-@zIndexCredits : @zIndexEditor+10;
-@zIndexLoading : @zIndexCredits+100;
+@zIndexPicture     : 100;
+@zIndexSpot        : @zIndexPicture+100;
+@zIndexTitle       : @zIndexSpot+100;
+@zIndexHandle      : @zIndexTitle+100;
+@zIndexPageCorner  : @zIndexHandle+100;
+@zIndexBookShadow  : @zIndexPageCorner+100;
+@zIndexNav         : @zIndexBookShadow+100;
+@zIndexEditor      : @zIndexNav+100;
+@zIndexCredits     : @zIndexEditor+100;
+@zIndexLoading     : @zIndexCredits+1000;
 
 @containerWidth  : 940px;
 @containerHeight : 600px;
@@ -600,6 +601,44 @@ body {
  
 
 
+#overflow.book {
+    
+    overflow:visible;
+    
+    
+    #page-flip {
+        top:0;
+        left:0;
+        position: absolute;
+        z-index: @zIndexBookShadow;
+    }
+
+    .page {
+        z-index:200;
+        display:block;
+        overflow:hidden;
+        height:100%;
+        position:absolute;
+        left:50%;
+        top:0;   
+        
+        a.corner {
+            border:20px solid fade(@black, 10);
+            border-top-color:transparent;
+            border-left-color:transparent;
+            position:absolute;
+            bottom:0;
+            right:0;
+            z-index:@zIndexPageCorner;
+        }     
+    }   
+    
+    .credits {
+        left:0;
+        right:auto;
+    }
+}
+
 #container {    
 
     overflow:hidden;
@@ -607,9 +646,8 @@ body {
     position:absolute;
     top:0; left:0;    
     right:0;
-    bottom:0;      
-
-        
+    bottom:0;   
+            
     .step {
         position:absolute;
         top:0; 

@@ -1,0 +1,22 @@
+extends ../layouts/slider
+include ../mixins
+
+block slider
+    #workspace
+      - navigation = obj.content.navigation || "horizontal"
+      #overflow(data-navigation=navigation,  class=overflowClass(obj.content), style=screenStyle(obj.content))        
+        canvas#page-flip
+        #container
+          if obj.content.steps
+            each step, stepKey in obj.content.steps
+              .page
+                a.corner
+                .step(style=stepStyle(step), class=step.class, data-step=stepKey)
+                    +stepContent(step, stepKey)
+        include ../widgets/credits
+
+block scripts
+  !=js(editMode ? "layouts" : "Book")
+  :coffeescript
+    # Basic instantation
+    $(window).load -> window.interactive = new window.Book()
