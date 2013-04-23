@@ -30,19 +30,18 @@
 #= require vendor/iscroll-lite.js
 
 class window.Interactive
-  $ui = $uis = null
-  currentStep = 0
-  scrollDuration = 300
-  defaultEntranceDuration = 600
 
   ###*
    * Initializrs the page 
   ###
-  constructor: ->    
+  constructor: -> 
+    @currentStep = 0
+    @scrollDuration = 300  
+    @defaultEntranceDuration = 600   
+    
     @buildUI()
     @buildAnimations()  
     @containerPosition()  
-    @tabWrapperWidth()
     @stepsPosition()
     @spotsSize()
     @spotsPosition()
@@ -59,25 +58,24 @@ class window.Interactive
    * @return {Object} Main page container
   ###
   buildUI: =>
-    $ui = $("#container")
-    $uis =
-      steps: $ui.find(".step")
-      spots: $ui.find(".spot")
+    @ui = $("#container")
+    @uis =
+      steps: @ui.find(".step")
+      spots: @ui.find(".spot")
       overflow: $("#overflow")
       navitem: $("#overflow .to-step")
-      tabs: $("#overflow .tabs .steps")
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
-    return $ui
+    return @ui
 
   ###*
    * Bind javascript event on page elements
    * @return {Object} jQuest window ibject
   ###
   bindUI: =>
-    $uis.steps.on "click", ".spot", @showSpot
-    $uis.previous.on "click", @previousStep
-    $uis.next.on "click", @nextStep
+    @uis.steps.on "click", ".spot", @showSpot
+    @uis.previous.on "click", @previousStep
+    @uis.next.on "click", @nextStep
     # Update the container position when we resize the window
     $(window).off("resize").on("resize", @containerPosition)
     # Bind the hashchange to change the current step
@@ -85,13 +83,6 @@ class window.Interactive
     # Deactivates this shortcuts in editor mode
     if not $("body").hasClass("editor-mode")
       $(window).off("keydown").keydown @keyboardNav
-    # Activate this shortcut on touch screens
-    if Modernizr.touch and $uis.tabs.length
-      # Create a new iScroll instance
-      $uis.iscroll = new iScroll $uis.tabs[0]
-    # Or bind the mousewheel
-    else
-      $uis.tabs.on "mousewheel", @wheelOnTabs
     # Open links begining by http in a new window
     $("a[href^='http://']").attr "target", "_blank"
 
@@ -107,19 +98,19 @@ class window.Interactive
         to:   { opacity: '1' }
 
       up:
-        from: { top: $ui.width(), left: 0 }
+        from: { top: @ui.width(), left: 0 }
         to:   { top: 0 }
 
       down:
-        from: { top: -1 * $ui.width(), left: 0 }
+        from: { top: -1 * @ui.width(), left: 0 }
         to:   { top: 0 }
 
       left:
-        from: { left: $ui.width(), top: 0  }
+        from: { left: @ui.width(), top: 0  }
         to:   { left: 0 }
 
       right:
-        from: { left: -1 * $ui.width(), top: 0 }
+        from: { left: -1 * @ui.width(), top: 0 }
         to:   { left: 0 }
 
       stepUp:
@@ -159,41 +150,27 @@ class window.Interactive
   ###
   containerPosition: =>
     windowHeight = $(window).height()
-    containerHeight = $uis.overflow.outerHeight()
+    containerHeight = @uis.overflow.outerHeight()
     if windowHeight <= containerHeight
       top = 0
     else
       top = (windowHeight-containerHeight)/2    
     # Sets the new offset
-    $uis.overflow.css "top", top
+    @uis.overflow.css "top", top
 
-  ###*
-   * Resize the tab wrapper within horizontal layout
-   * @return {Object} Tabs wrapper
-  ###
-  tabWrapperWidth: =>
-    if $uis.overflow.hasClass("horizontal-tabs")
-      # Calculates the wrapper size
-      wrapperWith = 0 
-      # By extracting the size of every step
-      $uis.tabs.find(".wrapper > li").each ->
-        # And mades a right reduction using there with
-        wrapperWith += $(this).outerWidth()
-      # Then apply the width to the wrapper
-      $uis.tabs.find(".wrapper").css("width", wrapperWith)
 
   ###*
    * Position every steps in the container
    * @return {Array} Steps list
   ###
   stepsPosition: =>
-    navigation = $uis.overflow.data("navigation")
-    $uis.steps.each (i, step) ->
+    navigation = @uis.overflow.data("navigation")
+    @uis.steps.each (i, step) =>
       $step = $(step)
       
       # Do not position the first step
       if i > 0
-        $previousStep = $uis.steps.eq(i - 1)   
+        $previousStep = @uis.steps.eq(i - 1)   
         switch navigation
           when "vertical"     
             $step.css "top", $previousStep.position().top + $previousStep.height()
@@ -205,7 +182,7 @@ class window.Interactive
    * @return {Array} Spots list
   ###
   spotsSize: =>    
-    $uis.spots.each (i, spot) ->
+    @uis.spots.each (i, spot) ->
       $spot = $(this)
       $spot.css "width",  $spot.find("js-animation-wrapper").outerWidth()
       $spot.css "height", $spot.find("js-animation-wrapper").outerHeight()
@@ -219,7 +196,7 @@ class window.Interactive
     
     # Add a negative margin on each spot
     # (position the spot from its center)
-    $uis.spots.each (i, spot) ->
+    @uis.spots.each (i, spot) ->
       $spot = $(spot)
       if $spot.data("origin") == "center" 
         $spot.css "margin-left", $spot.outerWidth() / -2
@@ -232,23 +209,7 @@ class window.Interactive
   ###
   showSpot: (event) =>
     $this = $(this)
-    alert $this.data("html")  if $this.data("html")
 
-  ###*
-   * Activate mousewheel within the tabs area
-   * @param  {Object} event  Mouse wheel event
-   * @param  {Number} delta  Distance across
-   * @param  {Number} deltaX Distance across on X
-   * @param  {Number} deltaY Distance across on Y
-  ###
-  wheelOnTabs: (event, delta, deltaX, deltaY) ->
-    $this = $(this)    
-    if $uis.overflow.hasClass("vertical-tabs")      
-      scrollTop = $this.scrollTop()
-      $this.scrollTop(scrollTop-Math.round(deltaY*20))      
-    else
-      scrollLeft = $this.scrollLeft()
-      $this.scrollLeft(scrollLeft-Math.round(-deltaX*20))          
 
 
   ###*
@@ -271,14 +232,14 @@ class window.Interactive
    * @return {Number} New current step number
   ###
   previousStep: =>
-    @changeStepHash 1 * currentStep - 1
+    @changeStepHash 1 * @currentStep - 1
 
   ###*
    * Go to the next step
    * @return {Number} New current step number
   ###
   nextStep: =>
-    @changeStepHash 1 * currentStep + 1
+    @changeStepHash 1 * @currentStep + 1
 
   ###*
    * Change the URL hash to fit to the given step
@@ -286,7 +247,7 @@ class window.Interactive
    * @return {String}      New location hash
   ###
   changeStepHash: (step=0) =>
-    location.hash = "#step=" + step  if step >= 0 and step < $uis.steps.length
+    location.hash = "#step=" + step  if step >= 0 and step < @uis.steps.length
 
   ###*
    * Just go to step directcly
@@ -304,38 +265,33 @@ class window.Interactive
    * @return {Number}      New current step number
   ###
   goToStep: (step=0) =>
-    if step >= 0 and step < $uis.steps.length      
+    if step >= 0 and step < @uis.steps.length      
       # Update the current step id
-      currentStep = 1 * step      
+      @currentStep = 1 * step
       # Remove current class
-      $uis.steps.removeClass("js-current").eq(currentStep).addClass "js-current"            
+      @uis.steps.removeClass("js-current").eq(@currentStep).addClass "js-current"            
       # Prevent scroll queing
       jQuery.scrollTo.window().queue([]).stop()      
       # And scroll to the current step
-      $ui.scrollTo $uis.steps.eq(currentStep), scrollDuration     
-      # Tab target (where to scroll to)
-      $tabTarget = $uis.navitem.filter("[data-step=#{currentStep}]")     
-      # Activate this shortcut on touch screens
-      if Modernizr.touch and $uis.tabs.length
-        $uis.iscroll.scrollToElement $tabTarget[0], scrollDuration
-      else
-        # Update the menu
-        $uis.tabs.scrollTo $tabTarget, scrollDuration  
+      @ui.scrollTo @uis.steps.eq(@currentStep), @scrollDuration     
       # Add a class to the body
       $body = $("body")      
       # Is this the first step ?
-      $body.toggleClass "js-first", currentStep is 0   
+      $body.toggleClass "js-first", @currentStep is 0   
       # Is this the last step ?
-      $body.toggleClass "js-last", currentStep is $uis.steps.length - 1
+      $body.toggleClass "js-last", @currentStep is @uis.steps.length - 1
       # Update the menu
-      $uis.navitem.removeClass("active").filter("[data-step=#{currentStep}]").addClass("active")
+      @uis.navitem.removeClass("active").filter("[data-step=#{@currentStep}]").addClass("active")
       # Hides element with entrance
-      $uis.steps.eq(currentStep).find(".spot[data-entrance]:not([data-entrance='']) .js-animation-wrapper").addClass "hidden"      
+      @uis.steps.eq(@currentStep).find(".spot[data-entrance]:not([data-entrance='']) .js-animation-wrapper").addClass "hidden"      
       # Clear all spot animations
       @clearSpotAnimations()      
       # Add the entrance animation after the scroll
-      setTimeout @doEntranceAnimations, scrollDuration
-    return currentStep
+      setTimeout @doEntranceAnimations, @scrollDuration
+      # Trigger an event
+      @ui.trigger "step:change", [@currentStep]
+
+    return @currentStep
 
   ###*
    * Set step animations
@@ -344,7 +300,7 @@ class window.Interactive
     # Launch hotspot background animations
     @doSpotAnimations()    
     # Find the current step
-    $step = $uis.steps.filter(".js-current")    
+    $step = @uis.steps.filter(".js-current")    
     # Number of element behind before animate the entrance
     queue = 0    
     # Find spots with animated entrance
@@ -379,7 +335,7 @@ class window.Interactive
         queue++  if $elem.data("queue")?
         # Take the element entrance duration 
         # or default duration
-        duration = data.entranceDuration or defaultEntranceDuration  
+        duration = data.entranceDuration or @defaultEntranceDuration  
 
         # explicite duration
         if $elem.data("queue") > 1
@@ -405,7 +361,7 @@ class window.Interactive
    * @return {Array} Spots list
   ###
   clearSpotAnimations: =>
-    $uis.spots.each (i, spot) ->
+    @uis.spots.each (i, spot) ->
       $spot = $(spot)
       if $spot.d
         window.cancelAnimationFrame $spot.d
@@ -417,7 +373,7 @@ class window.Interactive
   ###
   doSpotAnimations: =>    
     # Find the current step
-    $step = $uis.steps.filter(".js-current")    
+    $step = @uis.steps.filter(".js-current")    
     # Find its spots
     $spots = $step.find(".spot")
     
@@ -510,7 +466,3 @@ class window.Interactive
     q = window.location.hash.substring(1)
     hashParams[d(e[1])] = d(e[2])  while e = r.exec(q)
     hashParams
-
-
-# Basic instantation
-$(window).load -> window.interactive = new window.Interactive()

@@ -9,7 +9,7 @@
     "express": "3.0.1",
     "jade": "*",
     "less": "*",
-    "coffee-script": "*",
+    "coffee-script": "latest",
     "connect-assets": "*",
     "mongoose": "*",
     "config": "*",

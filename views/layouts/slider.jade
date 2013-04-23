@@ -26,7 +26,7 @@ html
     block slider              
 
     !=js("vendor/modernizr.custom.js")
-    !=js('Interactive')
+    block scripts
     //- Edit mode
     if editMode
       //- Loads the editor html
@@ -35,6 +35,5 @@ html
       !=js('Editor')
 
     //- Context scripts    
-    block scripts
     include ../widgets/deprecated
     include ../widgets/ga

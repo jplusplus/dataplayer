@@ -12,3 +12,10 @@ block slider
                 .step(style=stepStyle(step), class=step.class, data-step=stepKey)
                     +stepContent(step, stepKey)
         include ../widgets/credits
+
+
+block scripts
+  !=js(editMode ? "layouts" : "Tabs")
+  :coffeescript
+    # Basic instantation
+    $(window).load -> window.interactive = new window.Tabs()
