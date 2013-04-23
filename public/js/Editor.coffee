@@ -42,7 +42,6 @@ class @Editor
     updateScreen:(text)=>         
         # Update workspace content
         $("#workspace").html $(text).filter("#workspace").html()
-        window.interactive = new window.Interactive()  
         # Update embed code
         $("#editor-embed").html $(text).find("textarea#editor-embed").val()      
         # Get the JSON
@@ -53,6 +52,13 @@ class @Editor
         # Update the app title
         $("head title").text(content.title)
         $("#editor .screen-title").text(content.title)
+        # Create a player according the selected layout
+        switch content.layout
+            when "horizontal-tabs", "vertical-tabs"
+                klass = window.Tabs
+            else
+                klass = window.Interactive
+        window.interactive = new klass()  
 
 
     updateContent:() =>   
@@ -161,7 +167,3 @@ class @Editor
 
         # Set delegated draggable 
         $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)   
-     
-
-
-$(window).load -> window.editor = new window.Editor()
