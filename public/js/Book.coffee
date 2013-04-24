@@ -75,7 +75,7 @@ class window.Book extends window.Interactive
     window.requestAnimationFrame @render
     
     # Start moving a page    
-    @ui.on "mousedown  touchstart", "a.corner", @mouseDownHandler     
+    @ui.on "mousedown touchstart", "a.corner", @mouseDownHandler     
     $(@canvas).on "mousedown touchstart", @mouseDownHandler     
     # Record mouse position within the book 
     $(document).on "mousemove touchmove", @mouseMoveHandler
@@ -88,7 +88,7 @@ class window.Book extends window.Interactive
     @mouse.x = ref.clientX - @book.offset().left - (@BOOK_WIDTH / 2)
     @mouse.y = ref.clientY - @book.offset().top    
 
-  mouseDownHandler: (event) =>   
+  mouseDownHandler: (e) =>   
     # Make sure the mouse pointer is inside of the book
     if Math.abs(@mouse.x) < @PAGE_WIDTH
       if @mouse.x < 0 and @page - 1 >= 0        
@@ -99,9 +99,9 @@ class window.Book extends window.Interactive
         @flips[@page].dragging = true         
   
     # Prevents the text selection
-    event.preventDefault()
+    e.preventDefault()
 
-  mouseUpHandler: (event) =>
+  mouseUpHandler: (e) =>
     $.each @flips, (i, flip) =>                 
       # If this flip was being dragged, animate to its destination
       if flip.dragging        
