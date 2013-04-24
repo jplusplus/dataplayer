@@ -119,9 +119,9 @@ class window.Book extends window.Interactive
       # Do not interupt the lopp
       return true
 
-  render: =>    
+  render:(repeat=true) =>    
     # Bind the next request animation frame
-    window.requestAnimationFrame @render
+    window.requestAnimationFrame @render if repeat
     # Reset all pixels in the canvas
     @context.clearRect 0, 0, @canvas.width, @canvas.height
     # Hide the canvas

@@ -90,14 +90,14 @@ class @Editor
             $.ajax
                 url: "/#{@page}/draft"
                 type: "POST"
-                data: { content: content, token: token }
+                data: { content: content, token: @token }
                 success: @loadDraft
                 error: @updateError                               
         return false
 
     loadDraft:(content) =>        
         @updateJsonEditor(content)
-        $.get "/#{@page}?edit={@token}&preview=1", (text)=>                                      
+        $.get "/#{@page}?edit=#{@token}&preview=1", (text)=>                                      
             @updateScreen(text)
             $("#editor .btn-save").removeClass("disabled")
 

@@ -24,15 +24,70 @@
 
     #overflow {
         
+        
         &.book {
             
-            .box-shadow(0 0 0 10px fade(@activeColor, 70) );
+            @bookBorder: fade(@activeColor, 70);
+            @bookLight:  fade(@white, 40);
+            @bookShadow: fade(@black, 20);
+            
+            @basicBackground_d1: darken(@basicBackground, 1);
+            @basicBackground_d2: darken(@basicBackground, 2);         
+            @basicBackground_d10: darken(@basicBackground, 10);  
+            
+            border:@bookBorder 10px solid;  
             background-color:@altBackground;
+            .box-shadow(0 0 10px 0 @bookShadow );     
+
+
+            &:after {
+                content:"";
+                top:-10px;
+                bottom:-10px;
+                left:-12px;
+                right:-12px;
+                position:absolute;
+                .box-shadow(0 0 0 2px @bookLight inset)
+            }
+            
+            &:before {
+                content:"";
+                top:-10px;
+                bottom:-10px;
+                left:50%;
+                width:40px;
+                margin-left:-20px;
+                position:absolute;
+                background: @bookShadow;
+            } 
+            
+            /*
+            &:after {
+                z-index:15;
+                content:"";
+                top:5px;
+                bottom:5px;
+                left:-2px;
+                right:-2px;
+                position:absolute;
+                background:darken(@basicBackground, 10);
+            }
+          
+            &:before {
+                z-index:10;
+                content:"";
+                top:10px;
+                bottom:10px;
+                left:-4px;
+                right:-4px;
+                position:absolute;
+                background:darken(@basicBackground, 20);    
+            } */
+          
+
 
             #container {
-
-                @basicBackground_d1: darken(@basicBackground, 1);
-                @basicBackground_d2: darken(@basicBackground, 2);           
+         
                 .box-shadow(0 0 6px 0 darken(@activeColor, 60)); 
                 background-color:@basicBackground; 
 
@@ -48,7 +103,6 @@
                     background-image: linear-gradient(left, @basicBackground 35%, @basicBackground_d2 73%, @basicBackground 90%, @basicBackground_d1 100%);
                 }
 
-
                 .step {
                     background-color:@basicBackground; 
                     border-left:5px solid @basicBackground_d2;
@@ -58,10 +112,10 @@
                         top:0; bottom:0;
                         left:0;
                         width:40px;                
-                        background-image: -webkit-linear-gradient(left, @basicBackground_d1 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
-                        background-image: -moz-linear-gradient(left, @basicBackground_d1 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
-                        background-image: -o-linear-gradient(left, @basicBackground_d1 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
-                        background-image: linear-gradient(left, @basicBackground_d1 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
+                        background-image: -webkit-linear-gradient(left, @basicBackground_d10 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
+                        background-image: -moz-linear-gradient(left, @basicBackground_d10 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
+                        background-image: -o-linear-gradient(left, @basicBackground_d10 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
+                        background-image: linear-gradient(left, @basicBackground_d10 0%, @basicBackground_d2 50%,  @basicBackground 100%);                
                     }   
                     
                     h2 {
