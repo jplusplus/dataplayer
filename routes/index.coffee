@@ -1,5 +1,4 @@
-# Dependencies
-Embedly  = require('embedly')
+# Dependencie
 path     = require("path")
 async    = require("async")
 _        = require("underscore")
@@ -7,6 +6,7 @@ fs       = require("fs")
 mongoose = require("mongoose")
 Screen   = require("../models").Screen
 config   = require("config")
+oembed   = require("oembed")
 
 # Module variables
 app = undefined
@@ -15,8 +15,6 @@ module.exports = (a) ->
   app = a  
   # Connect mongoose
   mongoose.connect process.env.DATABASE_URL or config.database_url  
-  # Create the embedly client
-  new Embedly key: config.embedly_key, (e, api)-> exports.embedly = api unless e
   # Set routes
   app.get "/", homepage
   app.get "/create", createScreen
@@ -207,11 +205,13 @@ completeMissingEmbed = (obj, callback=->) ->
       wmode: 'transparent'
 
   # No URL to load, stop here
-  return callback null, obj if urls.length == 0 or not exports.embedly?
+  return callback null, obj if urls.length == 0
 
-  async.map urls, exports.embedly.oembed, (err, oembeds)->    
+  # Func to get an embed code
+  getEmbed = (o, next)-> oembed.fetch(o.url, o, next)
 
-    console.log oembeds
+  # Apply this function to every obj
+  async.map urls, getEmbed, (err, oembeds)->    
     # No error ?
     unless err
       # Get the embed spot with a missing embed
@@ -219,9 +219,9 @@ completeMissingEmbed = (obj, callback=->) ->
         # Retreive the corresponding oembed 
         oembed = oembeds[index]
         # if it's OK...
-        if not oembed.error? and oembed.length
+        if not oembed.error?
           # ...record the embed code
-          spot.oembed = oembed[0].html
+          spot.oembed = oembed.html
     # Add the end, pass to the next tick 
     callback(err, obj)
 

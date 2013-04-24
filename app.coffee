@@ -7,6 +7,7 @@ md      = require("marked")
 fs      = require("fs")
 http    = require("http")
 path    = require("path")
+oembed  = require("oembed")
 
 # Create the Express app
 app = express()
@@ -31,6 +32,9 @@ app.configure ->
   app.use (req, res, next) ->
     res.locals.path = req.path
     next()
+
+  # configure oembed client to use embedly as fallback
+  oembed.EMBEDLY_KEY = config.embedly_key
 
   ###
   Views helpers
