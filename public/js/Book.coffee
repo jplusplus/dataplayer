@@ -75,17 +75,18 @@ class window.Book extends window.Interactive
     window.requestAnimationFrame @render
     
     # Start moving a page    
-    @ui.on "mousedown", "a.corner", @mouseDownHandler     
-    $(@canvas).on "mousedown", @mouseDownHandler     
+    @ui.on "mousedown  touchstart", "a.corner", @mouseDownHandler     
+    $(@canvas).on "mousedown touchstart", @mouseDownHandler     
     # Record mouse position within the book 
-    $(document).on "mousemove", @mouseMoveHandler
+    $(document).on "mousemove touchmove", @mouseMoveHandler
     # Drop a page
-    $(document).on "mouseup",   @mouseUpHandler
+    $(document).on "mouseup touchend",   @mouseUpHandler
 
-  mouseMoveHandler: (event) =>    
+  mouseMoveHandler: (e) =>   
+    ref = if e.type == "mousemove" then e else event.touches[0]
     # Offset mouse position so that the top of the book spine is 0,0
-    @mouse.x = event.clientX - @book.offset().left - (@BOOK_WIDTH / 2)
-    @mouse.y = event.clientY - @book.offset().top    
+    @mouse.x = ref.clientX - @book.offset().left - (@BOOK_WIDTH / 2)
+    @mouse.y = ref.clientY - @book.offset().top    
 
   mouseDownHandler: (event) =>   
     # Make sure the mouse pointer is inside of the book
@@ -111,6 +112,9 @@ class window.Book extends window.Interactive
         else
           flip.target = 1
           @page = Math.max(@page - 1, 0)
+        # Update the current page
+        @changeStepHash @page
+      # Disable dragging on that flip
       flip.dragging = false
       # Do not interupt the lopp
       return true
