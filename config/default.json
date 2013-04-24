@@ -1,4 +1,5 @@
 {
-    "DATABASE_URL": false,
-    "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div>"
+    "database_url": false,
+    "embedly_key": "",
+    "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div><iframe><object><param>"
 }

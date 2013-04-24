@@ -1,5 +1,7 @@
 # Dependencies
+Embedly  = require('embedly')
 path     = require("path")
+async    = require("async")
 _        = require("underscore")
 fs       = require("fs")
 mongoose = require("mongoose")
@@ -8,10 +10,13 @@ config   = require("config")
 
 # Module variables
 app = undefined
+
 module.exports = (a) ->
   app = a  
   # Connect mongoose
-  mongoose.connect process.env.DATABASE_URL or config.DATABASE_URL  
+  mongoose.connect process.env.DATABASE_URL or config.database_url  
+  # Create the embedly client
+  new Embedly key: config.embedly_key, (e, api)-> exports.embedly = api unless e
   # Set routes
   app.get "/", homepage
   app.get "/create", createScreen
@@ -68,28 +73,30 @@ viewScreen = (req, res) ->
 updateContent = (req, res) ->
   try    
     # JSON parsing to avoid inbject javascript
-    dataObject = setDefaultValues(JSON.parse(req.body.content))
+    dataObject = JSON.parse(req.body.content)
   catch e    
     # Catch the parsing error
     return res.send(500, "Invalid configuration.")
-  
-  # Update the screen into the database
-  Screen.update
-    slug: req.params.slug
-    token: req.body.token
-  ,
-    content: dataObject
-  , (err, data) ->
-    
-    # Error during update
-    if err
-      res.send 500, "Impossible to update the page."    
-    # Screen not found
-    else unless data?
-      res.send 400, "Page not found."    
-    # OK
-    else
-      res.json dataObject
+
+  # Clean the configuration objecy
+  cleanConfiguration dataObject, (err, dataObject)->     
+    # Update the screen into the database
+    Screen.update
+      slug: req.params.slug
+      token: req.body.token
+    ,
+      content: dataObject
+    , (err, data) ->
+      
+      # Error during update
+      if err
+        res.send 500, "Impossible to update the page."    
+      # Screen not found
+      else unless data?
+        res.send 400, "Page not found."    
+      # OK
+      else
+        res.json dataObject
 
 ###*
  * Post method to update the screen draft
@@ -99,28 +106,30 @@ updateContent = (req, res) ->
 updateDraft = (req, res) ->
   try    
     # JSON parsing to avoid inbject javascript
-    dataObject = setDefaultValues(JSON.parse(req.body.content))
+    dataObject = JSON.parse(req.body.content)
   catch e    
     # Catch the parsing error
     return res.send(500, "Invalid configuration.")
   
-  # Update the screen into the database
-  Screen.update
-    slug: req.params.slug
-    token: req.body.token
-  ,
-    draft: dataObject
-  , (err, data) ->
-    
-    # Error during update
-    if err
-      res.send 500, "Impossible to update the page."    
-    # Screen not found
-    else unless data?
-      res.send 400, "Page not found."    
-    # OK
-    else
-      res.json dataObject
+  # Clean the configuration objecy
+  cleanConfiguration dataObject, (err, dataObject)->   
+    # Update the screen into the database
+    Screen.update
+      slug: req.params.slug
+      token: req.body.token
+    ,
+      draft: dataObject
+    , (err, data) ->
+      
+      # Error during update
+      if err
+        res.send 500, "Impossible to update the page."    
+      # Screen not found
+      else unless data?
+        res.send 400, "Page not found."    
+      # OK
+      else
+        res.json dataObject
 
 ###*
  * Router to create a screen and redirect to that screen
@@ -158,6 +167,17 @@ createScreen = (req, res) ->
     res.redirect "/" + data.slug + "?edit=" + data.token
 
 ###*
+ * Clean the given configuration object
+ * @param  {Object}   obj      Configuration object
+ * @param  {Function} callback Callback function
+###
+cleanConfiguration = (obj, callback=->) -> 
+  # Set default values
+  obj = setDefaultValues obj
+  # Look for the missing embed into given object's spots
+  completeMissingEmbed obj, callback  
+
+###*
  * Put the default screen values into the given obj
  * @param  {Object} obj Screen descriptor
  * @return {Object}     Screen descriptor updated
@@ -170,3 +190,62 @@ setDefaultValues = (obj) ->
   # Sanitaze each fields and return the obj
   require("../utils").sanitaze(obj)  
   
+###*
+ * Complete uncomplete embed spot with there oembed
+ * @param  {Object}   obj      Configuration object
+ * @param  {Function} callback Callback function
+###
+completeMissingEmbed = (obj, callback=->) ->
+  urls = []
+  # Get the embed spot with a missing embed
+  iterateMissingEmbed obj, (spot)->
+    # add the spot to the queue
+    urls.push 
+      url: spot.url
+      width: spot.width
+      height: spot.height
+      wmode: 'transparent'
+
+  # No URL to load, stop here
+  return callback null, obj if urls.length == 0 or not exports.embedly?
+
+  async.map urls, exports.embedly.oembed, (err, oembeds)->    
+
+    console.log oembeds
+    # No error ?
+    unless err
+      # Get the embed spot with a missing embed
+      iterateMissingEmbed obj, (spot, index)->
+        # Retreive the corresponding oembed 
+        oembed = oembeds[index]
+        # if it's OK...
+        if not oembed.error? and oembed.length
+          # ...record the embed code
+          spot.oembed = oembed[0].html
+    # Add the end, pass to the next tick 
+    callback(err, obj)
+
+###*
+ * Get the embed spots without oembed
+ * @param  {Object}   obj      Configuration object
+ * @param  {Function} iterator Iterator function
+###
+iterateMissingEmbed = (obj, iterator)-> 
+  index = 0   
+  # Fetch each step
+  _.each obj.steps or [], (step, stKey)->
+    # Fetch each spots into this step
+    _.each step.spots or [], (spot, spKey)->
+      # is the given spot an embed ?
+      if spot.type == "embed"
+        # is there an url ?
+        if spot.url?
+          # Is the oembed code present ?
+          if not spot.oembed? or spot.oembed == ""
+            # Iterate the spot
+            iterator spot, index++
+      # Do not interupt the loop
+      return true
+
+
+    

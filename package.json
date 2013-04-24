@@ -10,6 +10,8 @@
     "jade": "*",
     "less": "*",
     "coffee-script": "latest",
+    "async": "latest",
+    "embedly": "latest",
     "connect-assets": "*",
     "mongoose": "*",
     "config": "*",

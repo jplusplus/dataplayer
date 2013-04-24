@@ -2,6 +2,7 @@
 Module dependencies.
 ###
 express = require("express")
+config  = require("config")
 md      = require("marked")
 fs      = require("fs")
 http    = require("http")
@@ -63,7 +64,7 @@ app.configure ->
      * @return {String}      Container classes
     ###
     containerClass: (data) ->
-      return
+      return    
 
     ###*
      * Container context style
@@ -131,11 +132,11 @@ app.configure ->
      * @return {String}      Classes
     ###
     spotClass: (spot) ->
-      klass = []
-      
+      klass = []      
       # Spot classes
       klass.push spot.class  if spot.class
       klass.join " "
+
 
     ###*
      * Template helper to remove html tags (to plain text)

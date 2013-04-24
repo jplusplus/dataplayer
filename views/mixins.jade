@@ -43,6 +43,10 @@ mixin spotBlock(spot)
                 style=spotWrapperStyle(spot),
                 src=spot.src)
 
+        when "embed"
+            .js-animation-wrapper( style=spotWrapperStyle(spot) )
+                !=spot.oembed
+
         default
             .js-animation-wrapper( style=spotWrapperStyle(spot) ) 
                 +spotContent(spot)
