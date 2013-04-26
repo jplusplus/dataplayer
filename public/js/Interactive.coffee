@@ -38,9 +38,12 @@ class window.Interactive
    * Initializrs the page 
   ###
   constructor: -> 
-    @currentStep = 0
-    @scrollDuration = 300  
-    @defaultEntranceDuration = 600   
+    @currentStep=0
+    @cache =
+      scrollDuration: 300  
+      defaultEntranceDuration: 600 
+      hasWaypoint: false
+      navigation: "horizontal"
 
     @buildUI()
     # Remove loading overlay
@@ -64,12 +67,17 @@ class window.Interactive
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
 
+    # Record options
+    @cache.hasWaypoint = @uis.overflow.hasClass "scroll-allowed"
+    @cache.navigation  = @uis.overflow.data("navigation")
+
     @buildAnimations()  
     @containerPosition()  
     @stepsPosition()
     @spotsSize()
     @spotsPosition()
-    @bindUI()
+    @bindUI()    
+    @deactivateOtherSteps(-1)
 
     return @ui
 
@@ -81,14 +89,23 @@ class window.Interactive
     @uis.steps.on "click", ".spot", @showSpot
     @uis.previous.on "click", @previousStep
     @uis.next.on "click", @nextStep
+
     # Update the container position when we resize the window
     $(window).off("resize").on("resize", @resize)
     # Bind the hashchange to change the current step
     $(window).off("hashchange").hashchange @readStepFromHash
+    # Add an event to activate a step
+    @uis.steps.on "step:activate", (ev) => @changeStepHash $(ev.currentTarget).data("step"), true
     # Is the scroll activated on the content ?
-    if @uis.overflow.hasClass "scroll-allowed"
+    if @cache.hasWaypoint 
+      # Waypoint helps us to know when the container scroll reach a step
+      waypointOptions =  
+        # Monitor @ui as scroll space
+        context: @ui
+        # Activate or not the horizontal mode
+        horizontal: @cache.navigation == "horizontal"
       # Bind the mousewheel event
-      @ui.on "mousewheel", console.log #@wheelOnContainer
+      @uis.steps.waypoint @scrollReachStep, waypointOptions     
     # Deactivates this shortcuts in editor mode
     if not $("body").hasClass("editor-mode")
       $(window).off("keydown").keydown @keyboardNav
@@ -180,13 +197,16 @@ class window.Interactive
    * @return {Array} Steps list
   ###
   stepsPosition: ->
-    navigation = @uis.overflow.data("navigation")
     @uis.steps.each (i, step) =>
       $step = $(step)      
-      # Do not position the first step
-      if i > 0
+      # Do not position the first step according the previous one
+      if i == 0        
+        $step.css
+          top  : if @cache.navigation == "vertical" then 1 else 0
+          left : if @cache.navigation == "horizontal" then 1 else 0
+      else
         $previousStep = @uis.steps.eq(i - 1)   
-        switch navigation
+        switch @cache.navigation
           when "vertical"     
             $step.css "top", $previousStep.position().top + $previousStep.height()
           else
@@ -207,8 +227,7 @@ class window.Interactive
    * Position every spots in each steps
    * @return {Array} Spots list
   ###
-  spotsPosition: =>
-    
+  spotsPosition: =>    
     # Add a negative margin on each spot
     # (position the spot from its center)
     @uis.spots.each (i, spot) ->
@@ -225,7 +244,13 @@ class window.Interactive
   showSpot: (event) =>
     $this = $(this)
 
-
+  ###*
+   * Update the hashbang when we reach a step
+   * @param  {String} direction Scroll direction
+  ###
+  scrollReachStep: ()->
+    # Activate the current step
+    $(this).trigger("step:activate")
 
   ###*
    * Bind the keyboard keydown event to navigate through the page
@@ -261,52 +286,101 @@ class window.Interactive
    * @param  {Number} step Target step
    * @return {String}      New location hash
   ###
-  changeStepHash: (step=0) =>
-    location.hash = "#step=" + step  if step >= 0 and step < @uis.steps.length
+  changeStepHash: (step=@currentStep, noEvent=false) =>
+    # If the step is different
+    if step != @currentStep
+      # If we ask explicitly to not scroll once when the hashchange
+      @cache.skipHashChange = true if noEvent
+      # Change the hash
+      location.hash = "#step=" + step  if step >= 0 and step < @uis.steps.length
 
   ###*
    * Just go to step directcly
    * @return {Number} New step number
   ###
   readStepFromHash: => 
-    if @getHashParams().step
-      @goToStep @getHashParams().step
-    else
-      return false
+    # Get the step number from hash
+    step = @getHashParams().step
+    if step
+      # Skip the scroll
+      if @cache.skipHashChange
+        # Reactivate scroll to a step
+        @cache.skipHashChange = false
+        # and active the step
+        @activeStep step
+      # Or scroll to the step before...
+      else
+        @goToStep step
 
   ###*
    * Slide to the given step
    * @param  {Number} step New current step number
    * @return {Number}      New current step number
   ###
-  goToStep: (step=0) =>
+  goToStep: (step=@currentStep) =>
     if step >= 0 and step < @uis.steps.length      
       # Update the current step id
-      @currentStep = 1 * step
-      # Remove current class
-      @uis.steps.removeClass("js-current").eq(@currentStep).addClass "js-current"            
+      @currentStep = 1 * step     
       # Prevent scroll queing
-      jQuery.scrollTo.window().queue([]).stop()      
+      jQuery.scrollTo.window().queue([]).stop() 
+      # Disable waypoint temporary
+      @uis.steps.waypoint "disable" if @cache.hasWaypoint  
       # And scroll to the current step
-      @ui.scrollTo @uis.steps.eq(@currentStep), @scrollDuration     
-      # Add a class to the body
-      $body = $("body")      
-      # Is this the first step ?
-      $body.toggleClass "js-first", @currentStep is 0   
-      # Is this the last step ?
-      $body.toggleClass "js-last", @currentStep is @uis.steps.length - 1
-      # Update the menu
-      @uis.navitem.removeClass("active").filter("[data-step=#{@currentStep}]").addClass("active")
-      # Hides element with entrance
-      @uis.steps.eq(@currentStep).find(".spot[data-entrance]:not([data-entrance='']) .js-animation-wrapper").addClass "hidden"      
-      # Clear all spot animations
-      @clearSpotAnimations()      
-      # Add the entrance animation after the scroll
-      setTimeout @doEntranceAnimations, @scrollDuration
-      # Trigger an event
-      @ui.trigger "step:change", [@currentStep]
+      @ui.scrollTo(
+        @uis.steps.eq(@currentStep), 
+        # Default scroll duration
+        @cache.scrollDuration, 
+        # Active the given step
+        => @activeStep @currentStep 
+      )   
 
     return @currentStep
+
+  ###*
+   * Activate the given step
+   * @param  {Number} step New current step number
+   * @return {Number}      New current step number
+  ###
+  activeStep: (step=@currentStep) =>
+    # Update the current step id
+    @currentStep = 1 * step
+    # Remove current class
+    @uis.steps.removeClass("js-current").eq(@currentStep).addClass "js-current"       
+    # Deactivate other steps
+    @deactivateOtherSteps @currentStep
+    # Start reanable step waypoint
+    @uis.steps.waypoint "enable" if @cache.hasWaypoint
+    # Add a class to the body
+    $body = $("body")      
+    # Is this the first step ?
+    $body.toggleClass "js-first", @currentStep is 0   
+    # Is this the last step ?
+    $body.toggleClass "js-last", @currentStep is @uis.steps.length - 1
+    # Update the menu
+    @uis.navitem.removeClass("active").filter("[data-step=#{@currentStep}]").addClass "active"
+    # Clear all spot animations
+    @clearSpotAnimations()      
+    # Add the entrance animation after the scroll
+    setTimeout @doEntranceAnimations, @cache.scrollDuration
+    # Trigger an event
+    @ui.trigger "step:change", [@currentStep]
+
+    return @currentStep
+
+  ###*
+   * Deactivate steps exept the given one
+   * @param  {Number} step Step number to exept
+  ###
+  deactivateOtherSteps: (step=@currentStep) =>    
+    # Get the other steps
+    $others = @uis.steps.not ".js-current"
+    # Process each step one by one
+    $others.each (i, s)->
+      # Select animated spots
+      $spots = $(s).find(".spot[data-entrance]:not([data-entrance=''])")
+      # Hide animation wrappers
+      $spots.find(".js-animation-wrapper").addClass "hidden"
+
 
   ###*
    * Set step animations
@@ -350,7 +424,7 @@ class window.Interactive
         queue++  if $elem.data("queue")?
         # Take the element entrance duration 
         # or default duration
-        duration = data.entranceDuration or @defaultEntranceDuration  
+        duration = data.entranceDuration or @cache.defaultEntranceDuration  
 
         # explicite duration
         if $elem.data("queue") > 1
