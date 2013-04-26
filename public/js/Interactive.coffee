@@ -29,6 +29,9 @@
 # Local pan on touch screen
 #= require vendor/iscroll-lite.js
 
+# Monitor scroll
+#= require vendor/waypoints.js
+
 class window.Interactive
 
   ###*
@@ -82,6 +85,10 @@ class window.Interactive
     $(window).off("resize").on("resize", @resize)
     # Bind the hashchange to change the current step
     $(window).off("hashchange").hashchange @readStepFromHash
+    # Is the scroll activated on the content ?
+    if @uis.overflow.hasClass "scroll-allowed"
+      # Bind the mousewheel event
+      @ui.on "mousewheel", console.log #@wheelOnContainer
     # Deactivates this shortcuts in editor mode
     if not $("body").hasClass("editor-mode")
       $(window).off("keydown").keydown @keyboardNav

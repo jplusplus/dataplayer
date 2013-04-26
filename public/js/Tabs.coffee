@@ -24,7 +24,7 @@ class window.Tabs extends window.Interactive
     * Resize the tab wrapper within horizontal layout
     * @return {Object} Tabs wrapper
     ###
-    tabWrapperWidth: =>
+    tabWrapperWidth: =>        
         if @uis.overflow.hasClass("horizontal-tabs")
             # Calculates the wrapper size
             wrapperWith = 0 
@@ -42,8 +42,8 @@ class window.Tabs extends window.Interactive
     * @param  {Number} deltaX Distance across on X
     * @param  {Number} deltaY Distance across on Y
     ###
-    wheelOnTabs: (event, delta, deltaX, deltaY) ->
-        $this = $(this)    
+    wheelOnTabs: (ev, delta, deltaX, deltaY) =>
+        $this = $(ev.currentTarget)            
         if @uis.overflow.hasClass("vertical-tabs")      
             scrollTop = $this.scrollTop()
             $this.scrollTop(scrollTop-Math.round(deltaY*20))      

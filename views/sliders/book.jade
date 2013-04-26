@@ -4,7 +4,9 @@ include ../mixins
 block slider
     #workspace
       - navigation = obj.content.navigation || "horizontal"
-      #overflow(data-navigation=navigation,  class=overflowClass(obj.content), style=screenStyle(obj.content))        
+      #overflow(data-navigation=navigation,  
+                class=overflowClass(obj.content), 
+                style=screenStyle(obj.content))       
         canvas#page-flip
         #container
           if obj.content.steps

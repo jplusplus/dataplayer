@@ -59,6 +59,7 @@ app.configure ->
 
       klasses.push data.navigation || "horizontal"
       klasses.push data.layout || "default"
+      klasses.push "scroll-allowed" if data.scroll
         
       klasses.join " "
 
