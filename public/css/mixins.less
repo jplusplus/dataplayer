@@ -23,9 +23,9 @@
     }
 
     #overflow {
-        
-        
+                
         &.book {
+    
             
             @bookBorder: fade(@activeColor, 70);
             @bookLight:  fade(@white, 40);
@@ -35,12 +35,11 @@
             @basicBackground_d2: darken(@basicBackground, 2);         
             @basicBackground_d10: darken(@basicBackground, 10);  
             
-            border:@bookBorder 10px solid;  
-            background-color:@altBackground;
+            background-color:@bookBorder;
             .box-shadow(0 0 10px 0 @bookShadow );     
 
 
-            &:after {
+            /*&:after {
                 content:"";
                 top:-10px;
                 bottom:-10px;
@@ -59,7 +58,7 @@
                 margin-left:-20px;
                 position:absolute;
                 background: @bookShadow;
-            } 
+            } */
             
             /*
             &:after {
@@ -88,7 +87,11 @@
 
             #container {
          
-                .box-shadow(0 0 6px 0 darken(@activeColor, 60)); 
+                .box-shadow(0 0 6px 0 darken(@activeColor, 60));     
+                left:15px;      
+                right:15px;       
+                top:10px;      
+                bottom:10px;      
                 background-color:@basicBackground; 
 
                 &:after {     

@@ -603,12 +603,14 @@ body {
 
 #overflow.book {
     
-    overflow:visible;
-    
+    // Not scroll at all !!
+    &.scroll-allowed, & {                
+        overflow:visible;
+    }    
     
     #page-flip {
-        top:0;
-        left:0;
+        left:-25px; right:-25px;
+        top:-30px; bottom:-30px;
         position: absolute;
         z-index: @zIndexBookShadow;
     }
@@ -636,6 +638,7 @@ body {
     .credits {
         left:0;
         right:auto;
+        margin:10px 15px;
     }
 }
 

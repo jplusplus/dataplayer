@@ -65,11 +65,7 @@ class window.Book extends window.Interactive
     
     # Resize the canvas to match the book size
     @canvas.width = @BOOK_WIDTH + (@CVS_PADDING * 2)
-    @canvas.height = @BOOK_HEIGHT + (@CVS_PADDING * 2)
-    
-    # Offset the canvas so that it's padding is evenly spread around the book
-    @canvas.style.top = -@CVS_PADDING + "px"
-    @canvas.style.left = -@CVS_PADDING + "px"
+    @canvas.height = @BOOK_HEIGHT + (@CVS_PADDING * 2)    
     
     # Render the page flip every animation frame
     window.requestAnimationFrame @render
