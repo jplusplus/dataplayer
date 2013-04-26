@@ -170,4 +170,4 @@ class @Editor
             $(panId).addClass("active")
 
         # Set delegated draggable 
-        $("#overflow").delegate(".spot", "mouseenter", @setSpotDraggable)   
+        $(window).delegate(".spot", "mouseenter", @setSpotDraggable)   
