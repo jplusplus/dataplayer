@@ -1,5 +1,5 @@
 {
-    "database_url": false,
+    "database_url": "mongodb://localhost/db",
     "embedly_key": "",
     "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div><iframe><object><param>"
 }
