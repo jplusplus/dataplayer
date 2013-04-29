@@ -38,8 +38,10 @@ class window.Book extends window.Interactive
    * @return {Number}      New current step number
   ###
   goToStep:(step=@currentStep)=> 
-    if step >= 0 and step < @uis.steps.length      
+    if step >= 0 and step < @uis.steps.length                  
       @currentStep = step
+      # Active the step
+      setTimeout @activeStep, 600
       # Turn each page      
       $.each @flips, (i, flip) =>  
         # The target (or direction) is not the same 
@@ -144,7 +146,7 @@ class window.Book extends window.Interactive
           flip.target = 1
           @currentStep = Math.max(@currentStep - 1, 0)
         # Update the current page
-        @changeStepHash @currentStep, true
+        @changeStepHash @currentStep, true        
       # Disable dragging on that flip
       flip.dragging = false
       # Do not interupt the lopp

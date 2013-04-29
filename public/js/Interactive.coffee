@@ -293,9 +293,9 @@ class window.Interactive
    * @param  {Number} step Target step
    * @return {String}      New location hash
   ###
-  changeStepHash: (step=@currentStep, noEvent=false) =>
+  changeStepHash: (step=@currentStep, noEvent=false) =>    
     # If the step is different
-    if step != @currentStep
+    if not @getHashParams().hasOwnProperty("step") or @getHashParams().step != @currentStep      
       # If we ask explicitly to not scroll once when the hashchange
       @cache.skipHashChange = true if noEvent
       # Change the hash
@@ -305,10 +305,10 @@ class window.Interactive
    * Just go to step directcly
    * @return {Number} New step number
   ###
-  readStepFromHash: =>     
-    # Get the step number from hash
-    step = @getHashParams().step    
-    if step
+  readStepFromHash: =>   
+    if @getHashParams().hasOwnProperty("step")
+      # Get the step number from hash
+      step = @getHashParams().step      
       # Skip the scroll
       if @cache.skipHashChange
         # Reactivate scroll to a step
@@ -325,7 +325,8 @@ class window.Interactive
    * @param  {Number} step New current step number
    * @return {Number}      New current step number
   ###
-  goToStep: (step=@currentStep) =>    
+  goToStep: (step=@currentStep) =>      
+    console.log step          
     if step >= 0 and step < @uis.steps.length      
       # Update the current step id
       @currentStep = 1 * step     
