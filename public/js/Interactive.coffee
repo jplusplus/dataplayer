@@ -209,8 +209,8 @@ class window.Interactive
       # Do not position the first step according the previous one
       if i == 0        
         $step.css
-          top  :  0
-          left :  0
+          top  :  if @cache.hasWaypoint and @cache.navigation == "vertical"   then 1 else 0
+          left :  if @cache.hasWaypoint and @cache.navigation == "horizontal" then 1 else 0
       else
         $previousStep = @uis.steps.eq(i - 1)   
         switch @cache.navigation
