@@ -29,14 +29,20 @@
             
             @bookBorder: fade(@activeColor, 70);
             @bookLight:  fade(@white, 40);
-            @bookShadow: fade(@black, 20);
+            @bookShadow: fade(@black, 30);
             
             @basicBackground_d1: darken(@basicBackground, 1);
             @basicBackground_d2: darken(@basicBackground, 2);         
             @basicBackground_d10: darken(@basicBackground, 10);  
             
             background-color:@bookBorder;
-            .box-shadow(0 0 10px 0 @bookShadow );     
+            &, .book-stack {                
+                .box-shadow(0 0 5px 0 @bookShadow );     
+            }
+            
+            .book-stack {
+                background-color:@basicBackground;                 
+            }
 
 
             /*&:after {
@@ -59,30 +65,7 @@
                 position:absolute;
                 background: @bookShadow;
             } */
-            
-            /*
-            &:after {
-                z-index:15;
-                content:"";
-                top:5px;
-                bottom:5px;
-                left:-2px;
-                right:-2px;
-                position:absolute;
-                background:darken(@basicBackground, 10);
-            }
-          
-            &:before {
-                z-index:10;
-                content:"";
-                top:10px;
-                bottom:10px;
-                left:-4px;
-                right:-4px;
-                position:absolute;
-                background:darken(@basicBackground, 20);    
-            } */
-          
+                       
 
 
             #container {

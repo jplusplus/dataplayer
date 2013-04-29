@@ -3,7 +3,8 @@
 @zIndexTitle       : @zIndexSpot+100;
 @zIndexHandle      : @zIndexTitle+100;
 @zIndexPageCorner  : @zIndexHandle+100;
-@zIndexBookShadow  : @zIndexPageCorner+100;
+@zIndexBookStack   : @zIndexPageCorner+100;
+@zIndexBookShadow  : @zIndexBookStack+100;
 @zIndexNav         : @zIndexBookShadow+100;
 @zIndexEditor      : @zIndexNav+100;
 @zIndexCredits     : @zIndexEditor+100;
@@ -612,6 +613,31 @@ body {
         top:-30px; bottom:-30px;
         position: absolute;
         z-index: @zIndexBookShadow;
+    }
+
+    .book-stack {
+        position:absolute;
+        top:25px;
+        bottom:25px;
+        left:5px;
+        width:20px;
+        background:white;
+        
+        .book-stack {
+            top:-5px;
+            bottom:-5px;
+            left:3px;
+        }
+
+        &.right {
+            right:5px;
+            left:auto;
+            
+            .book-stack {
+                left:auto;
+                right:3px;
+            }
+        }
     }
 
     .page {
