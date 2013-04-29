@@ -325,8 +325,7 @@ class window.Interactive
    * @param  {Number} step New current step number
    * @return {Number}      New current step number
   ###
-  goToStep: (step=@currentStep) =>      
-    console.log step          
+  goToStep: (step=@currentStep) =>          
     if step >= 0 and step < @uis.steps.length      
       # Update the current step id
       @currentStep = 1 * step     

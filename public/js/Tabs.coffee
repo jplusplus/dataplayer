@@ -32,8 +32,8 @@ class window.Tabs extends window.Interactive
             @uis.tabs.find(".wrapper > li").each (i, tab)=>
                 # And mades a right reduction using there with
                 wrapperWith += $(tab).outerWidth()
-                # Then apply the width to the wrapper
-                @uis.tabs.find(".wrapper").css("width", wrapperWith)
+            # Then apply the width to the wrapper
+            @uis.tabs.find(".wrapper").css("width", wrapperWith)
 
     ###*
     * Activate mousewheel within the tabs area
