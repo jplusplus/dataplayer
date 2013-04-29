@@ -258,7 +258,21 @@ body.editor-mode {
             
             #editor-embed {
                 .input-block-level();
-                height:80px;
+                height:80px;                
+            }
+
+            .embed h4 {
+                padding-top:5px;
+            }
+
+            .clipboard-copier {
+                width:22px;
+                overflow:hidden;
+                display:inline-block;
+                text-indent:-999px;
+                background-image:url("/img/clipboard.png"); 
+                background-position:center center;
+                background-repeat:no-repeat;                
             }
 
             [readonly], .embed {
@@ -271,6 +285,7 @@ body.editor-mode {
                 font-family:inherit;                
                 border:1px  darken(@activeColor, 15%) solid;
                 background:fade(@white, 95%);
+                .border-radius(0);
                 .box-shadow(inset 0 0 5px darken(@activeColor, 15%) );
                 
                 a {

@@ -30,7 +30,7 @@
         article
             .bottom30
                 h4 Public address
-                button.btn.clipboard-copiers.disabled.right10(data-clipboard-text=publicURL(obj),title="Click to copy me.") Copy
+                button.btn.clipboard-copier.disabled.right10(data-clipboard-text=publicURL(obj),title="Click to copy me.") Copy
                 code
                     a(href=publicURL(obj))=publicURL(obj)  
                 p.top10
@@ -38,8 +38,8 @@
                     a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
 
 
-            .bottom30
-                button.btn.pull-left.right10.clipboard-copiers(data-clipboard-target="editor-embed", title="Click to copy me.") copy
+            .bottom30.embed
+                button.btn.pull-left.right10.clipboard-copier(data-clipboard-target="editor-embed", title="Click to copy me.") copy
                 h4.top20.bottom20 Embed 
                 textarea#editor-embed(readonly)
                     iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
@@ -47,7 +47,7 @@
             .bottom30
                 h4 Admin address
                 p This address enables you to edit this page. Keep it in your bookmarks and above all: <strong>do not share it.</strong>
-                button.btn.clipboard-copiers.disabled.right10(data-clipboard-text=privateURL(obj),title="Click to copy me.") Copy
+                button.btn.clipboard-copier.disabled.right10(data-clipboard-text=privateURL(obj),title="Click to copy me.") Copy
                 code
                     a(href=privateURL(obj))=privateURL(obj)
 #fb-root

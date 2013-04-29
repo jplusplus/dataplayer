@@ -123,11 +123,11 @@ class @Editor
         # Options with the path to the flash fallback
         options = { moviePath: "/swf/ZeroClipboard.swf" }
         # For each clipboard button
-        $(".clipboard-copiers").each (i, c)=> 
+        $(".clipboard-copier").each (i, c)=> 
             # Create the button
             clip = new ZeroClipboard(c, options)
             # Enabled the clip button
-            clip.on "load", -> $(".clipboard-copiers").removeClass "disabled"            
+            clip.on "load", -> $(".clipboard-copier").removeClass "disabled"            
 
     constructor: ->        
         @token = $("body").data "given-token"
