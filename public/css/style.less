@@ -603,14 +603,15 @@ body {
 
 #overflow.book {
     
+    .border-radius(2px);
     // Not scroll at all !!
     &.scroll-allowed, & {                
         overflow:visible;
     }    
     
     #page-flip {
-        left:-25px; right:-25px;
-        top:-30px; bottom:-30px;
+        left:-10px; right:0px;
+        top:-25px; bottom:0px;
         position: absolute;
         z-index: @zIndexBookShadow;
     }
@@ -619,23 +620,23 @@ body {
         position:absolute;
         top:25px;
         bottom:25px;
-        left:5px;
+        left:11px;
         width:20px;
         background:white;
         
         .book-stack {
-            top:-5px;
-            bottom:-5px;
-            left:3px;
+            top:-4px;
+            bottom:-4px;
+            left:2px;
         }
 
         &.right {
-            right:5px;
+            right:11px;
             left:auto;
             
             .book-stack {
                 left:auto;
-                right:3px;
+                right:2px;
             }
         }
     }
@@ -663,7 +664,7 @@ body {
     .credits {
         left:0;
         right:auto;
-        margin:10px 15px;
+        margin:5px 20px;
     }
 }
 

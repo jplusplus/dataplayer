@@ -69,7 +69,7 @@ class window.Book extends window.Interactive
     # Vertical spacing between the top edge of the book and the papers
     @PAGE_Y      = (@BOOK_HEIGHT - @PAGE_HEIGHT) / 2
     # The canvas size equals to the book dimensions + this padding
-    @CVS_PADDING = 40
+    @CVS_PADDING = 30
 
     
     @canvas           = document.getElementById("page-flip")    

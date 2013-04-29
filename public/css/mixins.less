@@ -26,55 +26,54 @@
                 
         &.book {
     
-            
+        
             @bookBorder: fade(@activeColor, 70);
             @bookLight:  fade(@white, 40);
-            @bookShadow: fade(@black, 30);
+            @bookShadow: fade(@black, 20);
             
             @basicBackground_d1: darken(@basicBackground, 1);
             @basicBackground_d2: darken(@basicBackground, 2);         
             @basicBackground_d10: darken(@basicBackground, 10);  
             
             background-color:@bookBorder;
-            &, .book-stack {                
-                .box-shadow(0 0 5px 0 @bookShadow );     
-            }
+            .box-shadow(0 2px 10px @bookShadow);
             
             .book-stack {
-                background-color:@basicBackground;                 
+                background-color:@basicBackground_d2;                 
+                .box-shadow(0 0 2px 0 @black );    
             }
 
-
-            /*&:after {
+            &:after {
                 content:"";
-                top:-10px;
-                bottom:-10px;
-                left:-12px;
-                right:-12px;
+                top:0px;
+                bottom:0px;
+                left:0px;
+                right:0px;
                 position:absolute;
-                .box-shadow(0 0 0 2px @bookLight inset)
+                border:2px solid @bookLight;
+                border-bottom-width:1px;
+                border-left:0;
+                border-right:0;
             }
-            
+
             &:before {
                 content:"";
-                top:-10px;
-                bottom:-10px;
+                top:0px;
+                bottom:0px;
                 left:50%;
                 width:40px;
                 margin-left:-20px;
                 position:absolute;
                 background: @bookShadow;
-            } */
-                       
-
+            }
 
             #container {
          
                 .box-shadow(0 0 6px 0 darken(@activeColor, 60));     
-                left:15px;      
-                right:15px;       
-                top:10px;      
-                bottom:10px;      
+                left:20px;      
+                right:20px;       
+                top:5px;      
+                bottom:5px;      
                 background-color:@basicBackground; 
 
                 &:after {     
