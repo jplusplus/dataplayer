@@ -6,9 +6,16 @@
 
 class window.Book extends window.Interactive
 
-  constructor:->
+  ###*
+   * Set cache attributes
+   * @return {Object} cache object 
+  ###
+  setCache: =>    
     super
-    @initBook()
+    # Record options
+    @cache.hasWaypoint = false
+    @cache
+    
 
   stepsPosition:->
     count = @uis.steps.length
@@ -25,10 +32,31 @@ class window.Book extends window.Interactive
 
       @uis.steps.css "width", @ui.outerWidth()/2
 
-  initBook: =>    
-    @book        = @ui
-    @flips       = []    
-    @page        = 0
+  ###*
+   * Override goToStep method
+   * @param  {Number} step New current step number
+   * @return {Number}      New current step number
+  ###
+  goToStep:(step=@currentStep)=> 
+    if step >= 0 and step < @uis.steps.length      
+      @currentStep = step
+      # Turn each page      
+      $.each @flips, (i, flip) =>  
+        # The target (or direction) is not the same 
+        # for backward and forward flip
+        if i < step
+          flip.target = -1
+        else
+          flip.target = 1          
+        # Drap the current flip
+        @drawFlip flip
+
+  ###*
+   * Gets every jquery shortcuts
+   * @return {Object} Main page container
+  ###
+  buildUI: => 
+    super    
     # Dimensions of the whole book
     @BOOK_WIDTH  = @ui.outerWidth()
     @BOOK_HEIGHT = @ui.outerHeight()    
@@ -42,17 +70,17 @@ class window.Book extends window.Interactive
     @PAGE_Y      = (@BOOK_HEIGHT - @PAGE_HEIGHT) / 2
     # The canvas size equals to the book dimensions + this padding
     @CVS_PADDING = 40
-    @canvas      = document.getElementById("page-flip")
-    @zIndexOn    = $(@canvas).css("z-index")
-    @zIndexOff   = 100
-    @context     = @canvas.getContext("2d")
-    @mouse       = x: 0, y: 0
 
-    # List of all the page elements in the DOM
-    $pages = @ui.find(".page")
-
+    
+    @canvas           = document.getElementById("page-flip")    
+    @context         = @canvas.getContext("2d")
+    @uis.canvas      = $(@canvas)    
+    @cache.zIndexOn  = $(@canvas).css("z-index")
+    @cache.zIndexOff = 100
+    @mouse           = x: 0, y: 0
+    @flips           = []    
     # Organize the depth of our pages and create the flip definitions
-    $pages.each (i, page)=>
+    @ui.find(".page").each (i, page)=>
       @flips.push        
         # Current progress of the flip (left -1 to right +1)
         progress: 1        
@@ -67,32 +95,39 @@ class window.Book extends window.Interactive
     @canvas.width = @BOOK_WIDTH + (@CVS_PADDING * 2)
     @canvas.height = @BOOK_HEIGHT + (@CVS_PADDING * 2)    
     
-    # Render the page flip every animation frame
-    window.requestAnimationFrame @render
     
+
+  ###*
+   * Bind javascript event on page elements
+   * @return {Object} jQuest window object
+  ###
+  bindUI: =>
+    super
     # Start moving a page    
     @ui.on "mousedown touchstart", "a.corner", @mouseDownHandler     
-    $(@canvas).on "mousedown touchstart", @mouseDownHandler     
+    @uis.canvas.on "mousedown touchstart", @mouseDownHandler     
     # Record mouse position within the book 
     $(document).on "mousemove touchmove", @mouseMoveHandler
     # Drop a page
     $(document).on "mouseup touchend",   @mouseUpHandler
+    # Render the page flip every animation frame
+    window.requestAnimationFrame @render
 
   mouseMoveHandler: (e) =>   
     ref = if e.type == "mousemove" then e else event.touches[0]
     # Offset mouse position so that the top of the book spine is 0,0
-    @mouse.x = ref.clientX - @book.offset().left - (@BOOK_WIDTH / 2)
-    @mouse.y = ref.clientY - @book.offset().top    
+    @mouse.x = ref.clientX - @ui.offset().left - (@BOOK_WIDTH / 2)
+    @mouse.y = ref.clientY - @ui.offset().top    
 
   mouseDownHandler: (e) =>   
     # Make sure the mouse pointer is inside of the book
     if Math.abs(@mouse.x) < @PAGE_WIDTH
-      if @mouse.x < 0 and @page - 1 >= 0        
+      if @mouse.x < 0 and @currentStep - 1 >= 0        
         # We are on the left side, drag the previous page
-        @flips[@page - 1].dragging = true      
+        @flips[@currentStep - 1].dragging = true      
       # We are on the right side, drag the current page
-      else if @mouse.x > 0 and @page + 1 < @flips.length     
-        @flips[@page].dragging = true         
+      else if @mouse.x > 0 and @currentStep + 1 < @flips.length     
+        @flips[@currentStep].dragging = true         
   
     # Prevents the text selection
     e.preventDefault()
@@ -104,12 +139,12 @@ class window.Book extends window.Interactive
         # Figure out which page we should navigate to
         if @mouse.x < 0
           flip.target = -1
-          @page = Math.min(@page + 1, @flips.length)
+          @currentStep = Math.min(@currentStep + 1, @flips.length)
         else
           flip.target = 1
-          @page = Math.max(@page - 1, 0)
+          @currentStep = Math.max(@currentStep - 1, 0)
         # Update the current page
-        @changeStepHash @page
+        @changeStepHash @currentStep, true
       # Disable dragging on that flip
       flip.dragging = false
       # Do not interupt the lopp
@@ -121,9 +156,9 @@ class window.Book extends window.Interactive
     # Reset all pixels in the canvas
     @context.clearRect 0, 0, @canvas.width, @canvas.height
     # Hide the canvas
-    $(@canvas).css "z-index", @zIndexOff
+    @uis.canvas.css "z-index", @cache.zIndexOff
 
-    $.each @flips, (i, flip)=>         
+    $.each @flips, (i, flip)=>               
       flip.target = Math.max( Math.min(@mouse.x / @PAGE_WIDTH, 1), -1) if flip.dragging 
       # Ease progress towards the target value 
       flip.progress += (flip.target - flip.progress) * 0.2  
@@ -134,7 +169,7 @@ class window.Book extends window.Interactive
         
   drawFlip: (flip) =>    
     # Show the canvas
-    $(@canvas).css "z-index", @zIndexOn
+    @uis.canvas.css "z-index", @cache.zIndexOn
     # Strength of the fold is strongest in the middle of the book
     strength = 1 - ( ~~( Math.abs(flip.progress)*1000) )/1000
     # How far the page should outdent vertically due to perspective

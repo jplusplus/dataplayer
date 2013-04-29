@@ -46,12 +46,31 @@ class window.Interactive
       navigation: "horizontal"
 
     @buildUI()
+    @setCache()
+    @buildAnimations()  
+    @containerPosition()  
+    @stepsPosition()
+    @spotsSize()
+    @spotsPosition()
+    @bindUI()    
+    @deactivateOtherSteps(-1)
+
     # Remove loading overlay
     $("body").removeClass "js-loading"    
     # Read the step from the hash
-    @readStepFromHash() or @goToStep 0   
+    @readStepFromHash() 
     # Activate fast click to avoid tap delay on touch screen
     new FastClick(document.body)
+
+  ###*
+   * Set cache attributes
+   * @return {Object} cache object 
+  ###
+  setCache: =>    
+    # Record options
+    @cache.hasWaypoint = @uis.overflow.hasClass "scroll-allowed"
+    @cache.navigation  = @uis.overflow.data("navigation")
+    @cache
 
   ###*
    * Gets every jquery shortcuts
@@ -66,18 +85,6 @@ class window.Interactive
       navitem: $("#overflow .to-step")
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
-
-    # Record options
-    @cache.hasWaypoint = @uis.overflow.hasClass "scroll-allowed"
-    @cache.navigation  = @uis.overflow.data("navigation")
-
-    @buildAnimations()  
-    @containerPosition()  
-    @stepsPosition()
-    @spotsSize()
-    @spotsPosition()
-    @bindUI()    
-    @deactivateOtherSteps(-1)
 
     return @ui
 
@@ -97,7 +104,7 @@ class window.Interactive
     # Add an event to activate a step
     @uis.steps.on "step:activate", (ev) => @changeStepHash $(ev.currentTarget).data("step"), true
     # Is the scroll activated on the content ?
-    if @cache.hasWaypoint 
+    if @cache.hasWaypoint
       # Waypoint helps us to know when the container scroll reach a step
       waypointOptions =  
         # Monitor @ui as scroll space
@@ -298,9 +305,9 @@ class window.Interactive
    * Just go to step directcly
    * @return {Number} New step number
   ###
-  readStepFromHash: => 
+  readStepFromHash: =>     
     # Get the step number from hash
-    step = @getHashParams().step
+    step = @getHashParams().step    
     if step
       # Skip the scroll
       if @cache.skipHashChange
@@ -317,7 +324,7 @@ class window.Interactive
    * @param  {Number} step New current step number
    * @return {Number}      New current step number
   ###
-  goToStep: (step=@currentStep) =>
+  goToStep: (step=@currentStep) =>    
     if step >= 0 and step < @uis.steps.length      
       # Update the current step id
       @currentStep = 1 * step     
