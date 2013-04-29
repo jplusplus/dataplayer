@@ -4,6 +4,7 @@
 #= require vendor/codemirror-javascript.js
 #= require vendor/jquery.hotkeys.js
 #= require vendor/notify-osd.min.js
+#= require vendor/ZeroClipboard.js
 
 class @Editor
     recordSpotPosition:(spot)=>
@@ -118,10 +119,21 @@ class @Editor
                 stop: (event, ui) =>              
                     @recordSpotPosition event.target
 
+    createClipboardCopiers:=>
+        # Options with the path to the flash fallback
+        options = { moviePath: "/swf/ZeroClipboard.swf" }
+        # For each clipboard button
+        $(".clipboard-copiers").each (i, c)=> 
+            # Create the button
+            clip = new ZeroClipboard(c, options)
+            # Enabled the clip button
+            clip.on "load", -> $(".clipboard-copiers").removeClass "disabled"            
 
     constructor: ->        
         @token = $("body").data "given-token"
         @page  = $("body").data "page"
+
+        @createClipboardCopiers()
 
         # Bind a "CodeMirror" editor on editor text area
         @myCodeMirror = CodeMirror.fromTextArea(

@@ -28,23 +28,28 @@
     
     #editor-publish.tabs-pan
         article
-            h4 Public address
-            code
-                i.icon-share.right10
-                a(href=publicURL(obj))=publicURL(obj)  
-            p.top10
-                .pull-left.right10.fb-like(data-href=publicURL(obj), data-send='true', data-layout='button_count', data-width='120', data-show-faces='false', data-font='verdana', data-action='recommend')
-                a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
+            .bottom30
+                h4 Public address
+                button.btn.clipboard-copiers.disabled.right10(data-clipboard-text=publicURL(obj),title="Click to copy me.") Copy
+                code
+                    a(href=publicURL(obj))=publicURL(obj)  
+                p.top10
+                    .pull-left.right10.fb-like(data-href=publicURL(obj), data-send='true', data-layout='button_count', data-width='120', data-show-faces='false', data-font='verdana', data-action='recommend')
+                    a.twitter-share-button(href='https://twitter.com/share', data-url=publicURL(obj), data-related='jplusplus_') Tweet
 
-            h4.top20 Embed 
-            textarea#editor-embed(readonly)
-                iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
 
-            h4.top20 Admin address
-            p This address enables you to edit this page. Keep it in your bookmarks and above all: <strong>do not share it.</strong>
-            code
-                i.icon-edit.right10
-                a(href=privateURL(obj))=privateURL(obj)
+            .bottom30
+                button.btn.pull-left.right10.clipboard-copiers(data-clipboard-target="editor-embed", title="Click to copy me.") copy
+                h4.top20.bottom20 Embed 
+                textarea#editor-embed(readonly)
+                    iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
+
+            .bottom30
+                h4 Admin address
+                p This address enables you to edit this page. Keep it in your bookmarks and above all: <strong>do not share it.</strong>
+                button.btn.clipboard-copiers.disabled.right10(data-clipboard-text=privateURL(obj),title="Click to copy me.") Copy
+                code
+                    a(href=privateURL(obj))=privateURL(obj)
 #fb-root
 script
   (function(d, s, id) {
