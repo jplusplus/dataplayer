@@ -125,12 +125,12 @@
 /* Azure (light blue) */
 .theme-azure {
     
-    @activeColor:darken(@bodyBackground, 15);
+    @activeColor:@white;
     @bodyBackground:#8CBEEC;
     @basicBackground:#8CBEEC;
     @altBackground:darken(@bodyBackground, 5);
     @basicColor:@white;
-    @altColor:@white;
+    @altColor:darken(@bodyBackground, 25);
     @basicRadius:0;
     
     .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);

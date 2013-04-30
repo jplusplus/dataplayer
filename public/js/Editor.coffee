@@ -67,7 +67,6 @@ class @Editor
     updateContent:() =>   
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")            
-            $("#editor .btn").addClass("disabled")
             content = @myCodeMirror.getValue()
             $.ajax
                 url: "/#{@page}/content"
@@ -81,12 +80,10 @@ class @Editor
         @updateJsonEditor(content)
         $.get "/#{@page}?edit=#{@token}", (xml)=>            
             @updateScreen(xml)
-            $("#editor .btn").removeClass("disabled")
 
     updateDraft:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
-            $("body").addClass("js-loading")            
-            $("#editor .btn").addClass("disabled")
+            $("body").addClass("js-loading")         
             content = @myCodeMirror.getValue()
             $.ajax
                 url: "/#{@page}/draft"
@@ -100,10 +97,8 @@ class @Editor
         @updateJsonEditor(content)
         $.get "/#{@page}?edit=#{@token}&preview=1", (text)=>                                      
             @updateScreen(text)
-            $("#editor .btn-save").removeClass("disabled")
 
     updateError:(xhr) =>   
-        $("#editor .btn").removeClass("disabled")
         $("body").removeClass("js-loading")
         $.notify_osd.create
             text    : xhr.responseText                     
@@ -126,7 +121,7 @@ class @Editor
         $(".clipboard-copier").each (i, c)=> 
             # Create the button
             clip = new ZeroClipboard(c, options)
-            # Enabled the clip button
+            # Enabled the clip buttons
             clip.on "load", -> $(".clipboard-copier").removeClass "disabled"            
 
     constructor: ->        
@@ -143,9 +138,6 @@ class @Editor
                 indentWithTabs: false,                
             }
         )
-
-        # Activate save/preview buttons
-        @myCodeMirror.on "change", -> $("#editor .btn").removeClass("disabled")
 
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);
