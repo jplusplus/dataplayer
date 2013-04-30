@@ -122,3 +122,30 @@
     }
 }
 
+/* Azure (light blue) */
+.theme-azure {
+    
+    @activeColor:darken(@bodyBackground, 15);
+    @bodyBackground:#8CBEEC;
+    @basicBackground:#8CBEEC;
+    @altBackground:darken(@bodyBackground, 5);
+    @basicColor:@white;
+    @altColor:@white;
+    @basicRadius:0;
+    
+    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);
+    
+    #overflow .credits a, 
+    #overflow .credits a:hover, 
+    #overflow .credits a:visited {
+        color: @white; 
+        text-decoration:underline;
+    }
+
+    #overflow {
+        h1, h2, h3 {
+            font-weight:200;
+            font-family:@serifFontFamily;
+        }
+    }
+}

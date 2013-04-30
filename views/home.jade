@@ -10,6 +10,8 @@ block content
                     li
                         a(href="#discover") discover
                     li
+                        a(href="#demo") demo
+                    li
                         a(href="#touch") get in touch
             .introduction
                 !=getPage("home")
@@ -45,6 +47,11 @@ block content
                         p We're journalists working for journalists.
                           | We built Dataplayer because you need speed, reliability and 
                           | compelling stories for your audience.
+
+        #demo            
+            .container
+                h2 Dataplayer in&nbsp;action
+            iframe(src=demoSlideshow, width="100%", height="600", frameborder="0", allowfullscreen)
                             
 
         #touch

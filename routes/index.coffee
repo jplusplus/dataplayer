@@ -29,7 +29,7 @@ module.exports = (a) ->
  * @param  {Object} res Client result object
 ###
 homepage = (req, res) ->
-  res.render "home"
+  res.render "home", demoSlideshow: config["demo_slideshow"]
 
 ###*
  * Single screen router 
