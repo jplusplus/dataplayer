@@ -104,20 +104,26 @@
 /*  Green*/
 .theme-green {
 
-    @activeColor:#44A823;
-    @bodyBackground:mix(@white, @activeColor);
-    @basicBackground:@white;
-    @altBackground:lighten(@bodyBackground, 5);
-    @basicColor:@bodyBackground;
-    @altColor:@white;
+    @bodyBackground:lighten(@activeColor, 10);
+    @basicBackground:@bodyBackground;
+    @altBackground:darken(@bodyBackground, 5);
+    @basicColor:@white;
+    @altColor:darken(@bodyBackground, 25);
     @basicRadius:0;
     
-    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @activeColor, @basicRadius);
-              
+    .build-theme(@bodyBackground, @basicBackground, @altBackground, @basicColor, @altColor, @white, @basicRadius);
+    
+    #overflow .credits a, 
+    #overflow .credits a:hover, 
+    #overflow .credits a:visited {
+        color: @white; 
+        text-decoration:underline;
+    }
+
     #overflow {
-        .box-shadow(0 0 0 1px lighten(#44A823, 30) );                  
         h1, h2, h3 {
-            font-family:Helvetica Neue, Helvetica, Arial;
+            font-weight:200;
+            font-family:@serifFontFamily;
         }
     }
 }
