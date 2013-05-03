@@ -1,5 +1,5 @@
 # Dependencies
-#= require vendor/jquery-ui.min.js
+#= require vendor/jquery-ui.js
 #= require vendor/codemirror.js
 #= require vendor/codemirror-javascript.js
 #= require vendor/jquery.hotkeys.js
