@@ -57,7 +57,7 @@ class window.Tabs extends window.Interactive
         $tabTarget = @uis.navitem.filter("[data-step=#{@currentStep}]")            
         # Activate this shortcut on touch screens
         if Modernizr.touch and @uis.tabs.length
-            @uis.iscroll.scrollToElement $tabTarget[0], @scrollDuration
+            @uis.iscroll.scrollToElement $tabTarget[0], @cache.scrollDuration
         else
             # Update the menu
-            @uis.tabs.scrollTo $tabTarget, @scrollDuration  
+            @uis.tabs.scrollTo $tabTarget, @cache.scrollDuration  
