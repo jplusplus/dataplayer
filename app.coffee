@@ -34,7 +34,7 @@ app.configure ->
     next()
 
   # configure oembed client to use embedly as fallback
-  oembed.EMBEDLY_KEY = config.embedly_key
+  oembed.EMBEDLY_KEY = process.env.EMBEDLY_KEY or config.embedly_key
 
   ###
   Views helpers
