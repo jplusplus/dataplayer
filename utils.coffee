@@ -46,6 +46,8 @@ sanitaze = module.exports.sanitaze = (obj, depth=5) ->
         if type == "string" then obj[key] = stripTags o
         # Just copy the number
         else if type == "number" then obj[key] = o
+        # Boolean
+        else if type == "boolean" then obj[key] = o
         # Reccurcive call with a depth check to avoid infinite call
         else if depth > 0 then sanitaze obj[key], depth
         # Unknow situation, return null
