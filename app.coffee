@@ -137,9 +137,14 @@ app.configure ->
      * @return {String}      Classes
     ###
     spotClass: (spot) ->
-      klass = []      
+      klass = []
+      # Default type
+      type = spot.type or "text"
+      klass.push "type-#{type}"
+      # Deactivate the background on demand      
+      klass.push "no-bg" if spot["no-bg"]
       # Spot classes
-      klass.push spot.class  if spot.class
+      klass.push spot.class if spot.class
       klass.join " "
 
 

@@ -1,8 +1,9 @@
 mixin stepContent(step, stepKey)
     unless step["no-title"]
         h2!=step.name
-    if step.picture
-        img(src=step.picture).step-background
+    if step.picture        
+        .step-picture
+            img(src=step.picture)
     if step.spots
         each spot, spotKey in step.spots
             .spot(
