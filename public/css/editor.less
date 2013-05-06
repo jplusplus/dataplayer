@@ -56,7 +56,7 @@ body.editor-mode {
     color:white;
     z-index:@zIndexEditor;
     background:@editorColor;
-    .box-shadow(0 0 5px 0 fade(@black, 30%));
+    .box-shadow(0 0 0 5px fade(@black, 10%));
     
     width:400px;
     @media (min-width: 1200px) {
@@ -72,7 +72,6 @@ body.editor-mode {
         z-index:@zIndexEditor+10;
         cursor:e-resize;
         .border-radius(0 9px 9px 0);     
-        .box-shadow(3px 0 3px 0 fade(@black, 30%));
         .icon-resize-horizontal();
         .icon-white();
         background-color:@activeColor;
