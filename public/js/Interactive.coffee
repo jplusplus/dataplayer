@@ -85,6 +85,7 @@ class window.Interactive
       navitem: $("#overflow .to-step")
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
+      parallaxes: @ui.find(".spot[data-parallax=1]")
 
     return @ui
 
@@ -97,6 +98,8 @@ class window.Interactive
     @uis.previous.on "click", @previousStep
     @uis.next.on "click", @nextStep
 
+    # Update element with parallax
+    @ui.off("scroll").on("scroll", @updateParallaxes)
     # Update the container position when we resize the window
     $(window).off("resize").on("resize", @resize)
     # Bind the hashchange to change the current step
@@ -113,9 +116,9 @@ class window.Interactive
         horizontal: @cache.navigation == "horizontal"
       # Bind the mousewheel event
       @uis.steps.waypoint @scrollReachStep, waypointOptions     
+
     # Deactivates this shortcuts in editor mode
-    if not $("body").hasClass("editor-mode")
-      $(window).off("keydown").keydown @keyboardNav
+    $(window).off("keydown").keydown @keyboardNav unless $("body").hasClass("editor-mode")
     # Open links begining by http in a new window
     $("a[href^='http://']").attr "target", "_blank"
 
@@ -243,6 +246,40 @@ class window.Interactive
         $spot.css "margin-left", $spot.outerWidth() / -2
         $spot.css "margin-top", $spot.outerHeight() / -2
 
+  updateParallaxes:(e)=>
+    ref = e
+    # According the navigation type...
+    switch @cache.navigation
+
+      when "horizontal" 
+        # ...extract the distance and the property to change
+        offset  = "left"
+        prop    = "translateX"
+        dist    = @ui.scrollLeft()
+
+      when "vertical" 
+        # ...extract the distance and the property to change
+        offset  = "top"
+        prop    = "translateY"
+        dist    = @ui.scrollTop()   
+
+
+    @uis.parallaxes.each (i, spot)=>
+      $spot = $(spot)
+      # Record the relative position of the step once
+      unless $spot.data "own-dist"
+        # Distance of the container from to the top of the window
+        refDist = @ui.offset()[offset]
+        $spot.data "own-dist", $spot.offset()[offset] - refDist
+      # Calculates the delta of the spot according the scroll position
+      delta = dist/$spot.data("own-dist") 
+      # Range between where the varies
+      range = $spot.data "parallax-range" or 100
+      val   = -range*delta+"px"
+      # Transform the position
+      $spot.css "transform", "#{prop}(#{val})"
+
+
   ###*
    * TODO: open a contextual popin when clicking on a spot
    * @param  {Object} event Click event
@@ -250,6 +287,7 @@ class window.Interactive
   ###
   showSpot: (event) =>
     $this = $(this)
+
 
   ###*
    * Update the hashbang when we reach a step

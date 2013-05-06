@@ -11,6 +11,8 @@ mixin stepContent(step, stepKey)
                 class=spotClass(spot),
                 data-html=spot.html,
                 data-spot=spotKey,
+                data-parallax=1*spot.parallax,
+                data-parallax-range=spot["parallax-range"],
                 data-step=stepKey,
                 data-origin=spot.origin,
                 data-entrance=spot.entrance,
