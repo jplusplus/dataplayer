@@ -12,7 +12,12 @@
             a(href="#editor-publish") Publish
 
     #editor-json.tabs-pan.active
-        .tr.editor-actions
+        .editor-actions.pull-left
+            .btn-toolbar
+                .btn-group 
+                    a.btn.toggle-fullscreen
+                        i.icon-fullscreen                    
+        .editor-actions.pull-right
             button.btn.btn-preview.right10             
                 i.icon-refresh.right10
                 | Preview

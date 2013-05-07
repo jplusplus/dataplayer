@@ -3,6 +3,7 @@
 #= require vendor/jquery.hotkeys.js
 #= require vendor/notify-osd.min.js
 #= require vendor/ZeroClipboard.js
+#= require vendor/fullscreen.js
 #= require vendor/ace.js
 #= require vendor/mode-json.js
 #= require vendor/theme-idle_fingers.js
@@ -125,6 +126,17 @@ class @Editor
             # Enabled the clip buttons
             clip.on "load", -> $(".clipboard-copier").removeClass "disabled"            
 
+    toggleFullscreenEditor:=>        
+        # Is the fullscreen api supported ?
+        if fullScreenApi.supportsFullScreen
+            # Is the fullscreen already activated ?
+            if fullScreenApi.isFullScreen()
+                # Close it
+                fullScreenApi.cancelFullScreen()
+            else
+                # Open fullscreen mode
+                $("#editor-json").requestFullScreen()
+
     constructor: ->        
         @token = $("body").data "given-token"
         @page  = $("body").data "page"
@@ -168,6 +180,9 @@ class @Editor
 
         # Select embed code
         $("#editor-embed").on "click", -> this.select()
+
+        # Toggle fullscreen mode
+        $("#editor-json").on "click", ".toggle-fullscreen", @toggleFullscreenEditor
 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->
