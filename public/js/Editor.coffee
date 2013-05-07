@@ -139,6 +139,8 @@ class @Editor
         @editor.getSession().setUseWrapMode(true);
         # Define the language
         @editor.getSession().setMode("ace/mode/json");
+        # Remove print margin
+        @editor.setShowPrintMargin(false);
         # The text size must be change manualy with ACE
         $("#editor-json-text").css "font-size", 16
 
@@ -146,6 +148,7 @@ class @Editor
         $("#editor").on("click", ".btn-save", @updateContent);
         $(document).bind('keydown', 'Ctrl+s meta+s', @updateContent);
         $("textarea,input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
+
         # Save the draft
         $("#editor").on("click", ".btn-preview", @updateDraft);
         $(document).bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
@@ -158,7 +161,8 @@ class @Editor
             handles: "e",
             ghost: true,
             minWidth: 300
-        }).on "resizestop", -> 
+        }).on "resizestop", => 
+            @editor.resize()
             $("#workspace").css "left", $("#editor").outerWidth()
             setTimeout window.interactive.resize, 1000
 
