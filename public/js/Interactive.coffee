@@ -73,7 +73,7 @@ class window.Interactive
   setCache: =>    
     # Record options
     @cache.hasWaypoint    = @uis.overflow.hasClass "scroll-allowed"
-    @cache.navigation     = @uis.overflow.data("navigation")     or @cache.navigation
+    @cache.navigation     = @uis.overflow.data("navigation")      or @cache.navigation
     @cache.scrollDuration = @uis.overflow.data("scroll-duration") or @cache.scrollDuration
     @cache.scrollEasing   = @uis.overflow.data("scroll-easing")   or @cache.scrollEasing
     @cache
@@ -209,8 +209,13 @@ class window.Interactive
     # Sets the new offset
     @uis.overflow.css "top", top
 
-  positionStepPicture: (e)=>
-    $pic = $(e.currentTarget)
+  ###*
+   * * Position the given picture at the center of its step by adding negative margins
+   * @param  {Object} e Received event
+   * @return {Object}   Current picture
+  ###
+  positionStepPicture: (e)->
+    $pic = $(this)
     $pic.css
       marginLeft: $pic.width() / -2
       marginTop:  $pic.height()/ -2
