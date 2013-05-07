@@ -246,38 +246,33 @@ class window.Interactive
         $spot.css "margin-left", $spot.outerWidth() / -2
         $spot.css "margin-top", $spot.outerHeight() / -2
 
-  updateParallaxes:(e)=>
-    ref = e
+  updateParallaxes:(e)=>   
     # According the navigation type...
     switch @cache.navigation
 
       when "horizontal" 
-        # ...extract the distance and the property to change
+        # ...extract the property to change
         offset  = "left"
         prop    = "translateX"
-        dist    = @ui.scrollLeft()
 
       when "vertical" 
-        # ...extract the distance and the property to change
+        # ...extract the property to change
         offset  = "top"
         prop    = "translateY"
-        dist    = @ui.scrollTop()   
 
-
+    # Distance from the top of the window
+    refDist = @ui.offset()[offset]      
+    # Apply a function to each parallax element
     @uis.parallaxes.each (i, spot)=>
       $spot = $(spot)
-      # Record the relative position of the step once
-      unless $spot.data "own-dist"
-        # Distance of the container from to the top of the window
-        refDist = @ui.offset()[offset]
-        $spot.data "own-dist", $spot.offset()[offset] - refDist
-      # Calculates the delta of the spot according the scroll position
-      delta = dist/$spot.data("own-dist") 
-      # Range between where the varies
-      range = $spot.data "parallax-range" or 100
-      val   = -range*delta+"px"
-      # Transform the position
-      $spot.css "transform", "#{prop}(#{val})"
+      # The step containing the spot      
+      $step = $spot.parents('.step')
+      # Distance of the parent step from the top of the container
+      delta = $step.offset()[offset] - refDist
+      # Speed of the movement 
+      speed = $spot.data("parallax-speed") or 0.5      
+      # Transform the position using the right property
+      $spot.css "transform", "#{prop}(#{speed*delta}px)"
 
 
   ###*
