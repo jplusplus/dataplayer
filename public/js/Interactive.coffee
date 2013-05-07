@@ -26,6 +26,9 @@
 # Cross-browser mousewheel support
 #= require vendor/jquery.mousewheel.js
 
+# Add easing function
+#= require vendor/jquery.easing.1.3.js
+
 # Local pan on touch screen
 #= require vendor/iscroll-lite.js
 
@@ -40,7 +43,8 @@ class window.Interactive
   constructor: -> 
     @currentStep=0
     @cache =
-      scrollDuration: 300  
+      scrollDuration: 1200  
+      scrollEasing: 'easeOutCubic'
       defaultEntranceDuration: 600 
       hasWaypoint: false
       navigation: "horizontal"
@@ -68,8 +72,10 @@ class window.Interactive
   ###
   setCache: =>    
     # Record options
-    @cache.hasWaypoint = @uis.overflow.hasClass "scroll-allowed"
-    @cache.navigation  = @uis.overflow.data("navigation")
+    @cache.hasWaypoint    = @uis.overflow.hasClass "scroll-allowed"
+    @cache.navigation     = @uis.overflow.data("navigation")     or @cache.navigation
+    @cache.scrollDuration = @uis.overflow.data("scroll-duration") or @cache.scrollDuration
+    @cache.scrollEasing   = @uis.overflow.data("scroll-easing")   or @cache.scrollEasing
     @cache
 
   ###*
@@ -85,7 +91,7 @@ class window.Interactive
       navitem: $("#overflow .to-step")
       previous: $("#overflow .previous")      
       next: $("#overflow .next")
-      parallaxes: @ui.find(".spot[data-parallax=1]")
+      parallaxes: @ui.find("[data-parallax]")
 
     return @ui
 
@@ -106,6 +112,8 @@ class window.Interactive
     $(window).off("hashchange").hashchange @readStepFromHash
     # Add an event to activate a step
     @uis.steps.on "step:activate", (ev) => @changeStepHash $(ev.currentTarget).data("step"), true
+    # Step-pictures positioning
+    @ui.find(".step-picture img").one("load", @positionStepPicture).each(-> $(this).load() if this.complete)
     # Is the scroll activated on the content ?
     if @cache.hasWaypoint
       # Waypoint helps us to know when the container scroll reach a step
@@ -201,6 +209,11 @@ class window.Interactive
     # Sets the new offset
     @uis.overflow.css "top", top
 
+  positionStepPicture: (e)=>
+    $pic = $(e.currentTarget)
+    $pic.css
+      marginLeft: $pic.width() / -2
+      marginTop:  $pic.height()/ -2
 
   ###*
    * Position every steps in the container
@@ -246,7 +259,11 @@ class window.Interactive
         $spot.css "margin-left", $spot.outerWidth() / -2
         $spot.css "margin-top", $spot.outerHeight() / -2
 
-  updateParallaxes:(e)=>   
+  ###*
+   * Update the parallaxes positions
+   * @return {[type]} [description]
+  ###
+  updateParallaxes:()=>   
     # According the navigation type...
     switch @cache.navigation
 
@@ -263,16 +280,16 @@ class window.Interactive
     # Distance from the top of the window
     refDist = @ui.offset()[offset]      
     # Apply a function to each parallax element
-    @uis.parallaxes.each (i, spot)=>
-      $spot = $(spot)
-      # The step containing the spot      
-      $step = $spot.parents('.step')
+    @uis.parallaxes.each (i, parallax)=>
+      $parallax = $(parallax)
+      # The step containing the parallax      
+      $step = $parallax.closest('.step')
       # Distance of the parent step from the top of the container
       delta = $step.offset()[offset] - refDist
       # Speed of the movement 
-      speed = $spot.data("parallax-speed") or 0.5      
+      speed = 1 * ( $parallax.data("parallax") or 0.5 )
       # Transform the position using the right property
-      $spot.css "transform", "#{prop}(#{speed*delta}px)"
+      $parallax.css "transform", "#{prop}(#{speed*delta}px)"
 
 
   ###*
@@ -369,10 +386,14 @@ class window.Interactive
       # And scroll to the current step
       @ui.scrollTo(
         @uis.steps.eq(@currentStep), 
-        # Default scroll duration
-        @cache.scrollDuration, 
-        # Active the given step
-        => @activeStep @currentStep 
+        { 
+          # Default scroll duration
+          duration: @cache.scrollDuration, 
+          # Add the default easing
+          easing: @cache.scrollEasing, 
+          # Active the given step
+          onAfter: => @activeStep @currentStep 
+        }
       )   
 
     return @currentStep

@@ -2,7 +2,9 @@ mixin stepContent(step, stepKey)
     unless step["no-title"]
         h2!=step.name
     if step.picture        
-        .step-picture
+        .step-picture(
+            data-parallax=1*step.parallax,
+            data-parallax-speed=step["parallax-speed"])
             img(src=step.picture)
     if step.spots
         each spot, spotKey in step.spots
