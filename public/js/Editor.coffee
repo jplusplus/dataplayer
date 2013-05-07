@@ -1,10 +1,11 @@
 # Dependencies
 #= require vendor/jquery-ui.js
-#= require vendor/codemirror.js
-#= require vendor/codemirror-javascript.js
 #= require vendor/jquery.hotkeys.js
 #= require vendor/notify-osd.min.js
 #= require vendor/ZeroClipboard.js
+#= require vendor/ace.js
+#= require vendor/mode-json.js
+#= require vendor/theme-idle_fingers.js
 
 class @Editor
     recordSpotPosition:(spot)=>
@@ -24,7 +25,7 @@ class @Editor
         top = (~~(top * 100) / 100) + "%"
         
         # Get the JSON to edit
-        content = JSON.parse @myCodeMirror.getValue()
+        content = JSON.parse @editor.getValue()
         # Edit positions into the object
         content.steps[step].spots[spot].left = left
         content.steps[step].spots[spot].top = top
@@ -38,7 +39,7 @@ class @Editor
             # stringify the object
             value =  JSON.stringify content, null, 4
         # Add the new configuration file to the editor
-        @myCodeMirror.setValue value if @myCodeMirror.getValue() != value
+        @editor.setValue value if @editor.getValue() != value
         
     updateScreen:(text)=>         
         # Update workspace content
@@ -46,7 +47,7 @@ class @Editor
         # Update embed code
         $("#editor-embed").html $(text).find("textarea#editor-embed").val()      
         # Get the JSON
-        content = JSON.parse @myCodeMirror.getValue()
+        content = JSON.parse @editor.getValue()
         # Update the theme by changing the body class
         bodyClass = "editor-mode theme-" + (content.theme || "default")
         $("body").attr("class", bodyClass)
@@ -67,7 +68,7 @@ class @Editor
     updateContent:() =>   
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")            
-            content = @myCodeMirror.getValue()
+            content = @editor.getValue()
             $.ajax
                 url: "/#{@page}/content"
                 type: "POST"
@@ -84,7 +85,7 @@ class @Editor
     updateDraft:() =>
         unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
             $("body").addClass("js-loading")         
-            content = @myCodeMirror.getValue()
+            content = @editor.getValue()
             $.ajax
                 url: "/#{@page}/draft"
                 type: "POST"
@@ -130,14 +131,16 @@ class @Editor
 
         @createClipboardCopiers()
 
-        # Bind a "CodeMirror" editor on editor text area
-        @myCodeMirror = CodeMirror.fromTextArea(
-            $("#editor-json textarea")[0],
-            {
-                indentUnit: 4,
-                indentWithTabs: false,                
-            }
-        )
+        # Create the ACE edtior
+        @editor = ace.edit "editor-json-text"
+        # Set the idle fingers theme
+        @editor.setTheme("ace/theme/idle_fingers");
+        # Activate wordwrap
+        @editor.getSession().setUseWrapMode(true);
+        # Define the language
+        @editor.getSession().setMode("ace/mode/json");
+        # The text size must be change manualy with ACE
+        $("#editor-json-text").css "font-size", 16
 
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);

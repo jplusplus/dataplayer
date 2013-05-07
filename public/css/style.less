@@ -14,7 +14,7 @@
 @containerHeight : 600px;
 
 @activeColor: #33BFA1;
-@bgColor: #505050;
+@bgColor: #323232;
 @menuColor: @bgColor;
 @containerColor:#232325;
 @editorColor:@menuColor;
@@ -47,7 +47,8 @@ body {
 
     input[type="password"], 
     input[type="text"], 
-    textarea, .CodeMirror {        
+    textarea, 
+    .code-editor {        
         border:1px  darken(@activeColor, 15%) solid;
         background:fade(@white, 95%);
         .box-shadow(inset 0 0 5px darken(@activeColor, 15%) );

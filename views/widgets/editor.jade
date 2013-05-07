@@ -20,7 +20,7 @@
                 i.icon-upload.icon-white.right10
                 | Save 
 
-        textarea(name="config")
+        #editor-json-text.code-editor
             !=JSON.stringify(obj.content, null, 4)
     
     #editor-help.tabs-pan
@@ -41,7 +41,7 @@
             .bottom30.embed
                 button.btn.pull-left.right10.clipboard-copier(data-clipboard-target="editor-embed", title="Click to copy me.") copy
                 h4.top20.bottom20 Embed 
-                textarea#editor-embed(readonly)
+                textarea#editor-embed(readonly) 
                     iframe(width=obj.content.width, height=obj.content.height, src=publicURL(obj), frameborder=0, allowfullscreen)
 
             .bottom30
@@ -50,6 +50,7 @@
                 button.btn.clipboard-copier.disabled.right10(data-clipboard-text=privateURL(obj),title="Click to copy me.") Copy
                 code
                     a(href=privateURL(obj))=privateURL(obj)
+
 #fb-root
 script
   (function(d, s, id) {
