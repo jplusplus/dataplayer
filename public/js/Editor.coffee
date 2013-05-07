@@ -4,6 +4,7 @@
 #= require vendor/notify-osd.min.js
 #= require vendor/ZeroClipboard.js
 #= require vendor/fullscreen.js
+#= require vendor/bootstrap.js
 #= require vendor/ace.js
 #= require vendor/mode-json.js
 #= require vendor/theme-idle_fingers.js
@@ -137,6 +138,31 @@ class @Editor
                 # Open fullscreen mode
                 $("#editor-json").requestFullScreen()
 
+    changeEditorSize:(width=null)=>        
+         # Is the fullscreen already activated ?
+        if fullScreenApi.isFullScreen()
+            # Close it
+            fullScreenApi.cancelFullScreen()
+        # Update the editor size
+        $("#editor").css "width", width
+        # Update the workspace
+        @afterEditorResize()
+
+    afterEditorResize:=>    
+        @editor.resize()
+        $("#editor-json .editor-size .active").removeClass("active")
+        $("#workspace").css "left", $("#editor").outerWidth()
+        setTimeout window.interactive.resize, 1000
+
+
+    updateEditorSize:(event)=>
+        # Get the clicked button
+        $button = $(event.currentTarget)                
+        switch $button.data("toggle")
+            when "fullscreen" then @toggleFullscreenEditor() 
+            when "default" then @changeEditorSize ""                        
+            when "big" then @changeEditorSize $(window).width()*0.8
+
     constructor: ->        
         @token = $("body").data "given-token"
         @page  = $("body").data "page"
@@ -159,12 +185,12 @@ class @Editor
         # Save the screen
         $("#editor").on("click", ".btn-save", @updateContent);
         $(document).bind('keydown', 'Ctrl+s meta+s', @updateContent);
-        $("textarea,input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
+        $("textarea, input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
 
         # Save the draft
         $("#editor").on("click", ".btn-preview", @updateDraft);
         $(document).bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
-        $("textarea,input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
+        $("textarea, input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
 
         # Toggle the editor
         $("#editor").on "click", ".heading, .editor-toggler", -> $("body").toggleClass "editor-toggled" 
@@ -173,16 +199,13 @@ class @Editor
             handles: "e",
             ghost: true,
             minWidth: 300
-        }).on "resizestop", => 
-            @editor.resize()
-            $("#workspace").css "left", $("#editor").outerWidth()
-            setTimeout window.interactive.resize, 1000
+        }).on "resizestop", => afterEditorResize
 
         # Select embed code
         $("#editor-embed").on "click", -> this.select()
 
         # Toggle fullscreen mode
-        $("#editor-json").on "click", ".toggle-fullscreen", @toggleFullscreenEditor
+        $("#editor-json .editor-size").on "click", "button", @updateEditorSize
 
         # Tabs switch
         $("#editor .tabs-bar").on "click", "a", (event)->

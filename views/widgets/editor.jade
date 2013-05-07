@@ -14,9 +14,13 @@
     #editor-json.tabs-pan.active
         .editor-actions.pull-left
             .btn-toolbar
-                .btn-group 
-                    a.btn.toggle-fullscreen
-                        i.icon-fullscreen                    
+                .btn-group.editor-size(data-toggle="buttons-radio")
+                    button.btn(data-toggle="fullscreen")
+                        i.icon-fullscreen   
+                    button.btn(data-toggle="default").active
+                        i.icon-step-forward   
+                    button.btn(data-toggle="big")
+                        i.icon-fast-forward                  
         .editor-actions.pull-right
             button.btn.btn-preview.right10             
                 i.icon-refresh.right10
