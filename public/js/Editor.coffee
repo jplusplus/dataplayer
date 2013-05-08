@@ -85,12 +85,12 @@ class @Editor
         @ui.find(".editor-size").on "click", "button", @updateEditorSize
 
         # Tabs switch
-        @ui.find("..tabs-bar").on("click", "a", (event)->
+        @ui.find(".tabs-bar").on("click", "a", (event)=>
             event.preventDefault()
             # Toggle the right tab link
             @ui.find(".tabs-bar li").removeClass("active")
-            $(this).parents("li").addClass("active")
-            panId = $(this).attr("href") 
+            $(event.currentTarget).parents("li").addClass("active")
+            panId = $(event.currentTarget).attr("href") 
             # Hide pan
             @ui.find(".tabs-pan").removeClass("active")
             $(panId).addClass("active")
