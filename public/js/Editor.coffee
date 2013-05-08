@@ -10,6 +10,98 @@
 #= require vendor/theme-idle_fingers.js
 
 class @Editor
+
+    ###*
+    * Initializes the editor 
+    ###
+    constructor: ->       
+        # Build the @uis object that contains ui shortcuts    
+        @buildUI()
+        # Create the clipboard copiers buttons
+        @createClipboardCopiers()
+        # Editor helper
+        @token = @uis.body.data "given-token"
+        @page  = @uis.body.data "page"
+        # Create the ACE edtior
+        @editor = ace.edit @uis.ace.attr("id")
+        # Set the idle fingers theme
+        @editor.setTheme("ace/theme/idle_fingers");
+        # Activate wordwrap
+        @editor.getSession().setUseWrapMode(true);
+        # Define the language
+        @editor.getSession().setMode("ace/mode/json");
+        # Remove print margin
+        @editor.setShowPrintMargin(false);
+        # The text size must be change manualy with ACE
+        @uis.ace.css "font-size", 16
+        # Bing the event to the user elements           
+        @bindUI()  
+
+    ###*
+    * Gets every jquery shortcuts
+    * @return {Object} Editor container
+    ###
+    buildUI: =>
+        @ui = $("#editor")
+        @uis =
+            workspace : $("#workspace")
+            copiers   : @ui.find(".clipboard-copier")
+            title     : @ui.find(".screen-title")
+            embed     : $("#editor-embed")
+            body      : $("body") 
+            json      : $("#editor-json")
+            ace       : $("#editor-json-text")
+
+        return @ui
+
+    ###*
+    * Bind javascript event on page elements
+    * @return {Object} jQuest window object
+    ###
+    bindUI:=>
+        # Save the screen
+        @ui.on("click", ".btn-save", @updateContent);
+        $(document).bind('keydown', 'Ctrl+s meta+s', @updateContent);
+        $("textarea, input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
+
+        # Save the draft
+        @ui.on("click", ".btn-preview", @updateDraft);
+        $(document).bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
+        $("textarea, input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
+
+        # Toggle the editor
+        @ui.on "click", ".heading, .editor-toggler", => @uis.body.toggleClass "editor-toggled" 
+        # Resize editor
+        @ui.resizable({        
+            handles: "e",
+            ghost: true,
+            minWidth: 300
+        }).on "resizestop", => afterEditorResize
+
+        # Select embed code
+        @uis.embed.on "click", -> this.select()
+
+        # Toggle fullscreen mode
+        @ui.find(".editor-size").on "click", "button", @updateEditorSize
+
+        # Tabs switch
+        @ui.find("..tabs-bar").on "click", "a", (event)->
+            event.preventDefault()
+            # Toggle the right tab link
+            @ui.find(".tabs-bar li").removeClass("active")
+            $(this).parents("li").addClass("active")
+            panId = $(this).attr("href") 
+            # Hide pan
+            @ui.find(".tabs-pan").removeClass("active")
+            $(panId).addClass("active")
+
+        # Set delegated draggable 
+        $(window).delegate(".spot", "mouseenter", @setSpotDraggable)   
+
+    ###*
+     * Records the position of a spot after the user moved it
+     * @param  {Object} spot Spot moved
+    ###
     recordSpotPosition:(spot)=>
         # Shortcuts
         $spot = $(spot)
@@ -33,7 +125,10 @@ class @Editor
         content.steps[step].spots[spot].top = top
         @updateJsonEditor(content)
 
-
+    ###*
+     * Update the JSON editor with the given value
+     * @param  {Object|String} content New value of the editor
+    ###
     updateJsonEditor:(content)=>        
         if typeof content == "string"
             value = content
@@ -43,19 +138,23 @@ class @Editor
         # Add the new configuration file to the editor
         @editor.setValue value if @editor.getValue() != value
         
+    ###*
+     * Update the screen with the received data
+     * @param  {String} text Data to parse
+    ###
     updateScreen:(text)=>         
         # Update workspace content
-        $("#workspace").html $(text).filter("#workspace").html()
+        @uis.workspace.html $(text).filter("#workspace").html()
         # Update embed code
-        $("#editor-embed").html $(text).find("textarea#editor-embed").val()      
+        @uis.embed.html $(text).find("textarea#editor-embed").val()      
         # Get the JSON
         content = JSON.parse @editor.getValue()
         # Update the theme by changing the body class
         bodyClass = "editor-mode theme-" + (content.theme || "default")
-        $("body").attr("class", bodyClass)
+        @uis.body.attr("class", bodyClass)
         # Update the app title
         $("head title").text(content.name)
-        $("#editor .screen-title").text(content.name)
+        @uis.title.text(content.name)
         # Create a player according the selected layout
         switch content.layout
             when "horizontal-tabs", "vertical-tabs"
@@ -66,47 +165,66 @@ class @Editor
                 klass = window.Interactive
         window.interactive = new klass()  
 
+    ###*
+     * Update the JSON editor and load the screen
+     * @param  {String} content   JSON content
+     * @param  {Number} preview=0 Activate the preview mode
+    ###
+    loadScreen:(content, preview=0) =>        
+        @updateJsonEditor(content)
+        $.get "/#{@page}?edit=#{@token}&preview={preview}", (xml)=>            
+            @updateScreen(xml)
 
+    ###*
+     * Send the new screen and load the screen
+    ###
     updateContent:() =>   
-        unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
-            $("body").addClass("js-loading")            
+        # Checks that we aren't in loading mode
+        unless @uis.body.hasClass("js-loading")
+            # Activate loading mode
+            @uis.body.addClass("js-loading")   
+            # Get the new JSON         
             content = @editor.getValue()
             $.ajax
                 url: "/#{@page}/content"
                 type: "POST"
                 data: { content: content, token: @token }
-                success: @loadContent
+                success: (d)-> @loadContent(d)
                 error: @updateError             
         return false
 
-    loadContent:(content) =>        
-        @updateJsonEditor(content)
-        $.get "/#{@page}?edit=#{@token}", (xml)=>            
-            @updateScreen(xml)
-
+    ###*
+     * Send the draft and load the screen
+    ###
     updateDraft:() =>
-        unless $("body").hasClass("js-loading") or $("#editor .btn-save").hasClass("disabled")
-            $("body").addClass("js-loading")         
+        # Checks that we aren't in loading mode
+        unless @uis.body.hasClass("js-loading")
+            # Activate loading mode
+            @uis.body.addClass("js-loading")  
+            # Get the new JSON                
             content = @editor.getValue()
             $.ajax
                 url: "/#{@page}/draft"
                 type: "POST"
                 data: { content: content, token: @token }
-                success: @loadDraft
+                success: (d)-> @loadContent(d, 1)
                 error: @updateError                               
         return false
 
-    loadDraft:(content) =>        
-        @updateJsonEditor(content)
-        $.get "/#{@page}?edit=#{@token}&preview=1", (text)=>                                      
-            @updateScreen(text)
-
+    ###*
+     * Somethinh wrong happens
+     * @param  {Object} xhr Cross HTTP Request Object
+    ###
     updateError:(xhr) =>   
-        $("body").removeClass("js-loading")
+        @uis.body.removeClass("js-loading")
         $.notify_osd.create
             text    : xhr.responseText                     
             timeout : 5
 
+    ###*
+     * Activate draggability when entering into a spot's handler
+     * @param {Object} event Received event
+    ###
     setSpotDraggable:(event) =>
         $spot = $(event.target).parents(".spot")
         unless $spot.is(':data(draggable)')
@@ -117,16 +235,23 @@ class @Editor
                 stop: (event, ui) =>              
                     @recordSpotPosition event.target
 
+    ###*
+     * Create the clipboard copiers buttons
+     * @return {Object} Copiers buttons
+    ###
     createClipboardCopiers:=>
         # Options with the path to the flash fallback
         options = { moviePath: "/swf/ZeroClipboard.swf" }
         # For each clipboard button
-        $(".clipboard-copier").each (i, c)=> 
+        @uis.copiers.each (i, c)=> 
             # Create the button
             clip = new ZeroClipboard(c, options)
             # Enabled the clip buttons
-            clip.on "load", -> $(".clipboard-copier").removeClass "disabled"            
+            clip.on "load", => @uis.copiers.removeClass "disabled"            
 
+    ###*
+     * Toggle the fullscreen mode for the editor
+    ###
     toggleFullscreenEditor:=>        
         # Is the fullscreen api supported ?
         if fullScreenApi.supportsFullScreen
@@ -136,87 +261,40 @@ class @Editor
                 fullScreenApi.cancelFullScreen()
             else
                 # Open fullscreen mode
-                $("#editor").requestFullScreen()
-
+                @ui.requestFullScreen()
+    ###*
+     * Change the editor width for the given parameter
+     * @param  {Number} width=null Editor with
+    ###
     changeEditorSize:(width=null)=>        
          # Is the fullscreen already activated ?
         if fullScreenApi.isFullScreen()
             # Close it
             fullScreenApi.cancelFullScreen()
         # Update the editor size
-        $("#editor").css "width", width
+        @ui.css "width", width
         # Update the workspace
         @afterEditorResize()
 
-    afterEditorResize:=>    
-        @editor.resize()
-        $("#editor-json .editor-size .active").removeClass("active")
-        $("#workspace").css "left", $("#editor").outerWidth()
-        setTimeout window.interactive.resize, 1000
 
-
+    ###*
+     * Event handler to change the editor size
+     * @param  {Object} event Received event
+    ###
     updateEditorSize:(event)=>
         # Get the clicked button
         $button = $(event.currentTarget)                
+        # Determines what to do accorind the data-toggle attribut
         switch $button.data("toggle")
             when "fullscreen" then @toggleFullscreenEditor() 
             when "default" then @changeEditorSize ""                        
             when "big" then @changeEditorSize $(window).width()*0.8
 
-    constructor: ->        
-        @token = $("body").data "given-token"
-        @page  = $("body").data "page"
-
-        @createClipboardCopiers()
-
-        # Create the ACE edtior
-        @editor = ace.edit "editor-json-text"
-        # Set the idle fingers theme
-        @editor.setTheme("ace/theme/idle_fingers");
-        # Activate wordwrap
-        @editor.getSession().setUseWrapMode(true);
-        # Define the language
-        @editor.getSession().setMode("ace/mode/json");
-        # Remove print margin
-        @editor.setShowPrintMargin(false);
-        # The text size must be change manualy with ACE
-        $("#editor-json-text").css "font-size", 16
-
-        # Save the screen
-        $("#editor").on("click", ".btn-save", @updateContent);
-        $(document).bind('keydown', 'Ctrl+s meta+s', @updateContent);
-        $("textarea, input").bind('keydown', 'Ctrl+s meta+s', @updateContent);
-
-        # Save the draft
-        $("#editor").on("click", ".btn-preview", @updateDraft);
-        $(document).bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
-        $("textarea, input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
-
-        # Toggle the editor
-        $("#editor").on "click", ".heading, .editor-toggler", -> $("body").toggleClass "editor-toggled" 
-        # Resize editor
-        $("#editor").resizable({        
-            handles: "e",
-            ghost: true,
-            minWidth: 300
-        }).on "resizestop", => afterEditorResize
-
-        # Select embed code
-        $("#editor-embed").on "click", -> this.select()
-
-        # Toggle fullscreen mode
-        $("#editor-json .editor-size").on "click", "button", @updateEditorSize
-
-        # Tabs switch
-        $("#editor .tabs-bar").on "click", "a", (event)->
-            event.preventDefault()
-            # Toggle the right tab link
-            $("#editor .tabs-bar li").removeClass("active")
-            $(this).parents("li").addClass("active")
-            panId = $(this).attr("href") 
-            # Hide pan
-            $("#editor .tabs-pan").removeClass("active")
-            $(panId).addClass("active")
-
-        # Set delegated draggable 
-        $(window).delegate(".spot", "mouseenter", @setSpotDraggable)   
+    ###*
+     * Adjust the editor after a resizing
+    ###
+    afterEditorResize:=>    
+        @editor.resize()
+        @uis.json.find(".editor-size .active").removeClass("active")
+        @uis.workspace.css "left", $("#editor").outerWidth()
+        setTimeout window.interactive.resize, 700
