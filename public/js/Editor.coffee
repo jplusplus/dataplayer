@@ -25,13 +25,13 @@ class @Editor
         # Create the ACE edtior
         @editor = ace.edit @uis.ace.attr("id")
         # Set the idle fingers theme
-        @editor.setTheme("ace/theme/idle_fingers");
+        @editor.setTheme("ace/theme/idle_fingers")
         # Activate wordwrap
-        @editor.getSession().setUseWrapMode(true);
+        @editor.getSession().setUseWrapMode(true)
         # Define the language
-        @editor.getSession().setMode("ace/mode/json");
+        @editor.getSession().setMode("ace/mode/json")
         # Remove print margin
-        @editor.setShowPrintMargin(false);
+        @editor.setShowPrintMargin(false)
         # The text size must be change manualy with ACE
         @uis.ace.css "font-size", 16
         # Bing the event to the user elements           
@@ -76,7 +76,7 @@ class @Editor
             handles: "e",
             ghost: true,
             minWidth: 300
-        }).on "resizestop", => afterEditorResize
+        }).on "resizestop", @afterEditorResize
 
         # Select embed code
         @uis.embed.on "click", -> this.select()
@@ -172,8 +172,7 @@ class @Editor
     ###
     loadScreen:(content, preview=0) =>        
         @updateJsonEditor(content)
-        $.get "/#{@page}?edit=#{@token}&preview={preview}", (xml)=>            
-            @updateScreen(xml)
+        $.get "/#{@page}?edit=#{@token}&preview=#{preview}", @updateScreen
 
     ###*
      * Send the new screen and load the screen
@@ -287,7 +286,7 @@ class @Editor
         # Determines what to do accorind the data-toggle attribut
         switch $button.data("toggle")
             when "fullscreen" then @toggleFullscreenEditor() 
-            when "default" then @changeEditorSize ""                        
+            when "default" then @changeEditorSize ""                   
             when "big" then @changeEditorSize $(window).width()*0.8
 
     ###*
