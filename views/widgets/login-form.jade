@@ -1,4 +1,8 @@
+h4 Log in
 form(action="/login", method="POST")
-  input(type="text",name="username")
-  input(type="password",name="password")
-  input(type="submit")
+  label Username
+    input(type="text",name="username").input-block-level
+  label Password
+    input(type="password",name="password").input-block-level
+  .tr
+    input(type="submit").btn.btn-dp

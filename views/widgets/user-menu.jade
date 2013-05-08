@@ -1,0 +1,14 @@
+#user-menu
+  a.handle
+  .wrapper  
+    unless user
+      include login-form
+    else
+      ul.unstyled.links
+        li.hola Hola #{user.username}!
+        li
+          a(href="/user/#{user.username}") My gallery
+        li
+          a(href="/logout") 
+            | Logout
+            i.icon.icon-off.icon-white

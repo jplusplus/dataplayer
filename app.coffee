@@ -212,6 +212,8 @@ app.configure ->
 
   # Add context helpers
   app.use (req, res, next) ->
+    # Current user
+    res.locals.user = if req.isAuthenticated() then req.user else false
     res.locals.path = req.path
     res.locals.editMode = req.query.hasOwnProperty("edit")
     res.locals.editToken = req.query["edit"]
