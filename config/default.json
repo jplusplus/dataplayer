@@ -2,5 +2,8 @@
     "database_url": "mongodb://localhost/db",
     "embedly_key": "",
     "demo_slideshow": "",
-    "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div><iframe><object><param>"
+    "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div><iframe><object><param>",
+    "salts": {
+        "cookies": "xRDzKneqabDFVZPSdMC8rkEdJE7asYWGRYZADpxKSCdYXsYY"
+    }
 }

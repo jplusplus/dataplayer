@@ -11,6 +11,7 @@
     "less": "*",
     "coffee-script": "latest",
     "async": "latest",
+    "connect-flash": "latest",
     "oembed": "latest",
     "password": "latest",
     "password-local": "latest",
