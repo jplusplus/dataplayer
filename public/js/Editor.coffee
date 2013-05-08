@@ -54,8 +54,8 @@ class @Editor
         bodyClass = "editor-mode theme-" + (content.theme || "default")
         $("body").attr("class", bodyClass)
         # Update the app title
-        $("head title").text(content.title)
-        $("#editor .screen-title").text(content.title)
+        $("head title").text(content.name)
+        $("#editor .screen-title").text(content.name)
         # Create a player according the selected layout
         switch content.layout
             when "horizontal-tabs", "vertical-tabs"
