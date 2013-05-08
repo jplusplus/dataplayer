@@ -1,5 +1,7 @@
 h4 Log in
 form(action="/login", method="POST")
+  if error != ""
+    .alert.alert-error!=error
   label Username
     input(type="text",name="username").input-block-level
   label Password
