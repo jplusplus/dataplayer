@@ -31,6 +31,10 @@ Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
  * @var {Object} The object describing the User Schema
 ###
 UserSchema = module.exports.UserSchema = mongoose.Schema(
+  username:
+    type: String
+    index:
+      unique: true
   email:
     type: String
     index:
