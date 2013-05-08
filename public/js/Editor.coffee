@@ -70,7 +70,7 @@ class @Editor
         $("textarea, input").bind('keydown', 'Ctrl+p meta+p', @updateDraft);  
 
         # Toggle the editor
-        @ui.on "click", ".heading, .editor-toggler", => @uis.body.toggleClass "editor-toggled" 
+        @ui.on("click", ".heading, .editor-toggler", => @uis.body.toggleClass "editor-toggled")
         # Resize editor
         @ui.resizable({        
             handles: "e",
@@ -85,7 +85,7 @@ class @Editor
         @ui.find(".editor-size").on "click", "button", @updateEditorSize
 
         # Tabs switch
-        @ui.find("..tabs-bar").on "click", "a", (event)->
+        @ui.find("..tabs-bar").on("click", "a", (event)->
             event.preventDefault()
             # Toggle the right tab link
             @ui.find(".tabs-bar li").removeClass("active")
@@ -94,6 +94,7 @@ class @Editor
             # Hide pan
             @ui.find(".tabs-pan").removeClass("active")
             $(panId).addClass("active")
+        )
 
         # Set delegated draggable 
         $(window).delegate(".spot", "mouseenter", @setSpotDraggable)   
@@ -188,7 +189,7 @@ class @Editor
                 url: "/#{@page}/content"
                 type: "POST"
                 data: { content: content, token: @token }
-                success: (d)-> @loadContent(d)
+                success: (d)=> @loadScreen(d)
                 error: @updateError             
         return false
 
@@ -206,7 +207,7 @@ class @Editor
                 url: "/#{@page}/draft"
                 type: "POST"
                 data: { content: content, token: @token }
-                success: (d)-> @loadContent(d, 1)
+                success: (d)=> @loadScreen(d, 1)
                 error: @updateError                               
         return false
 
