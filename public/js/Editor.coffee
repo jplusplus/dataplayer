@@ -136,7 +136,7 @@ class @Editor
                 fullScreenApi.cancelFullScreen()
             else
                 # Open fullscreen mode
-                $("#editor-json").requestFullScreen()
+                $("#editor").requestFullScreen()
 
     changeEditorSize:(width=null)=>        
          # Is the fullscreen already activated ?

@@ -51,6 +51,16 @@ body.editor-mode {
     }
 }
 
+// Standard prefix
+#editor:fullscreen { right:0; width:auto !important; }
+#editor:fullscreen .editor-toggler { display:none; }
+// Webkit prefix
+#editor:-webkit-full-screen {right:0; width:auto !important; } 
+#editor:-webkit-full-screen .editor-toggler { display:none; }
+// Mozilla prefix
+#editor:-moz-full-screen { right:0; width:auto !important; }
+#editor:-moz-full-screen .editor-toggler { display:none; }
+
 #editor {
     position:fixed;
     top:0;
@@ -145,7 +155,8 @@ body.editor-mode {
         height:35px;
         background:darken(@editorColor, 10%);
         .box-shadow( inset 0 0 40px 0 darken(@editorColor, 20%) );
-        
+
+
         li {
             display:block;
             float:left;
