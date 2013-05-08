@@ -1,13 +1,17 @@
 ###
 Module dependencies.
 ###
-express = require("express")
-config  = require("config")
-md      = require("marked")
-fs      = require("fs")
-http    = require("http")
-path    = require("path")
-oembed  = require("oembed")
+express       = require("express")
+config        = require("config")
+md            = require("marked")
+fs            = require("fs")
+http          = require("http")
+path          = require("path")
+oembed        = require("oembed")
+flash         = require('connect-flash')
+passport      = require("passport")
+LocalStrategy = require("passport-local").Strategy
+User          = require("./models").User
 
 # Create the Express app
 app = express()
@@ -24,17 +28,52 @@ app.configure ->
   app.set "views", __dirname + "/views"
   app.set "view engine", "jade"
 
+  # Middlewares
   app.use express.logger("dev")
   app.use express.bodyParser()
   app.use express.methodOverride()
+  app.use express.cookieParser(config.salts.cookies)
+  app.use express.session()     
+  # Flash messages
+  # see also: https://github.com/jaredhanson/connect-flash    
+  app.use flash()
+  # Assets managers
   app.use require("connect-assets")(src: __dirname + "/public")
   app.use express.static(path.join(__dirname, "public"))
-  app.use (req, res, next) ->
-    res.locals.path = req.path
-    next()
 
   # configure oembed client to use embedly as fallback
-  oembed.EMBEDLY_KEY = process.env.EMBEDLY_KEY or config.embedly_key
+  oembed.EMBEDLY_KEY = process.env.EMBEDLY_KEY or config.EMBEDLY_KEY
+
+  # Authentification with passport
+  app.use passport.initialize()
+  app.use passport.session()
+
+  # Passport session setup.
+  # To support persistent login sessions, Passport needs to be able to
+  # serialize users into and deserialize users out of the session. Typically,
+  # this will be as simple as storing the user ID when serializing, and finding
+  # the user by ID when deserializing.
+  passport.serializeUser (user, done)->done(null, user)
+  passport.deserializeUser (user, done)->done(null, user)
+
+  # Creates passport strategy
+  passport.use(new LocalStrategy (username, password, done)->
+    # Get the user from the database
+    User.findOne(username: username, (err, user)->
+      # Something happens   
+      if err   
+        return done(err) 
+      # The username is incorrect
+      unless user
+        return done(null, false, message: "Incorrect username.")
+      # The password is incorrect
+      unless user.authenticate(password)
+        return done(null, false, message: "Incorrect password.")
+      # Everything is OK
+      done null, user
+    )
+  )
+
 
   ###
   Views helpers
@@ -43,7 +82,6 @@ app.configure ->
   app.locals
     # Constant containing the node environment (development, production, etc)
     NODE_ENV: process.env.NODE_ENV
-
     ###*
      * Return the class of the overflow according descriptor
      * @param  {Object} data Screen descriptor
@@ -174,6 +212,9 @@ app.configure ->
 
   # Add context helpers
   app.use (req, res, next) ->
+    # Current user
+    res.locals.user = if req.isAuthenticated() then req.user else false
+    res.locals.path = req.path
     res.locals.editMode = req.query.hasOwnProperty("edit")
     res.locals.editToken = req.query["edit"]
     res.locals.publicURL = (obj) ->
@@ -184,6 +225,8 @@ app.configure ->
     
   # @warning Needs to be after helpers
   app.use app.router  
+  # Load the user route file
+  require("./routes/user") app
   # Load the default route file
   require("./routes") app
   # Returns the app, explicitely

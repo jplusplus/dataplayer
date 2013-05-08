@@ -18,7 +18,8 @@ html
     block stylesheets
     !=css("style")
 
-  body.theme-datawrapper
+  body.theme-datawrapper.left-user-menu
+    include ../widgets/user-menu
     block content
     !=js("vendor/modernizr.custom.js")
     //- Context scripts    
