@@ -25,3 +25,46 @@ screenSchema = module.exports.screenSchema = mongoose.Schema(
 ###
 Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
 
+
+###*
+ * User Schema
+ * @var {Object} The object describing the User Schema
+###
+UserSchema = module.exports.UserSchema = mongoose.Schema(
+  email:
+    type: String
+    index:
+      unique: true
+  hashed_password: String
+  salt: String
+)
+
+# Creates a virtual attribute that contains the id of the user
+UserSchema.virtual("id").get -> @_id.toHexString()
+
+# Creates a virtual attribute that contains the password of the user (before encryption)
+UserSchema.virtual("password").set((password) ->
+  @_password = password
+  @salt = @makeSalt()
+  @hashed_password = @encryptPassword(password)
+).get -> @_password
+
+###*
+ * Authenticate checking method
+ * @param  {String} plainText Password not hashed
+ * @return {Boolean}          True if the passwords match
+###
+UserSchema.method "authenticate", (plainText)-> @encryptPassword(plainText) is @hashed_password
+
+###*
+ * Create a random salt for the password hash
+ * @return {String} Random salt
+###
+UserSchema.method "makeSalt", -> "" + Math.round((new Date().valueOf() * Math.random()))
+
+###*
+ * Encrypt the given password
+ * @param  {String} password Password to encrypt
+ * @return {String}          Passwird encrypted
+###
+UserSchema.method "encryptPassword", (password) -> crypto.createHmac("sha1", @salt).update(password).digest "hex"
