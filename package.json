@@ -12,6 +12,7 @@
     "coffee-script": "latest",
     "async": "latest",
     "oembed": "latest",
+    "password": "latest",
     "connect-assets": "*",
     "mongoose": "*",
     "config": "*",
