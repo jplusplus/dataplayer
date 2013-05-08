@@ -3,7 +3,7 @@ mixin stepContent(step, stepKey)
         h2!=step.name
     if step.picture        
         .step-picture(
-            data-parallax=1*step.parallax,
+            data-parallax=step.parallax,
             data-parallax-speed=step["parallax-speed"])
             img(src=step.picture)
     if step.spots
@@ -13,7 +13,7 @@ mixin stepContent(step, stepKey)
                 class=spotClass(spot),
                 data-html=spot.html,
                 data-spot=spotKey,
-                data-parallax=1*spot.parallax,
+                data-parallax=spot.parallax,
                 data-parallax-speed=spot["parallax-speed"],
                 data-step=stepKey,
                 data-origin=spot.origin,
@@ -63,4 +63,4 @@ mixin spotContent(spot)
     if spot["sub-title"]
         h4!=spot["sub-title"]    
     if spot["content"]
-        p!=spot["content"]         
+        !=spot["content"]         

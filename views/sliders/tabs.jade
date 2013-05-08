@@ -5,6 +5,9 @@ block slider
     #workspace
       - navigation = obj.content.navigation || "horizontal"
       #overflow(data-navigation=navigation,  
+                data-scroll-duration=obj.content["scroll-duration"],
+                data-scroll-speed=obj.content["scroll-speed"],
+                data-scroll-easing=obj.content["scroll-easing"],
                 class=overflowClass(obj.content), 
                 style=screenStyle(obj.content))    
         include ../widgets/tabs.jade            
