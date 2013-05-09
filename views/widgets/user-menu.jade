@@ -1,14 +1,14 @@
-#user-menu(class=error != "" ? "open" : "open")
+#user-menu(class=errorLogin.length || errorSignup.length ? "open" : "")
   a.menu-handle
   .wrapper  
     unless user
       
-      .foldable
+      .foldable(class=errorSignup.length ? "fold" : "")
         a.handle Already an account?
         .content
           include login-form
 
-      .foldable.fold
+      .foldable(class=errorSignup.length ? "" : "fold")
         a.handle Create an account
         .content
           include signup-form

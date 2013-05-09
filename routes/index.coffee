@@ -31,7 +31,8 @@ module.exports = (a) ->
 homepage = (req, res) ->
   locals=
     demoSlideshow: process.env.DEMO_SLIDESHOW or config["demo_slideshow"]
-    error: req.flash("error")
+    errorLogin: req.flash("errorLogin")
+    errorSignup: req.flash("errorSignup")
   res.render "home", locals
 
 ###*

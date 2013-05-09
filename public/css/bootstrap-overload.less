@@ -41,11 +41,12 @@ html body {
   input[type="tel"],
   input[type="color"],
   .uneditable-input {
+    font-size:0.9em;
     // Focus state
-    &:focus {
+    &:focus, &:active {
       border: 1px solid @inputBorder;
       outline: 0;
-      outline: thin dotted \9; /* IE6-9 */
+      outline: thin dotted \9; /* IE6-9 */      
       .box-shadow(none);
     }
   }

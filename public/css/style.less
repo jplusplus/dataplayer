@@ -70,7 +70,7 @@ body {
     z-index:@zIndexUserMenu;
     overflow:hidden;        
     background: darken(@activeColor, 20);
-        
+
     .transition(0.3s);    
     .box-shadow(0 0 0 5px fade(@black, 10%));    
 
@@ -79,6 +79,7 @@ body {
         max-height:@openWidth*4;
         .wrapper {
             visibility: visible;
+            .opacity(100);
         }
     }
 
@@ -158,9 +159,11 @@ body {
 
     .wrapper {
         visibility: hidden;
+        overflow:hidden;
         width:@openWidth;
         margin:0;
-        padding:0;
+        padding:0; 
+        .opacity(0);
          
 
         h4, .links li.hola {
