@@ -1,0 +1,14 @@
+h4 Sign up
+form(action="/login", method="POST")
+  label Username
+    input(type="text",name="username").input-block-level
+  label Email
+    input(type="text",name="email").input-block-level
+  label Password
+    input(type="password",name="password").input-block-level
+  label Password again
+    input(type="password",name="password_again").input-block-level
+  .tr
+    input(type="submit",value="Sign up").btn.btn-dp  
+  if error != ""
+    .alert.alert-error.top10.bottom0!=error
