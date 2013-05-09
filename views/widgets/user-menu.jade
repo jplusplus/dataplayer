@@ -2,16 +2,16 @@
   a.menu-handle
   .wrapper  
     unless user
-      
-      .foldable(class=errorSignup.length ? "fold" : "")
-        a.handle Already an account?
-        .content
-          include login-form
+      .forms
+        .foldable(class=errorSignup.length ? "fold" : "")
+          a.handle Already an account?
+          .content
+            include login-form
 
-      .foldable(class=errorSignup.length ? "" : "fold")
-        a.handle Create an account
-        .content
-          include signup-form
+        .foldable(class=errorSignup.length ? "" : "fold")
+          a.handle Create an account
+          .content
+            include signup-form
     else
       ul.unstyled.links
         li.hola Hola #{user.username}!

@@ -1,8 +1,15 @@
 crypto   = require('crypto')
 mongoose = require("mongoose")
+
 # Self returning
 module.exports = -> module.exports
 
+###*
+ * Just ensure that the given value exists
+ * @param  {Mixed} value Value to check
+ * @return {Boolean}     True if the value exists
+###
+validatePresenceOf = (value)-> value && value.length
 
 ###*
  * Screen Schema
@@ -33,10 +40,10 @@ Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
 userSchema = module.exports.userSchema = mongoose.Schema(
   username:
     type: String
-    index:
-      unique: true
+    validate: [validatePresenceOf, 'An username is required']
   email:
     type: String
+    validate: [validatePresenceOf, 'An email is required']
     index:
       unique: true
   hashed_password: String
@@ -52,6 +59,19 @@ userSchema.virtual("password").set((password) ->
   @salt = @makeSalt()
   @hashed_password = @encryptPassword(password)
 ).get -> @_password
+
+
+# Checks that the username isn't taken yet
+userSchema.pre "save", (next) ->      
+  # Looks for users with the same username
+  User.findOne username: @username, (err, user) =>
+    # Username exists!
+    if user
+      @invalidate "username", "Username already taken"
+      err = new Error("Username already taken")
+    # Callback function
+    next err
+
 
 ###*
  * Authenticate checking method
