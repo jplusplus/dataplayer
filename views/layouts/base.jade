@@ -21,8 +21,10 @@ html
   body.theme-datawrapper.left-user-menu
     include ../widgets/user-menu
     block content
-    !=js("vendor/modernizr.custom.js")
+    
     //- Context scripts    
-    block scripts
+    block scripts    
+    !=js("vendor/modernizr.custom.js")
+
     include ../widgets/deprecated
     include ../widgets/ga

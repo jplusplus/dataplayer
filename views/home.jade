@@ -84,6 +84,7 @@ block content
 
 block scripts
     !=js('vendor/jquery-1.7.1.min.js')
+    !=js("UserMenu.js")
     script
         $('a[href^="#"]').click(function(){  
             var the_id = $(this).attr("href");  
@@ -92,3 +93,6 @@ block scripts
             }, 'slow');  
             return false;  
         });  
+    
+    :coffeescript
+        $(window).load -> window.userMenu = new window.UserMenu()

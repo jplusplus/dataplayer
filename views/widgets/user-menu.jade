@@ -1,8 +1,17 @@
-#user-menu(class=error != "" ? "open" : "")
-  a.handle
+#user-menu(class=error != "" ? "open" : "open")
+  a.menu-handle
   .wrapper  
     unless user
-      include login-form
+      
+      .foldable
+        a.handle Already an account?
+        .content
+          include login-form
+
+      .foldable.fold
+        a.handle Create an account
+        .content
+          include signup-form
     else
       ul.unstyled.links
         li.hola Hola #{user.username}!
