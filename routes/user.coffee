@@ -1,5 +1,6 @@
-passport = require("passport")
-User     = require("../models").User
+passport     = require("passport")
+User         = require("../models").User
+isValidEmail = require("../utils").isValidEmail
 # Module variables
 app = undefined
 
@@ -27,23 +28,26 @@ module.exports = (a)->
 
   # Intercept the signup form
   app.post '/signup', (req, res)->
-    
-    # Normalize end function
-    end=(err)->
-      req.flash "errorSignup", err
-      # Always redirect to the homepage
-      res.redirect "/"
-
-    # Check passwords is long enougt    
-    return end("Password too short.") if req.body.password.length < 8
-    # Check passwords are the sames
-    return end("Wrong password confirmation.") if req.body.password != req.body.password_again
 
     # Create the user object
     user = new User
       username : req.body.username
       email    : req.body.email
       password : req.body.password
+          
+    # Normalize end function
+    end=(err)->
+      req.flash "errorSignup", err
+      req.flash "tmpUser", user
+      # Always redirect to the homepage
+      res.redirect "/"
+
+    # Check email format    
+    return end("Wrong email address.") unless isValidEmail req.body.email
+    # Check passwords is long enougt    
+    return end("Password too short.") if req.body.password.length < 8
+    # Check passwords are the sames
+    return end("Wrong password confirmation.") if req.body.password != req.body.password_again
 
     # Save the new user
     user.save (e, obj)->
@@ -55,7 +59,7 @@ module.exports = (a)->
       else
         # Duplicates
         if e.code == 11000
-          end "Email already taken"          
+          end "Email already taken."          
         # Several errors
         else if e.errors        
           # Collect the errors and put them as flash message
@@ -63,7 +67,4 @@ module.exports = (a)->
         else if e.message
           end e.message
         else
-          end "Something went wrong"
-
-
-        
+          end "Something went wrong."

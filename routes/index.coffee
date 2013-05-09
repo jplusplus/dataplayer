@@ -33,6 +33,7 @@ homepage = (req, res) ->
     demoSlideshow: process.env.DEMO_SLIDESHOW or config["demo_slideshow"]
     errorLogin: req.flash("errorLogin")
     errorSignup: req.flash("errorSignup")
+    tmpUser: req.flash("tmpUser")
   res.render "home", locals
 
 ###*

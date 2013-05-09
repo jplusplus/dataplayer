@@ -40,10 +40,10 @@ Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
 userSchema = module.exports.userSchema = mongoose.Schema(
   username:
     type: String
-    validate: [validatePresenceOf, 'An username is required']
+    validate: [validatePresenceOf, 'An username is required.']
   email:
     type: String
-    validate: [validatePresenceOf, 'An email is required']
+    validate: [validatePresenceOf, 'An email is required.']
     index:
       unique: true
   hashed_password: String
@@ -67,8 +67,8 @@ userSchema.pre "save", (next) ->
   User.findOne username: @username, (err, user) =>
     # Username exists!
     if user
-      @invalidate "username", "Username already taken"
-      err = new Error("Username already taken")
+      @invalidate "username", "Username already taken."
+      err = new Error("Username already taken.")
     # Callback function
     next err
 
