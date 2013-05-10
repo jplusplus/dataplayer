@@ -17,7 +17,7 @@ block content
                 ul.screens-list.unstyled
                     each skreen in screens
                         li.screen(class="theme-#{skreen.content.theme}")
-                            h4
+                            h4.thumb-title
                                 a(href="/#{skreen.slug}")=skreen.content.name  
                             .actions
                                 if isYou
