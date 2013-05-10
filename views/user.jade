@@ -17,7 +17,8 @@ block content
                 ul.screens-list.unstyled
                     each skreen in screens
                         li.screen(class="theme-#{skreen.content.theme}")
-                            h4=skreen.content.name  
+                            h4
+                                a(href="/#{skreen.slug}")=skreen.content.name  
                             .actions
                                 if isYou
                                     a(href="/#{skreen.slug}?edit").btn.btn-small.edit 
