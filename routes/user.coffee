@@ -7,13 +7,12 @@ app = undefined
 module.exports = (a)->
   app = a  
 
-  app.get('/logout', (req, res)->    
+  app.get '/logout', (req, res)->    
     req.logout()
-    res.redirect("/")
-  )
+    res.redirect("back")  
 
   loginOptions = 
-    successRedirect: '/'
+    successRedirect: 'back'
     failureRedirect: '/login'
     failureFlash: true
 
@@ -24,7 +23,7 @@ module.exports = (a)->
     # Do we transmit a flash message ?
     req.flash 'errorLogin', req.flash('error')
     # Redirect to the homepage 
-    res.redirect("/")
+    res.redirect("back")
 
   # Intercept the signup form
   app.post '/signup', (req, res)->
@@ -40,7 +39,7 @@ module.exports = (a)->
       req.flash "errorSignup", err
       req.flash "tmpUser", user
       # Always redirect to the homepage
-      res.redirect "/"
+      res.redirect "back"
 
     # Check email format    
     return end("Wrong email address.") unless isValidEmail req.body.email

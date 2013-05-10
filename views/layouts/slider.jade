@@ -21,8 +21,9 @@ html
 
   - bodyClass  = !editMode || "editor-mode"
   - bodyClass += " theme-" + (obj.content.theme || "default")
-  body.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
-    
+  body.right-user-menu.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
+    if editRequest    
+      include ../widgets/user-menu
     block slider              
 
     !=js("vendor/modernizr.custom.js")

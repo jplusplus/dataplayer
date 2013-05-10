@@ -11,27 +11,6 @@ module.exports = -> module.exports
 ###
 validatePresenceOf = (value)-> value && value.length
 
-###*
- * Screen Schema
- * @var {Object} The object describing the Screen Schema
-###
-screenSchema = module.exports.screenSchema = mongoose.Schema(
-  slug:
-    type: String
-    index:
-      unique: true
-  token: String
-  content: mongoose.Schema.Types.Mixed
-  draft: mongoose.Schema.Types.Mixed
-  created_at: Date
-)
-
-###*
- * Screen model
- * @var {Object} The class creating from the Screen model
-###
-Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
-
 
 ###*
  * User Schema
@@ -98,3 +77,29 @@ userSchema.method "encryptPassword", (password) -> crypto.createHmac("sha1", @sa
  * @var {Object} The class creating from the User model
 ###
 User = module.exports.User = mongoose.model('User', userSchema)
+
+
+
+###*
+ * Screen Schema
+ * @var {Object} The object describing the Screen Schema
+###
+screenSchema = module.exports.screenSchema = mongoose.Schema(
+  slug:
+    type: String
+    index:
+      unique: true
+  token: String
+  content: mongoose.Schema.Types.Mixed
+  draft: mongoose.Schema.Types.Mixed
+  created_at: Date
+  author:
+    type: mongoose.Schema.Types.ObjectId
+    ref: 'UserSchema'
+)
+
+###*
+ * Screen model
+ * @var {Object} The class creating from the Screen model
+###
+Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
