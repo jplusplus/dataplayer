@@ -241,6 +241,79 @@ body {
     .lt-ie7 & { display:block; }
 }
 
+#user-profile {
+    padding-left:250px;
+    .user {
+        background:@menuColor;
+        position:fixed;
+        width:210px;
+        top:0;
+        left:0;
+        bottom:0;   
+        padding:20px;    
+        padding-top:100px; 
+        color:@white;
+        text-align:center;
+
+        h2 {
+            padding-bottom:20px;
+            position:relative;
+
+            &:first-letter { 
+                text-transform: uppercase;
+            }
+
+            &:after {
+                content:"";
+                position:absolute;
+                bottom:0;
+                left:50%;
+                margin-left:-20px;
+                width:40px;
+                height:1px;
+                background:@white;
+            }
+        }        
+    }
+
+    .avatar img {
+        .box-shadow(0 0 0 5px fade(@black, 10%));    
+        background:fade(@black, 5%);
+        margin-bottom:20px;        
+    }
+
+    .screens-list {
+        margin:20px;
+        li.screen {
+            position:relative;
+            overflow: hidden;
+            display:block;
+            float:left;
+            width:200px;
+            height:180px;
+            padding:10px;
+            margin:20px;
+            border:1px solid fade(#000, 30);
+            .border-radius(2px);
+            .box-shadow(0 1px 6px 0 fade(#000, 20));
+
+            .actions {
+                position:absolute;
+                bottom:5px;
+                right:5px;
+
+                .btn {
+                    margin-left:5px;
+                    i {
+                        margin-top:1px;
+                        margin-right:5px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 #home {
 
     font-size:18px;  

@@ -1,5 +1,6 @@
 passport     = require("passport")
 User         = require("../models").User
+Screen       = require("../models").Screen
 isValidEmail = require("../utils").isValidEmail
 # Module variables
 app = undefined
@@ -7,6 +8,14 @@ app = undefined
 module.exports = (a)->
   app = a  
 
+  # Intercepts the user profile
+  app.get '/user/:username', userProfile
+
+  ###*
+   * Logout the user
+   * @param  {Object} req User request
+   * @param  {Object} res User result
+  ###
   app.get '/logout', (req, res)->    
     req.logout()
     res.redirect("back")  
@@ -15,17 +24,30 @@ module.exports = (a)->
     successRedirect: 'back'
     failureRedirect: '/login'
     failureFlash: true
-
-  # Intercept the login form
+  
+  ###*
+   * Intercept the login form
+   * @param  {Object} req User request
+   * @param  {Object} res User result
+  ###
   app.post '/login', passport.authenticate('local', loginOptions)
-  # Intercept the login error
+
+  ###*
+   * Intercept the login error
+   * @param  {Object} req User request
+   * @param  {Object} res User result
+  ###
   app.get '/login', (req, res)-> 
     # Do we transmit a flash message ?
     req.flash 'errorLogin', req.flash('error')
     # Redirect to the homepage 
     res.redirect("back")
 
-  # Intercept the signup form
+  ###*
+   * Intercept the signup form
+   * @param  {Object} req User request
+   * @param  {Object} res User result
+  ###
   app.post '/signup', (req, res)->
 
     # Create the user object
@@ -67,3 +89,35 @@ module.exports = (a)->
           end e.message
         else
           end "Something went wrong."
+
+###*
+ * User profile
+ * @param  {Object} req User request
+ * @param  {Object} res User result
+###
+userProfile = (req, res)->
+  # Get the user
+  User.findOne username: req.params.username, (err, user)->
+    # Error cases
+    return res.send(500) if err
+    return res.send(400, "User not found.") unless user?
+
+    # Screen filter
+    filter =
+      # By author
+      "author": user._id
+      # And only the public one
+      "content.private": "$ne": true
+
+    # Get the user's screens
+    Screen.find filter, (err, screens)->
+      # Error cases
+      return res.send(500) if err
+      # Show the user profile
+      res.render "user", 
+        isYou: req.isAuthenticated() and String(req.user._id) == String(user._id)
+        userProfile: user        
+        screens: screens
+
+  
+      

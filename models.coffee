@@ -32,6 +32,9 @@ userSchema = module.exports.userSchema = mongoose.Schema(
 # Creates a virtual attribute that contains the id of the user
 userSchema.virtual("id").get -> @_id.toHexString()
 
+# Creates a virtual attribute that contains the email hashed (for gravatar)
+userSchema.virtual("email_hash").get -> crypto.createHash('md5').update(@email).digest("hex");
+
 # Creates a virtual attribute that contains the password of the user (before encryption)
 userSchema.virtual("password").set((password) ->
   @_password = password
