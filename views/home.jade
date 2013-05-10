@@ -3,6 +3,7 @@ extends ./layouts/base
 block title
     | Welcome to Dataplayer
 block content
+    include ../widgets/user-menu
     #home
         .banner
             nav.anchors
@@ -84,7 +85,6 @@ block content
 
 block scripts
     !=js('vendor/jquery-1.7.1.min.js')
-    !=js("UserMenu.js")
     script
         $('a[href^="#"]').click(function(){  
             var the_id = $(this).attr("href");  
@@ -94,5 +94,6 @@ block scripts
             return false;  
         });  
     
+    !=js("UserMenu.js")
     :coffeescript
         $(window).load -> window.userMenu = new window.UserMenu()

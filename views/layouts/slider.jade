@@ -22,12 +22,17 @@ html
   - bodyClass  = !editMode || "editor-mode"
   - bodyClass += " theme-" + (obj.content.theme || "default")
   body.right-user-menu.js-loading(class=bodyClass, data-page=obj.slug, data-given-token=editToken)
-    if editRequest    
-      include ../widgets/user-menu
+   
     block slider              
+    block scripts  
 
-    !=js("vendor/modernizr.custom.js")
-    block scripts
+    !=js("vendor/modernizr.custom.js")    
+    if editRequest    
+      include ../widgets/user-menu   
+      !=js("UserMenu.js")
+      :coffeescript
+          $(window).load -> window.userMenu = new window.UserMenu()      
+        
     //- Edit mode
     if editMode
       //- Loads the editor html
