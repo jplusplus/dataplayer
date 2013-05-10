@@ -1,29 +1,15 @@
 crypto   = require('crypto')
 mongoose = require("mongoose")
+
 # Self returning
 module.exports = -> module.exports
 
-
 ###*
- * Screen Schema
- * @var {Object} The object describing the Screen Schema
+ * Just ensure that the given value exists
+ * @param  {Mixed} value Value to check
+ * @return {Boolean}     True if the value exists
 ###
-screenSchema = module.exports.screenSchema = mongoose.Schema(
-  slug:
-    type: String
-    index:
-      unique: true
-  token: String
-  content: mongoose.Schema.Types.Mixed
-  draft: mongoose.Schema.Types.Mixed
-  created_at: Date
-)
-
-###*
- * Screen model
- * @var {Object} The class creating from the Screen model
-###
-Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
+validatePresenceOf = (value)-> value && value.length
 
 
 ###*
@@ -33,10 +19,10 @@ Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)
 userSchema = module.exports.userSchema = mongoose.Schema(
   username:
     type: String
-    index:
-      unique: true
+    validate: [validatePresenceOf, 'An username is required.']
   email:
     type: String
+    validate: [validatePresenceOf, 'An email is required.']
     index:
       unique: true
   hashed_password: String
@@ -46,12 +32,28 @@ userSchema = module.exports.userSchema = mongoose.Schema(
 # Creates a virtual attribute that contains the id of the user
 userSchema.virtual("id").get -> @_id.toHexString()
 
+# Creates a virtual attribute that contains the email hashed (for gravatar)
+userSchema.virtual("email_hash").get -> crypto.createHash('md5').update(@email).digest("hex");
+
 # Creates a virtual attribute that contains the password of the user (before encryption)
 userSchema.virtual("password").set((password) ->
   @_password = password
   @salt = @makeSalt()
   @hashed_password = @encryptPassword(password)
 ).get -> @_password
+
+
+# Checks that the username isn't taken yet
+userSchema.pre "save", (next) ->      
+  # Looks for users with the same username
+  User.findOne username: @username, (err, user) =>
+    # Username exists!
+    if user
+      @invalidate "username", "Username already taken."
+      err = new Error("Username already taken.")
+    # Callback function
+    next err
+
 
 ###*
  * Authenticate checking method
@@ -78,3 +80,29 @@ userSchema.method "encryptPassword", (password) -> crypto.createHmac("sha1", @sa
  * @var {Object} The class creating from the User model
 ###
 User = module.exports.User = mongoose.model('User', userSchema)
+
+
+
+###*
+ * Screen Schema
+ * @var {Object} The object describing the Screen Schema
+###
+screenSchema = module.exports.screenSchema = mongoose.Schema(
+  slug:
+    type: String
+    index:
+      unique: true
+  token: String
+  content: mongoose.Schema.Types.Mixed
+  draft: mongoose.Schema.Types.Mixed
+  created_at: Date
+  author:
+    type: mongoose.Schema.Types.ObjectId
+    ref: 'UserSchema'
+)
+
+###*
+ * Screen model
+ * @var {Object} The class creating from the Screen model
+###
+Screen = module.exports.Screen = mongoose.model('Screen', screenSchema)

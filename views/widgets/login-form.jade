@@ -1,10 +1,12 @@
 h4 Log in
 form(action="/login", method="POST")
-  label Username
-    input(type="text",name="username").input-block-level
-  label Password
-    input(type="password",name="password").input-block-level
+  label 
+    .hide-text Username
+    input(type="text",name="username", placeholder="Enter your username").input-block-level
+  label 
+    .hide-text Password
+    input(type="password",name="password", placeholder="Enter your password").input-block-level
   .tr
     input(type="submit",value="Log in").btn.btn-dp  
-  if error != ""
+  each error in errorLogin
     .alert.alert-error.top10.bottom0!=error

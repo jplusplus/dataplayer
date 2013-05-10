@@ -70,7 +70,7 @@ body {
     z-index:@zIndexUserMenu;
     overflow:hidden;        
     background: darken(@activeColor, 20);
-        
+
     .transition(0.3s);    
     .box-shadow(0 0 0 5px fade(@black, 10%));    
 
@@ -79,6 +79,7 @@ body {
         max-height:@openWidth*4;
         .wrapper {
             visibility: visible;
+            .opacity(100);
         }
     }
 
@@ -91,21 +92,77 @@ body {
         color:inherit;
     }
 
-    .handle {
+    .menu-handle {
         width:28px;
         height:28px;
         background:url("/img/user.png") no-repeat 0 0;
         display:block;
         position:absolute;
         top:6px;
-        right:6px;
+        right:6px
+    }
+
+    .foldable {
+        overflow:hidden;
+        .transition(0.6s);
+
+        .content {
+            .transition(0.6s);
+            max-height:@openWidth*4;
+        }
+
+        a.handle {
+            display:none;    
+            background:fade(@white, 0);
+            position:absolute;
+            bottom:0;
+            left:0;
+            right:0;
+            height:40px;
+            font-size:14px;
+            line-height:40px;
+            color:@black;
+            padding-left: 30px;
+            cursor:pointer;
+
+            &:after {
+                content:"";
+                position:absolute;
+                top:12px;
+                left:10px;
+                width:14px;
+                height:16px;
+                background-image: url("@{iconSpritePath}");
+                .icon-chevron-right();
+            }
+
+            &:hover {
+                background:fade(@activeColor, 10);
+            }
+        }
+
+        &.fold {            
+            margin-bottom:0px;
+
+            a.handle {
+                background:@white;
+                display:block;                
+            }
+
+            .content {
+                visibility:hidden;
+                max-height:0;
+            }
+        }
     }
 
     .wrapper {
         visibility: hidden;
+        overflow:hidden;
         width:@openWidth;
-        margin:0;
-        padding:0;
+        margin:0;        
+        padding:0; 
+        .opacity(0);
          
 
         h4, .links li.hola {
@@ -115,6 +172,10 @@ body {
             line-height: 18px;
             border-bottom:1px solid lighten(@activeColor, 10);
             background: darken(@activeColor, 20);            
+        }
+
+        .forms {
+            margin-bottom:40px;
         }
 
         .links {
@@ -178,6 +239,84 @@ body {
     
     display:none;
     .lt-ie7 & { display:block; }
+}
+
+#user-profile {
+    padding-left:250px;
+    .user {
+        background:@menuColor;
+        position:fixed;
+        width:210px;
+        top:0;
+        left:0;
+        bottom:0;   
+        padding:20px;    
+        padding-top:100px; 
+        color:@white;
+        text-align:center;
+
+        h2 {
+            padding-bottom:20px;
+            position:relative;
+
+            &:first-letter { 
+                text-transform: uppercase;
+            }
+
+            &:after {
+                content:"";
+                position:absolute;
+                bottom:0;
+                left:50%;
+                margin-left:-20px;
+                width:40px;
+                height:1px;
+                background:@white;
+            }
+        }        
+    }
+
+    .avatar img {
+        .box-shadow(0 0 0 5px fade(@black, 10%));    
+        background:fade(@black, 5%);
+        margin-bottom:20px;        
+    }
+
+    .screens-list {
+        margin:20px;
+        li.screen {
+            position:relative;
+            overflow: hidden;
+            display:block;
+            float:left;
+            width:200px;
+            height:180px;
+            padding:10px;
+            margin:20px;
+            border:1px solid fade(#000, 30);
+            .border-radius(2px);
+            .box-shadow(0 1px 6px 0 fade(#000, 20));
+
+            h4 a { 
+                color:inherit !important; 
+                padding:10px 0;
+            }
+
+            .actions {
+                position:absolute;
+                bottom:5px;
+                right:5px;
+
+                .btn {
+                    margin-left:5px;
+                    i {
+                        margin-top:1px;
+                        margin-right:5px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 #home {

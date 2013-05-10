@@ -215,12 +215,16 @@ app.configure ->
     # Current user
     res.locals.user = if req.isAuthenticated() then req.user else false
     res.locals.path = req.path
-    res.locals.editMode = req.query.hasOwnProperty("edit")
-    res.locals.editToken = req.query["edit"]
     res.locals.publicURL = (obj) ->
       req.protocol + "://" + req.headers.host + "/" + obj.slug
     res.locals.privateURL = (obj) ->
-      res.locals.publicURL(obj) + "?edit=" + req.query["edit"]
+      res.locals.publicURL(obj) + "?edit=" + obj.token
+
+    # Login/Signup form everywhere
+    res.locals.errorLogin = req.flash("errorLogin")
+    res.locals.errorSignup = req.flash("errorSignup")
+    res.locals.tmpUser = req.flash("tmpUser")
+
     next()
     
   # @warning Needs to be after helpers

@@ -3,6 +3,7 @@ extends ./layouts/base
 block title
     | Welcome to Dataplayer
 block content
+    include ./widgets/user-menu
     #home
         .banner
             nav.anchors
@@ -92,3 +93,7 @@ block scripts
             }, 'slow');  
             return false;  
         });  
+    
+    !=js("UserMenu.js")
+    :coffeescript
+        $(window).load -> window.userMenu = new window.UserMenu()
