@@ -28,3 +28,9 @@ block content
                                     | view             
 
 
+
+block scripts
+    !=js('vendor/jquery-1.7.1.min.js')
+    !=js("UserMenu.js")
+    :coffeescript
+        $(window).load -> window.userMenu = new window.UserMenu()
