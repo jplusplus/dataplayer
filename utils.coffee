@@ -54,3 +54,15 @@ sanitaze = module.exports.sanitaze = (obj, depth=5) ->
         else obj[key] = null
 
     obj        
+
+
+###*
+ * True if the given email is valid
+ * @param  {String}  email Email to test
+ * @return {Boolean}       True if the email is valid
+###
+isValidEmail = module.exports.isValidEmail = (email) ->  
+  # Source:
+  # http://fightingforalostcause.net/misc/2006/compare-email-regex.php
+  reg = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i
+  reg.test email

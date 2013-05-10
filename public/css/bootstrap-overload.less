@@ -12,3 +12,42 @@
         color:@white;
     }
 }
+
+.alert {
+  border:0;
+
+  &.alert-error {
+    background:#F59FA5;
+    color:@white;
+    text-shadow:none;
+  }
+
+}
+
+html body {  
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"],
+  .uneditable-input {
+    font-size:0.9em;
+    // Focus state
+    &:focus, &:active {
+      border: 1px solid @inputBorder;
+      outline: 0;
+      outline: thin dotted \9; /* IE6-9 */      
+      .box-shadow(none);
+    }
+  }
+}

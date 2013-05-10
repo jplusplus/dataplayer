@@ -1,0 +1,18 @@
+h4 Sign up
+form(action="/signup", method="POST")
+  label 
+    .hide-text Username
+    input(type="text",name="username", placeholder="Desired username", value=tmpUser.length ? tmpUser[0].username : "").input-block-level
+  label
+    .hide-text Email
+    input(type="text",name="email", placeholder="Your email address", value=tmpUser.length ? tmpUser[0].email : "").input-block-level
+  label
+    .hide-text Password
+    input(type="password",name="password", placeholder="Create a password").input-block-level
+  label
+    .hide-text Password again
+    input(type="password",name="password_again", placeholder="Confirm your password").input-block-level
+  .tr
+    input(type="submit",value="Create account").btn.btn-dp  
+  each error in errorSignup
+    .alert.alert-error.top10.bottom0!=error

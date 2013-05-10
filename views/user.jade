@@ -1,0 +1,37 @@
+extends ./layouts/base
+
+block title
+    | #{userProfile.username}'s profile - Dataplayer
+
+block content
+    include ./widgets/user-menu
+    #user-profile
+        .row-fluid
+            .user
+                a.avatar(href="http://www.gravatar.com", target="_blank", title="Update your avatar on Gravatar")
+                    img.img-circle(src="//www.gravatar.com/avatar/a#{userProfile.email_hash}?default=blank")
+                h2 #{userProfile.username}'s profile
+                .back-to-home
+                    a(href="/") ↩ Back to home
+            .screens
+                ul.screens-list.unstyled
+                    each skreen in screens
+                        li.screen(class="theme-#{skreen.content.theme}")
+                            h4.thumb-title
+                                a(href="/#{skreen.slug}")=skreen.content.name  
+                            .actions
+                                if isYou
+                                    a(href="/#{skreen.slug}?edit").btn.btn-small.edit 
+                                        i.icon-edit
+                                        | edit
+                                a(href="/#{skreen.slug}").btn.btn-small.btn-dp.view 
+                                    i.icon-white.icon-eye-open
+                                    | view             
+
+
+
+block scripts
+    !=js('vendor/jquery-1.7.1.min.js')
+    !=js("UserMenu.js")
+    :coffeescript
+        $(window).load -> window.userMenu = new window.UserMenu()

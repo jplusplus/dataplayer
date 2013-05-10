@@ -29,7 +29,9 @@ module.exports = (a) ->
  * @param  {Object} res Client result object
 ###
 homepage = (req, res) ->
-  res.render "home", demoSlideshow: process.env.DEMO_SLIDESHOW or config["demo_slideshow"]
+  locals=
+    demoSlideshow: process.env.DEMO_SLIDESHOW or config["demo_slideshow"]
+  res.render "home", locals
 
 ###*
  * Single screen router 
@@ -39,27 +41,56 @@ homepage = (req, res) ->
 viewScreen = (req, res) ->
   Screen.findOne(
     slug: req.params.slug,
-    (err, data) ->
+    (err, screen) ->
       # Error cases
-      return res.send(500)  if err
-      return res.send(400, "Page not found.")  if not data? or not data
+      return res.send(500) if err
+      return res.send(400, "Page not found.")  if not screen? or not screen
       
       # Template file 
       tplDir = "sliders/"
-      tplName = data.content.layout + "." + app.get("view engine")
+      tplName = screen.content.layout + "." + app.get("view engine")
       tplPath = path.join(app.get("views"), tplDir, tplName)
       
-      # Change the layout if not exists
-      data.content.layout = (if fs.existsSync(tplPath) then data.content.layout else "default")
-      
-      # Preview mode, use the draft as data
-      data.content = data.draft or data.content  if req.query.preview
-      
-      # Render the page template      
-      # Use the default template if needed 
-      res.render path.join(tplDir, data.content.layout),        
-        # Send the data to the template
-        obj: data
+      # End callback
+      end = (err, screen)->     
+        # Error case
+        return res.send 500 if err   
+
+        # Change the layout if not exists
+        screen.content.layout = (if fs.existsSync(tplPath) then screen.content.layout else "default")      
+        # Preview mode, use the draft as screen
+        screen.content = screen.draft or screen.content  if req.query.preview      
+
+        # Determines if this is the edit mode (false by default)
+        editMode  = false
+        # Edit request
+        if req.query.edit?
+          # If the authenicated user is the author
+          editMode |= req.isAuthenticated() and String(screen.author) == String(req.user._id)
+          # Or if the given token is the editToken and the screen has no author
+          editMode |= not screen.author? and screen.token == req.query.edit
+
+          # If the user just own a screen
+          if req.isAuthenticated() and screen.token == req.query.edit
+            # Redirect to the url without token 
+            return res.redirect("/#{screen.slug}?edit")
+
+        # Render the page template      
+        # Use the default template if needed 
+        res.render path.join(tplDir, screen.content.layout), 
+          # To know if the user ask for edition
+          editRequest: req.query.edit?
+          # Activate edit mode
+          editMode: editMode
+          # Get the edit token
+          editToken: if editMode then screen.token else null
+          # Send the screen to the template
+          obj: screen
+
+      # Import the screen to an user if need
+      if req.isAuthenticated() then importUserScreen(req.user, screen, end)
+      # Or just terminates
+      else end null, screen
   )
 
 
@@ -152,6 +183,7 @@ createScreen = (req, res) ->
     created_at: new Date()
     content: content
     draft: {}
+    author: if req.isAuthenticated() then req.user._id else null
   )
 
   # Save it to the databse
@@ -160,9 +192,13 @@ createScreen = (req, res) ->
     if err and err.code is 11000
       return createScreen(req, res)    
     # Other error
-    else return res.send(500) if err    
+    else return res.send(500) if err 
+    # Basic redirect url       
+    url = "/" + data.slug + "?edit"
+    # Add the token if we are not connected to allow anonymmous 
+    url += "=" + data.token unless req.isAuthenticated()
     # Redirect to the new screen
-    res.redirect "/" + data.slug + "?edit=" + data.token
+    res.redirect url 
 
 ###*
  * Clean the given configuration object
@@ -182,7 +218,7 @@ cleanConfiguration = (obj, callback=->) ->
 ###
 setDefaultValues = (obj) ->
   # Default values
-  defaults = _.clone(require("../data/default.json"))
+  defaults = _.clone require("../data/default.json")
   # Extend the obj value
   obj = _.extend(defaults, obj)  
   # Sanitaze each fields and return the obj
@@ -248,4 +284,14 @@ iterateMissingEmbed = (obj, iterator)->
       return true
 
 
+importUserScreen = (user, screen, callback)->
+  # If the screen hasn't an author yet
+  unless screen.author?
+    # Update it author
+    screen.author = user._id
+    # Save the screen
+    screen.save callback
+  else
+    # Nothing to do
+    callback null, screen
     
