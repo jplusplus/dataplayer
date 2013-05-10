@@ -9,7 +9,7 @@ block content
         .row-fluid
             .user
                 a.avatar(href="http://www.gravatar.com", target="_blank", title="Update your avatar on Gravatar")
-                    img.img-circle(src="//www.gravatar.com/avatar/a#{userProfile.email_hash}?default=blank")
+                    img.img-circle(src="//www.gravatar.com/avatar/#{userProfile.email_hash}?default=blank")
                 h2 #{userProfile.username}'s profile
                 .back-to-home
                     a(href="/") ↩ Back to home
