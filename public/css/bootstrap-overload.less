@@ -13,6 +13,18 @@
     }
 }
 
+.btn-danger {
+    @bg: darken(@red, 2);
+    .buttonBackground(@bg, @bg);
+    &:hover {
+        .buttonBackground(lighten(@bg, 5), lighten(@bg, 5));        
+    }
+
+    &:focus {
+        color:@white;
+    }
+}
+
 .alert {
   border:0;
 
