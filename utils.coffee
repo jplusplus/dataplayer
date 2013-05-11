@@ -122,21 +122,6 @@ module.exports.locals = (app)->
     ###
     stripTags: stripTags
 
-    ###*
-     * Return the given page (parsed from Markdown)
-     * @param  {String} name Page name
-     * @return {String}      Page HTML code
-    ###
-    getPage: (name) ->      
-        # Builds file name
-        fileName = path.join(app.get("pages"), name) + ".md"      
-        # Checks that file exists
-        return ""  unless fs.existsSync(fileName)      
-        # Read the text file
-        file = fs.readFileSync(fileName, "UTF-8")      
-        # Parse the markdown      
-        md file
-
 
 module.exports.context = (req, res, next) ->
     # Current user
