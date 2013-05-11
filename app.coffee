@@ -51,8 +51,11 @@ app.configure ->
   # serialize users into and deserialize users out of the session. Typically,
   # this will be as simple as storing the user ID when serializing, and finding
   # the user by ID when deserializing.
-  passport.serializeUser (user, done)->done(null, user)
-  passport.deserializeUser (user, done)->done(null, user)
+  passport.serializeUser (user, done)->
+    done(null, user._id)
+
+  passport.deserializeUser (_id, done)->
+    User.findOne _id, done
 
   # Creates passport strategy
   passport.use(new LocalStrategy (username, password, done)->
@@ -72,30 +75,10 @@ app.configure ->
     )
   )
 
-
-  ###
-  Views helpers
-  ###  
   # Register helpers functions for use in view's
   app.locals require("./utils").locals(app)
-
   # Add context helpers
-  app.use (req, res, next) ->
-    # Current user
-    res.locals.user = if req.isAuthenticated() then req.user else false
-    res.locals.path = req.path
-    res.locals.publicURL = (obj) ->
-      req.protocol + "://" + req.headers.host + "/" + obj.slug
-    res.locals.privateURL = (obj) ->
-      res.locals.publicURL(obj) + "?edit=" + obj.token
-
-    # Login/Signup form everywhere
-    res.locals.errorLogin = req.flash("errorLogin")
-    res.locals.errorSignup = req.flash("errorSignup")
-    res.locals.tmpUser = req.flash("tmpUser")
-
-    next()
-    
+  app.use require("./utils").context  
   # @warning Needs to be after helpers
   app.use app.router  
   # Load the user route file

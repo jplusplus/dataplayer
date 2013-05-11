@@ -138,6 +138,22 @@ module.exports.locals = (app)->
         md file
 
 
+module.exports.context = (req, res, next) ->
+    # Current user
+    res.locals.user = if req.isAuthenticated() then req.user else false
+    res.locals.path = req.path
+    res.locals.publicURL = (obj) ->
+        req.protocol + "://" + req.headers.host + "/" + obj.slug
+    res.locals.privateURL = (obj) ->
+        res.locals.publicURL(obj) + "?edit=" + obj.token
+
+    # Login/Signup form everywhere
+    res.locals.errorLogin = req.flash("errorLogin")
+    res.locals.errorSignup = req.flash("errorSignup")
+    res.locals.tmpUser = req.flash("tmpUser")
+
+    next()
+
 ###*
  * Template helper to remove html tags (to plain text)
  * @copyright http://kevin.vanzonneveld.net
