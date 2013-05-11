@@ -43,7 +43,7 @@ class window.Interactive
   constructor: -> 
     @currentStep=0
     @cache =
-      scrollDuration: 900  
+      scrollDuration: 700  
       scrollEasing: 'easeOutCubic'
       defaultEntranceDuration: 600 
       hasWaypoint: false
