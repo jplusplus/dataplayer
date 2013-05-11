@@ -467,24 +467,38 @@ body {
     }
 
     #demo {
-        background:lighten(@activeColor, 10);
+        background:@activeColor;
+        height:750px;
         overflow:hidden;
         color:white;
-        padding:60px 0 0;    
-        position:relative;      
-        h2:after { border-color:@white; }    
+        padding:0;    
+        position:relative;              
 
         &:before {
             content:"";
             display:block;
             top:0;
-            position:absolute;
+            position:absolute;     
+            z-index:20;
             left:-20px;
             right:-20px;
             height:40px;
             .box-shadow(0 10px 0 0 fade(@black, 20) inset)
         }
 
+        h2 {    
+            padding-top:60px;        
+            z-index:20;
+            &:after { border-color:@white; }    
+        }
+
+        iframe {
+            z-index:10;
+            position:absolute;
+            top:0; bottom:0;
+            left:0; right:0;
+            height:inherit;
+        }
     }
 
     #touch {
