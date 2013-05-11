@@ -22,7 +22,7 @@ app.configure ->
   # Sets configuration variable
   app.set "port", process.env.PORT or 3000
   app.set "data", __dirname + "/data"
-  app.set "pages", __dirname + "/pages"
+  app.set "pages", __dirname + "/views/pages"
   app.set "views", __dirname + "/views"
   app.set "view engine", "jade"
 
