@@ -19,6 +19,9 @@ block content
             .launch
                 a.btn.btn-large.btn-block.btn-dp(href="/create")
                     | Get started!
+            .overflow
+                .picture
+                    //- Empty div to illustrate the homepage
         
         #discover
             .container
@@ -62,13 +65,6 @@ block content
                 ul.inline.links.pull-right
                     li
                         a(href="mailto:hello@dataplayer.org") hello@dataplayer.org
-                    li.rounded
-                        a.facebook(href="http://facebook.com/journalismplusplus", title="facebook")
-                    li.rounded
-                        a.twitter(href="http://twitter.com/jplusplus_", title="twitter")
-                    li.rounded
-                        a.github(href="http://github.com/jplusplus", title="github")
-
         footer            
             .container
                 .row
@@ -96,4 +92,6 @@ block scripts
     
     !=js("UserMenu.js")
     :coffeescript
-        $(window).load -> window.userMenu = new window.UserMenu()
+        $(window).load -> 
+            window.userMenu = new window.UserMenu()
+            $("html").addClass "js-ready"
