@@ -3,12 +3,12 @@
   .wrapper  
     unless user
       .forms
-        .foldable(class=errorSignup.length ? "fold" : "")
+        .foldable.logIn(class=errorSignup.length ? "fold" : "")
           a.handle Already an account?
           .content
             include login-form
 
-        .foldable(class=errorSignup.length ? "" : "fold")
+        .foldable.signUp(class=errorSignup.length ? "" : "fold")
           a.handle Create an account
           .content
             include signup-form
