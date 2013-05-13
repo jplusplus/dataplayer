@@ -14,9 +14,15 @@
             include signup-form
     else
       ul.unstyled.links
-        li.hola Hola #{user.username}!
+        li.hola Hola #{user.username}!        
         li
-          a(href="/user/#{user.username}") Your profile
+          a(href="/user/#{user.username}") 
+            | Your profile  
+            i.icon.icon-user.icon-white        
+        li
+          a(href="/create")
+            | New player
+            i.icon.icon-file.icon-white
         li
           a(href="/logout") 
             | Logout
