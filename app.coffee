@@ -55,7 +55,7 @@ app.configure ->
     done(null, user._id)
 
   passport.deserializeUser (_id, done)->
-    User.findOne _id, done
+    User.findOne _id: _id, done
 
   # Creates passport strategy
   passport.use(new LocalStrategy (username, password, done)->
