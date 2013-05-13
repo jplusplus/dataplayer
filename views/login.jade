@@ -1,0 +1,17 @@
+extends ./layouts/base
+
+block title
+    | Log in - Dataplayer
+
+block content      
+    .standalone-login
+        h1 Dataplayer
+        include widgets/user-menu
+        .back-to-home.top20.back
+            a(href="/") ↩ Back to home
+
+block scripts
+    !=js('vendor/jquery-1.7.1.min.js')
+    !=js("UserMenu.js")
+    :coffeescript
+        $(window).load -> window.userMenu = new window.UserMenu()

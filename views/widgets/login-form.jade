@@ -5,11 +5,11 @@ form(action="/login", method="POST")
     input(type="text",name="username", placeholder="Enter your username").input-block-level
   label 
     .hide-text Password
-    input(type="password",name="password", placeholder="Enter your password").input-block-level
-  label.pull-left.checkbox
+    input(type="password",name="password", placeholder="Enter your password").input-block-level  
+  label.checkbox.pull-left
     input(type="checkbox", name="remember_me")
-    | Remember me
+    | Remember me  
   .tr
-    input(type="submit",value="Log in").btn.btn-dp  
+    input(type="submit",value="Log in").btn.btn-dp    
   each error in errorLogin
     .alert.alert-error.top10.bottom0!=error
