@@ -1,5 +1,5 @@
-#user-menu(class=errorLogin.length || errorSignup.length ? "open" : "")
-  a.menu-handle
+#user-menu(class=errorLogin.length || errorSignup.length ? "open" : "")  
+  a.menu-handle(class=user ? "connected" : "")
   .wrapper  
     unless user
       .forms

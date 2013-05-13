@@ -134,15 +134,33 @@ body {
     a {
         color:inherit;
     }
+    
 
     .menu-handle {
         width:28px;
-        height:28px;
-        background:url("/img/user.png") no-repeat 0 0;
+        height:28px;        
         display:block;
         position:absolute;
         top:6px;
-        right:6px;                
+        right:6px;  
+                
+        &.connected {        
+            text-shadow:0 0 5px @white;
+        }
+        
+        &:before {
+            font-family: FontAwesome;
+            content:"\f007";
+            position:absolute;
+            top:0;
+            left:0;     
+            right:0;
+            bottom:0;
+            text-align:center;
+            line-height:28px;    
+            font-size:32px;
+            color:@white;
+        }              
     }
 
     .foldable {
