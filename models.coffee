@@ -46,7 +46,9 @@ userSchema.virtual("password").set((password) ->
 
 
 # Checks that the username isn't taken yet
-userSchema.pre "save", (next) ->      
+userSchema.pre "save", (next) ->     
+  # Checks the username only if we change it  
+  return next() unless @isModified 'username'
   # Looks for users with the same username
   User.findOne username: @username, (err, user) =>
     # Username exists!
@@ -68,7 +70,7 @@ userSchema.method "authenticate", (plainText)-> @encryptPassword(plainText) is @
  * Create a random salt for the password hash
  * @return {String} Random salt
 ###
-userSchema.method "makeSalt", -> "" + bcrypt.genSaltSync(15)
+userSchema.method "makeSalt", (len=15)-> "" + bcrypt.genSaltSync(len)
 
 ###*
  * Encrypt the given password

@@ -51,16 +51,30 @@ app.configure ->
   # serialize users into and deserialize users out of the session. Typically,
   # this will be as simple as storing the user ID when serializing, and finding
   # the user by ID when deserializing.
-  passport.serializeUser (user, done)->
-    done(null, user._id)
+  passport.serializeUser (user, done)->    
+    createAccessToken = ->      
+      token = user.makeSalt 30
+      User.findOne accessToken: token, (err, existingUser) ->
+        return done err if err
+        # Run the function again - the token has to be unique!
+        if existingUser then createAccessToken() 
+        # Remeber the access token into session
+        else
+          user.set "access_token", token
+          user.save (err) ->
+            return done(err) if err
+            done null, user.get("access_token")
+    # creates the token
+    createAccessToken() if user._id
 
-  passport.deserializeUser (_id, done)->
-    User.findOne _id: _id, done
+  # Get the user matching to the token
+  passport.deserializeUser (token, done)-> User.findOne access_token: token, done
+
 
   # Creates passport strategy
   passport.use(new LocalStrategy (username, password, done)->
     # Get the user from the database
-    User.findOne(username: username, (err, user)->
+    User.findOne(username: username, (err, user)->      
       # Something happens   
       if err   
         return done(err) 
