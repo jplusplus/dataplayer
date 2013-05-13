@@ -3,7 +3,6 @@ path     = require("path")
 async    = require("async")
 _        = require("underscore")
 fs       = require("fs")
-mongoose = require("mongoose")
 Screen   = require("../models").Screen
 config   = require("config")
 oembed   = require("oembed")
@@ -13,8 +12,6 @@ app = undefined
 
 module.exports = (a) ->
   app = a  
-  # Connect mongoose
-  mongoose.connect process.env.DATABASE_URL or config.database_url  
   # Set routes
   app.get "/", homepage
   app.get "/create", createScreen

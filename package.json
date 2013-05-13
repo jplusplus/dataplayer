@@ -16,6 +16,7 @@
     "passport": "latest",
     "passport-local": "latest",
     "connect-assets": "*",
+    "connect-mongo": "*",
     "mongoose": "*",
     "config": "*",
     "marked": "*",

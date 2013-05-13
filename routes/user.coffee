@@ -37,7 +37,7 @@ module.exports = (a)->
    * @param  {Object} req User request
    * @param  {Object} res User result
   ###
-  app.get '/login', (req, res)-> 
+  app.get '/login', (req, res)->
     # Do we transmit a flash message ?
     req.flash 'errorLogin', req.flash('error')
     # Redirect to the homepage 
