@@ -31,11 +31,10 @@ module.exports = (a)->
    * @param  {Object} req User request
    * @param  {Object} res User result
   ###
-  app.get '/login', (req, res)-> 
+  app.get '/user', (req, res)-> 
     # Redirect authenticated users to the hp
     return res.redirect("/") if req.isAuthenticated()
     res.render("login")
-
 
   ###*
    * Intercept the login form
