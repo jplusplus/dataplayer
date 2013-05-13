@@ -73,10 +73,8 @@ app.configure ->
   # Returns the app, explicitely
   return app
 
-
 app.configure "development", ->
   app.use express.errorHandler()
-
 
 # Connect mongoose
 mongoose.connect app.get("db"), ->
