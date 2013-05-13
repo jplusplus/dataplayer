@@ -6,6 +6,9 @@ form(action="/login", method="POST")
   label 
     .hide-text Password
     input(type="password",name="password", placeholder="Enter your password").input-block-level
+  label.pull-left.checkbox
+    input(type="checkbox", name="remember_me")
+    | Remember me
   .tr
     input(type="submit",value="Log in").btn.btn-dp  
   each error in errorLogin

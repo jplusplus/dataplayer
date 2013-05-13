@@ -189,7 +189,7 @@ module.exports.localStrategy = new LocalStrategy (username, password, done)->
 ###
 module.exports.rememberMe = (req, res, next) ->
   if req.method is "POST" and req.url is "/login"
-    if req.body.rememberMe or true        
+    if req.body.remember_me
       req.session.cookie.maxAge = 2592000000 # 30*24*60*60*1000 Rememeber 'me' for 30 days
     else
       req.session.cookie.expires = false
