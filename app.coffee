@@ -34,7 +34,7 @@ app.configure ->
   app.use express.cookieParser()
   sessionOptions =
     secret : process.env.SALT_SESSIONS or config.salts.sessions
-    store  :  new MongoStore url: app.get("db")
+    store  : new MongoStore url: app.get("db")
   app.use express.session sessionOptions
 
   # Flash messages
