@@ -1,7 +1,8 @@
-passport     = require("passport")
-User         = require("../models").User
-Screen       = require("../models").Screen
-isValidEmail = require("../utils").isValidEmail
+passport      = require("passport")
+User          = require("../models").User
+Screen        = require("../models").Screen
+isValidEmail  = require("../utils").isValidEmail
+LocalStrategy = require("passport-local").Strategy
 # Module variables
 app = undefined
 
@@ -118,6 +119,82 @@ userProfile = (req, res)->
         isYou: req.isAuthenticated() and String(req.user._id) == String(user._id)
         userProfile: user        
         screens: screens
+
+
+
+###*
+ * User serialization function
+ * 
+ * Passport session setup.
+ * To support persistent login sessions, Passport needs to be able to
+ * serialize users into and deserialize users out of the session. Typically,
+ * this will be as simple as storing the user ID when serializing, and finding
+ * the user by ID when deserializing.
+ * 
+ * @param  {Object}   user Given user
+ * @param  {Function} done Callback function
+###
+module.exports.serializeUser = (user, done)->        
+    createAccessToken = ->      
+      token = user.makeSalt 30
+      User.findOne accessToken: token, (err, existingUser) ->
+        return done err if err
+        # Run the function again - the token has to be unique!
+        if existingUser then createAccessToken() 
+        # Remeber the access token into session
+        else
+          user.set "access_token", token
+          user.save (err) ->
+            return done(err) if err
+            done null, user.get("access_token")
+    # creates the token
+    createAccessToken() if user._id
+
+###*
+ * Get the user matching to the token
+ * @param  {String}   token User access token
+ * @param  {Function} done  Callback function
+###
+module.exports.deserializeUser = (token, done)-> User.findOne access_token: token, done
+
+
+###*
+ * Creates passport strategy
+ * @param  {String}   username Username
+ * @param  {String}   password Passport (in clear)
+ * @param  {Function} done     Callbackfunction
+ * @return {Object}            LocalStrategy instance
+###
+module.exports.localStrategy = new LocalStrategy (username, password, done)->
+  # Get the user from the database
+  User.findOne(username: username, (err, user)->      
+    # Something happens   
+    if err   
+      return done(err) 
+    # The username is incorrect
+    unless user
+      return done(null, false, message: "Incorrect username.")
+    # The password is incorrect
+    unless user.authenticate(password)
+      return done(null, false, message: "Incorrect password.")
+    # Everything is OK
+    done null, user
+  )  
+
+###*
+ * Remember Me middleware
+ * @param  {Object}   req  User request
+ * @param  {Object}   res  User result
+ * @param  {Function} next Callbackfunction
+###
+module.exports.rememberMe = (req, res, next) ->
+  if req.method is "POST" and req.url is "/login"
+    if req.body.rememberMe or true        
+      req.session.cookie.maxAge = 2592000000 # 30*24*60*60*1000 Rememeber 'me' for 30 days
+    else
+      req.session.cookie.expires = false
+  next()
+
 
   
       
