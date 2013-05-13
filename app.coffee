@@ -29,9 +29,9 @@ app.configure ->
   # Middlewares
   app.use express.logger("dev")
   app.use express.bodyParser()
-  app.use express.methodOverride()
-  app.use express.cookieParser(config.salts.cookies)
-  app.use express.session()     
+  app.use express.methodOverride()  
+  app.use express.cookieParser process.env.SALT_COOKIES or config.salts.cookies
+  app.use express.session(secret: process.env.SALT_SESSIONS or config.salts.sessions)     
   # Flash messages
   # see also: https://github.com/jaredhanson/connect-flash    
   app.use flash()

@@ -4,6 +4,7 @@
     "demo_slideshow": "http://dataplayer.org/H41BF",
     "allowed-tags": "<a><b><p><br><img><strong><em><i><span><div><iframe><object><param>",
     "salts": {
-        "cookies": "xRDzKneqabDFVZPSdMC8rkEdJE7asYWGRYZADpxKSCdYXsYY"
+        "cookies":  "",
+        "sessions": ""
     }
 }

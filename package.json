@@ -19,6 +19,7 @@
     "mongoose": "*",
     "config": "*",
     "marked": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "bcrypt": "latest"
   }
 }

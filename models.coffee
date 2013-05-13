@@ -1,5 +1,6 @@
 crypto   = require('crypto')
 mongoose = require("mongoose")
+bcrypt   = require('bcrypt')
 
 # Self returning
 module.exports = -> module.exports
@@ -27,6 +28,7 @@ userSchema = module.exports.userSchema = mongoose.Schema(
       unique: true
   hashed_password: String
   salt: String
+  access_token: String
 )
 
 # Creates a virtual attribute that contains the id of the user
@@ -66,7 +68,7 @@ userSchema.method "authenticate", (plainText)-> @encryptPassword(plainText) is @
  * Create a random salt for the password hash
  * @return {String} Random salt
 ###
-userSchema.method "makeSalt", -> "" + Math.round((new Date().valueOf() * Math.random()))
+userSchema.method "makeSalt", -> "" + bcrypt.genSaltSync(15)
 
 ###*
  * Encrypt the given password
