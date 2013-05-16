@@ -38,7 +38,7 @@
 class window.Interactive
 
   ###*
-   * Initializrs the page 
+   * Bind and trigger ready event to construct the player
   ###
   constructor: -> 
     # Prepare the lazyloading before everything
@@ -52,6 +52,9 @@ class window.Interactive
     # Or trigger this event when the windows is loaded
     else $(window).on "load", => $(this).trigger ev
 
+  ###*
+   * Initialize the player when the page is loaded
+  ###
   ready: => 
     # Remeber that the window is now loaded 
     window.loaded = true
