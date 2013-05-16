@@ -65,11 +65,12 @@ app.configure ->
   # Add context helpers
   app.use require("./utils").context  
   # @warning Needs to be after helpers
-  app.use app.router  
+  app.use app.router    
   # Load the user route file
   require("./routes/user") app
   # Load the default route file
   require("./routes") app
+  
   # Returns the app, explicitely
   return app
 

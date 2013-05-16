@@ -136,8 +136,6 @@ module.exports.context = (req, res, next) ->
     res.locals.errorLogin = req.flash("errorLogin")
     res.locals.errorSignup = req.flash("errorSignup")
     res.locals.tmpUser = req.flash("tmpUser")
-
-    console.log res.locals.errorLogin
     next()
 
 ###*
