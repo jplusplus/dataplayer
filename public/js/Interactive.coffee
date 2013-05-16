@@ -48,11 +48,11 @@ class window.Interactive
     # Disable existing handlers
     $(this).off(ev).on ev, @ready
     # Trigger the event if the window is already loaded
-    if window.loaded then $(window).trigger ev 
+    if window.loaded then $(this).trigger ev 
     # Or trigger this event when the windows is loaded
     else $(window).on "load", => $(this).trigger ev
 
-  ready: =>   
+  ready: => 
     # Remeber that the window is now loaded 
     window.loaded = true
     # Initial step
