@@ -85,14 +85,20 @@ body.editor-mode {
         z-index:@zIndexEditor+10;
         cursor:e-resize;
         .border-radius(0 9px 9px 0);
-        .icon-resize-horizontal();
-        .icon-white();
         background-color:@activeColor;
         border:5px @activeColor solid;   
         border-left:0;
         
         .editor-toggled & {
             display:none;
+        }
+
+        &:before {            
+            .icon-white();
+            position:absolute;
+            font-family:FontAwesome;
+            content: "\f07e";
+            line-height:18px;
         }
     }
     
