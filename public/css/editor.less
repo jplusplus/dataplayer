@@ -34,13 +34,19 @@ body.editor-mode {
             background:@menuColor;
             border:5px solid @menuColor;
             cursor:move;
-            .icon-move();
-            .icon-white();
             .box-shadow(0 0 3px 0 darken(@containerColor, 10%) );
             .opacity(10);
             &:hover {
                 background-color:mix(@menuColor, @activeColor);
                 border-color:mix(@menuColor, @activeColor);
+            }
+
+            &:before {
+                position:absolute;
+                line-height:14px;                
+                .icon-white();
+                font-family:FontAwesome;
+                content: "\f047";
             }
         }
 

@@ -70,6 +70,8 @@ app.configure ->
   require("./routes/user") app
   # Load the default route file
   require("./routes") app
+  # Load api resources and routers
+  require("./routes/api") app
   
   # Returns the app, explicitely
   return app

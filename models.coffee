@@ -1,5 +1,6 @@
 crypto   = require('crypto')
 mongoose = require("mongoose")
+Schema   = require("mongoose").Schema
 bcrypt   = require('bcrypt')
 
 # Self returning
@@ -17,7 +18,7 @@ validatePresenceOf = (value)-> value && value.length
  * User Schema
  * @var {Object} The object describing the User Schema
 ###
-userSchema = module.exports.userSchema = mongoose.Schema(
+userSchema = module.exports.userSchema = Schema(
   username:
     type: String
     validate: [validatePresenceOf, 'An username is required.']
@@ -91,18 +92,18 @@ User = module.exports.User = mongoose.model('User', userSchema)
  * Screen Schema
  * @var {Object} The object describing the Screen Schema
 ###
-screenSchema = module.exports.screenSchema = mongoose.Schema(
+screenSchema = module.exports.screenSchema = Schema(
   slug:
     type: String
     index:
       unique: true
   token: String
-  content: mongoose.Schema.Types.Mixed
-  draft: mongoose.Schema.Types.Mixed
+  content: Schema.Types.Mixed
+  draft: Schema.Types.Mixed
   created_at: Date
   author:
-    type: mongoose.Schema.Types.ObjectId
-    ref: 'UserSchema'
+    type: Schema.Types.ObjectId
+    ref: 'User'
 )
 
 ###*

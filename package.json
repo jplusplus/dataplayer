@@ -21,6 +21,7 @@
     "config": "*",
     "marked": "*",
     "underscore": "*",
-    "bcrypt": "latest"
+    "bcrypt": "latest",
+    "baucis": "latest"
   }
 }
