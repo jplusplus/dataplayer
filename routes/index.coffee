@@ -250,11 +250,11 @@ completeMissingEmbed = (obj, callback=->) ->
       # Get the embed spot with a missing embed
       iterateMissingEmbed obj, (spot, index)->
         # Retreive the corresponding oembed 
-        oembed = oembeds[index]
+        embed = oembeds[index]
         # if it's OK...
-        if not oembed.error?
+        if not embed.error?
           # ...record the embed code
-          spot.oembed = oembed.html
+          spot.oembed = embed.html
     # Add the end, pass to the next tick 
     callback(err, obj)
 
