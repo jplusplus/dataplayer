@@ -41,13 +41,29 @@ class window.Interactive
    * Initializrs the page 
   ###
   constructor: -> 
-    @currentStep=0
-    @cache =
-      scrollDuration: 700  
-      scrollEasing: 'easeOutCubic'
-      defaultEntranceDuration: 600 
-      hasWaypoint: false
-      navigation: "horizontal"
+    # Prepare the lazyloading before everything
+    @prepareLazyloading()
+    # Event trigeered when the window is ready
+    ev = "interactive:ready"
+    # Disable existing handlers
+    $(this).off(ev).on ev, @ready
+    # Trigger the event if the window is already loaded
+    if window.loaded then $(window).trigger ev 
+    # Or trigger this event when the windows is loaded
+    else $(window).on "load", => $(this).trigger ev
+
+  ready: =>   
+    # Remeber that the window is now loaded 
+    window.loaded = true
+    # Initial step
+    @currentStep  = 0
+    # Cached attributes
+    @cache        = 
+      scrollDuration          : 700  
+      scrollEasing            : 'easeOutCubic'
+      defaultEntranceDuration : 600 
+      hasWaypoint             : false
+      navigation              : "horizontal"
 
     @buildUI()
     @setCache()
@@ -85,13 +101,14 @@ class window.Interactive
   buildUI: =>
     @ui = $("#container")
     @uis =
-      steps: @ui.find(".step")
-      spots: @ui.find(".spot")
-      overflow: $("#overflow")
-      navitem: $("#overflow .to-step")
-      previous: $("#overflow .previous")      
-      next: $("#overflow .next")
-      parallaxes: @ui.find("[data-parallax]")
+      steps      : @ui.find(".step")
+      spots      : @ui.find(".spot")
+      iframes    : @ui.find("iframe")   
+      parallaxes : @ui.find("[data-parallax]")
+      overflow   : $("#overflow")
+      navitem    : $("#overflow .to-step")
+      previous   : $("#overflow .previous") 
+      next       : $("#overflow .next")
 
     return @ui
 
@@ -219,6 +236,19 @@ class window.Interactive
     $pic.css
       marginLeft: $pic.width() / -2
       marginTop:  $pic.height()/ -2
+
+  ###*
+   * Static method to "unload" iframes before lazyloading
+   * @return {Array} Iframes list
+  ###
+  prepareLazyloading: ()->
+    # For each iframe (static way)
+    $("#container iframe").each (i, iframe)->
+      $iframe = $(iframe)
+      # Remeber its src
+      $iframe.data "src", $iframe.attr("src")
+      # Removes the src attribute
+      $iframe.removeAttr "src"
 
   ###*
    * Position every steps in the container
@@ -425,12 +455,20 @@ class window.Interactive
     $body.toggleClass "js-last", @currentStep is @uis.steps.length - 1
     # Update the menu
     @uis.navitem.removeClass("active").filter("[data-step=#{@currentStep}]").addClass "active"
+    # Load the awainting iframes
+    @uis.steps.eq(@currentStep).find("iframe").each (i, iframe)-> 
+      if $(iframe).data("src")?
+        # Update the src attribute onlu if the data value exists
+        $(iframe).attr "src", $(iframe).data("src")
+        # Then remove it
+        $(iframe).removeData("src")
+
     # Clear all spot animations
     @clearSpotAnimations()      
     # Add the entrance animation after the scroll
     setTimeout @doEntranceAnimations, @cache.scrollDuration
     # Trigger an event
-    @ui.trigger "step:change", [@currentStep]
+    @ui.trigger "step:change", [@currentStep]    
 
     return @currentStep
 

@@ -2,7 +2,7 @@
 
 class window.Tabs extends window.Interactive
 
-    constructor:->
+    ready:=>
         super
         @buildTabs()
 
