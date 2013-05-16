@@ -66,7 +66,7 @@ block content
         #demo            
             .container
                 h2 Dataplayer in action
-            iframe(src=demoSlideshow, name="slideshow", width="100%", height="750px", frameborder="0", allowfullscreen)
+            iframe(data-src=demoSlideshow, name="slideshow", width="100%", height="750px", frameborder="0", allowfullscreen)
                             
 
         #touch
@@ -94,8 +94,25 @@ block scripts
     !=js('vendor/jquery-1.7.1.min.js')
     !=js('vendor/jquery.lazyload.js')
     !=js("UserMenu.js")
+    
     :coffeescript
+        # Smooth scrolling
+        $("a[href^=\"#\"]").click ->
+          id = $(this).attr("href")
+          $("html, body").animate scrollTop: $(id).offset().top, "slow", false
+        
+        # Images and iframe lazy loading
+        $("iframe[data-src]")
+            .lazyload(data_attribute: "src")
+            # By default, lazyload not support iframe appearence.
+            # We unload the appear handler
+            .off("appear")
+            # To set a new and simplier handler
+            .one "appear", -> 
+                # if the src attribute is not set
+                $(this).attr "src", $(this).data("src") unless $(this).attr("src")?
 
         $(window).load -> 
-            window.userMenu = new window.UserMenu()
+            # User menu
+            window.userMenu = new window.UserMenu()            
             $("html").addClass "js-ready"
