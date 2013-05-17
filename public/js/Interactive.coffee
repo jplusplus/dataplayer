@@ -125,7 +125,7 @@ class window.Interactive
     @uis.next.on "click", @nextStep
 
     # Update element with parallax
-    @ui.off("scroll").on("scroll", @updateParallaxes)
+    @updateParallaxes() if Modernizr.csstransforms  and @uis.parallaxes.length
     # Update the container position when we resize the window
     $(window).off("resize").on("resize", @resize)
     # Bind the hashchange to change the current step
@@ -302,6 +302,7 @@ class window.Interactive
    * @return {[type]} [description]
   ###
   updateParallaxes:()=>   
+    window.requestAnimationFrame @updateParallaxes
     # According the navigation type...
     switch @cache.navigation
 
