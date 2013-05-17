@@ -1126,58 +1126,62 @@ body {
             z-index:@zIndexSpot;   
             background:none;                 
 
-            &.pictos {
-                width:200px; /* IE8 FIX */   
-            }
+            .js-animation-wrapper {
 
-            &.red {
-                background:red;
-            }
 
-            &.fg {
-              z-index:@zIndexSpot + 5;      
-            }
+                background:0 0 repeat;            
+                position:relative;          
+                height:100%;      
+                &.hidden { display:none; }            
 
-            &.light-border .js-animation-wrapper {
-                border:10px solid fade(@white, 40);                
-            }
-
-            &.dark-border .js-animation-wrapper {
-                border:10px solid ffade(@black, 40);
-            }
-
-             &.drop-shadow .js-animation-wrapper {
-                &:after, &:before {
-                    content:"";
-                    position:absolute;
-                    width:50%;
-                    height:1px;                                        
-                    bottom:15px;
-                    .box-shadow(0 0 30px 5px @black);                       
-                }                
-
-                &:before {
-                    left:20px;
-                    .rotate(-3deg);
+                &.type-text {
+                    padding: 4px 10px;
                 }
 
-                &:after {
-                    right:20px; 
-                    .rotate(3deg);                   
+                &.no-bg.type-text {
+                    background-color:transparent;
+                }
+
+                &.red {
+                    background:red;
+                }
+
+                &.fg {
+                  z-index:@zIndexSpot + 5;      
+                }
+
+                &.light-border {
+                    border:10px solid fade(@white, 40);                
+                }
+
+                &.dark-border  {
+                    border:10px solid ffade(@black, 40);
+                }
+
+                &.drop-shadow {
+                    &:after, &:before {
+                        content:"";
+                        position:absolute;
+                        width:50%;
+                        height:1px;                                        
+                        bottom:15px;
+                        .box-shadow(0 0 30px 5px @black);                       
+                    }                
+
+                    &:before {
+                        left:20px;
+                        .rotate(-3deg);
+                    }
+
+                    &:after {
+                        right:20px; 
+                        .rotate(3deg);                   
+                    }                    
                 }
             }
 
             .handle {
                 display:none;
-            }
-
-            .ie &.ie-opacity .js-animation-wrapper {
-                background:#e2e6e7;
-                .opacity(100);
-                * {
-                    background:#e2e6e7;
-                    filter: inherit;
-                }
             }
 
 
@@ -1203,23 +1207,6 @@ body {
             }
 
 
-            .js-animation-wrapper {
-                background:0 0 repeat;            
-                position:relative;                
-                &.hidden { display:none; }
-            }
-
-            &.type-text .js-animation-wrapper {
-                padding: 4px 10px;
-            }
-
-            &.no-bg.type-text .js-animation-wrapper {
-                background-color:transparent;
-            }
-
-            div.js-animation-wrapper {    
-                height:100%;
-            }
             
         }
 

@@ -10,7 +10,6 @@ mixin stepContent(step, stepKey)
         each spot, spotKey in step.spots
             .spot(
                 style=spotStyle(spot),
-                class=spotClass(spot),
                 data-html=spot.html,
                 data-spot=spotKey,
                 data-parallax=spot.parallax,
@@ -31,6 +30,7 @@ mixin spotBlock(spot)
         when "iframe"
             iframe.js-animation-wrapper(
                 style=spotWrapperStyle(spot),
+                class=spotClass(spot),
                 src=spot.src, 
                 width=spot.width,
                 height=spot.height,
@@ -40,20 +40,26 @@ mixin spotBlock(spot)
         when "link"
             a.js-animation-wrapper(
                 style=spotWrapperStyle(spot),
+                class=spotClass(spot),
                 href=spot.href)
                 +spotContent(spot)
 
         when "image"
             img.js-animation-wrapper(
                 style=spotWrapperStyle(spot),
+                class=spotClass(spot),
                 src=spot.src)
 
         when "embed"
-            .js-animation-wrapper( style=spotWrapperStyle(spot) )
+            .js-animation-wrapper( 
+                class=spotClass(spot),
+                style=spotWrapperStyle(spot))
                 !=spot.oembed
 
         default
-            .js-animation-wrapper( style=spotWrapperStyle(spot) ) 
+            .js-animation-wrapper(                 
+                class=spotClass(spot),
+                style=spotWrapperStyle(spot)) 
                 +spotContent(spot)
     .handle
 
